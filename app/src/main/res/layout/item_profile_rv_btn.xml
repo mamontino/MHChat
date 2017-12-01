@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+                                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    style="@style/ProfileCardViewStyle">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/activity_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/image_doc_item"
+            android:layout_width="@dimen/ic_size_big"
+            android:layout_height="@dimen/ic_size_big"
+            android:layout_marginTop="@dimen/base_element_margin"
+            app:srcCompat="@drawable/ic_logo"
+            android:contentDescription="@string/photo_doctor"/>
+
+        <TextView
+            android:id="@+id/tv_price_name_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginLeft="@dimen/base_element_margin"
+            android:layout_marginStart="@dimen/base_element_margin"
+            android:layout_marginTop="@dimen/base_element_margin"
+            android:layout_toEndOf="@+id/image_doc_item"
+            android:layout_toRightOf="@+id/image_doc_item"
+            android:gravity="center_horizontal"
+            android:text="Наименование услуги"/>
+
+        <TextView
+            android:id="@+id/tv_doc_hint_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_price_name_item"
+            android:layout_alignStart="@+id/tv_price_name_item"
+            android:layout_below="@+id/tv_price_name_item"
+            android:layout_marginTop="@dimen/base_element_margin"
+            android:gravity="start"
+            android:text="Врач: "/>
+
+        <TextView
+            android:id="@+id/tv_doc_name_item"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tv_doc_hint_item"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_price_name_item"
+            android:layout_marginTop="@dimen/base_element_margin"
+            android:layout_marginStart="@dimen/base_element_margin"
+            android:layout_marginLeft="@dimen/base_element_margin"
+            android:layout_toEndOf="@+id/tv_doc_hint_item"
+            android:layout_toRightOf="@+id/tv_doc_hint_item"
+            android:gravity="end"
+            android:text="ФИО доктора"/>
+
+        <TextView
+            android:id="@+id/tv_date_hint_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="start"
+            android:text="Дата приема: "
+            android:layout_alignBaseline="@+id/tv_date_item"
+            android:layout_alignBottom="@+id/tv_date_item"
+            android:layout_alignLeft="@+id/tv_doc_hint_item"
+            android:layout_alignStart="@+id/tv_doc_hint_item"/>
+
+        <TextView
+            android:id="@+id/tv_date_item"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_doc_name_item"
+            android:layout_marginTop="@dimen/base_element_margin"
+            android:layout_toEndOf="@+id/tv_date_hint_item"
+            android:layout_toRightOf="@+id/tv_date_hint_item"
+            android:gravity="end"
+            android:text="21.01.2018 14:30"/>
+
+        <Button
+            android:id="@+id/btn_cancel_profile_item"
+            android:layout_width="@dimen/base_size_128dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/tv_date_item"
+            android:layout_marginBottom="@dimen/base_element_margin"
+            android:layout_marginTop="@dimen/base_element_margin"
+            android:text="Отменить"/>
+
+        <Button
+            android:id="@+id/btn_confirm_profile_item"
+            android:layout_width="@dimen/base_size_128dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_date_item"
+            android:layout_marginBottom="@dimen/base_element_margin"
+            android:layout_marginTop="@dimen/base_element_margin"
+            android:visibility="gone"
+            android:text="Подтвердить"/>
+
+    </RelativeLayout>
+
+</android.support.v7.widget.CardView>

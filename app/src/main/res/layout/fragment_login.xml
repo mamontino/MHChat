@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:layout_marginBottom="@dimen/activity_horizontal_margin"
+    android:layout_marginLeft="@dimen/activity_horizontal_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginTop="@dimen/activity_horizontal_margin"
+    android:background="@android:color/transparent"
+    android:orientation="vertical">
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <ImageView
+        android:id="@+id/login_logo"
+        android:layout_width="72dp"
+        android:layout_height="72dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/company_logo"
+        android:src="@drawable/ic_logo"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <TextView
+        android:id="@+id/login_tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal|top"
+        android:gravity="center"
+        android:text="@string/login_header"
+        android:textStyle="bold"
+        android:textColor="@color/colorPrimary"
+        android:textSize="@dimen/text_size_20sp"/>
+
+    <EditText
+        android:id="@+id/et_login_username"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@drawable/rounded_view"
+        android:cursorVisible="true"
+        android:gravity="start|center_vertical"
+        android:hint="@string/isRead"
+        android:inputType="textEmailAddress"
+        android:maxLength="30"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:textColor="@color/black_effective"
+        android:textColorHint="@color/semi_gray"
+        android:textSize="18sp"/>
+
+    <EditText
+        android:id="@+id/et_login_password"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@drawable/rounded_view"
+        android:cursorVisible="true"
+        android:gravity="start|center_vertical"
+        android:hint="@string/password"
+        android:inputType="textPassword"
+        android:maxLength="30"
+        android:paddingEnd="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingStart="@dimen/activity_horizontal_margin"
+        android:textColor="@color/black_effective"
+        android:textColorHint="@color/semi_gray"
+        android:textSize="18sp"/>
+
+    <CheckBox
+        android:id="@+id/chb_login_save"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="@dimen/activity_horizontal_margin"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginStart="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:checked="true"
+        android:text="@string/save_password"
+        android:textColor="@color/semi_gray"/>
+
+    <Button
+        android:id="@+id/btn_login_enter"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"
+        android:background="@color/colorPrimary"
+        android:gravity="center"
+        android:text="@string/login"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_16sp"/>
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+</LinearLayout>
+

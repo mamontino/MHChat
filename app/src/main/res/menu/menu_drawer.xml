@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/nav_item_main"
+            android:checked="true"
+            android:icon="@drawable/ic_home_white_24dp"
+            android:title="@string/nav_main"/>
+        <item
+            android:id="@+id/nav_item_record"
+            android:checked="true"
+            android:icon="@drawable/ic_assignment_white_24dp"
+            android:title="@string/nav_record"/>
+        <item
+            android:id="@+id/nav_item_chat"
+            android:checked="true"
+            android:icon="@drawable/ic_message_white_24dp"
+            android:title="@string/nav_chat"/>
+        <item
+            android:id="@+id/nav_item_schedule"
+            android:checked="true"
+            android:icon="@drawable/ic_date_range_white_24dp"
+            android:title="@string/nav_schedule"/>
+        <item
+            android:id="@+id/nav_item_price"
+            android:checked="true"
+            android:icon="@drawable/ic_payment_white_24dp"
+            android:title="@string/nav_price"/>
+        <item
+            android:id="@+id/nav_item_sale"
+            android:checked="true"
+            android:icon="@drawable/ic_card_giftcard_white_24dp"
+            android:title="@string/nav_sale"/>
+        <item
+            android:id="@+id/nav_item_staff"
+            android:checked="true"
+            android:icon="@drawable/ic_person_pin_white_24dp"
+            android:title="@string/nav_staff"/>
+        <item
+            android:id="@+id/nav_item_feedback"
+            android:checked="true"
+            android:icon="@drawable/ic_question_answer_white_24dp"
+            android:title="@string/nav_feedback"/>
+        <!--<item-->
+            <!--android:id="@+id/nav_item_settings"-->
+            <!--android:checked="true"-->
+            <!--android:icon="@drawable/ic_settings_white_24dp"-->
+            <!--android:title="@string/nav_settings"/>-->
+        <item
+            android:id="@+id/nav_item_logout"
+            android:checked="true"
+            android:icon="@drawable/ic_exit_to_app_white_24dp"
+            android:title="@string/nav_logout"/>
+    </group>
+</menu>

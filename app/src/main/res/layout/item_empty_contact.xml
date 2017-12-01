@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:app="http://schemas.android.com/apk/res-auto"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+    <ImageButton
+        android:id="@+id/empty_image_add_contact"
+        android:layout_width="@dimen/base_margin_64dp"
+        android:layout_height="@dimen/base_margin_64dp"
+        android:background="@color/colorPrimary"
+        app:srcCompat="@drawable/ic_add_circle_outline_white_48dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"/>
+
+    <TextView
+        android:id="@+id/empty_tv_add_contact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/add_contact"
+        android:layout_below="@+id/empty_image_add_contact"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/activity_horizontal_margin"/>
+
+</RelativeLayout>

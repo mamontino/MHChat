@@ -1,0 +1,134 @@
+<resources>
+    <string name="app_name">MHChat</string>
+
+    <string name="btn_enter">Войти</string>
+    <string name="hint_name">Введите имя</string>
+    <string name="hint_email">Введите e-mail</string>
+    <string name="err_msg_name">Введите полное имя</string>
+    <string name="err_msg_email">Введите корректный e-mail</string>
+    <string name="hint_message">Введите сообщение</string>
+    <string name="btn_send">Отправить</string>
+
+    <string name="clear">Очистить</string>
+    <string name="cut">Вырезать</string>
+    <string name="copy">Копировать</string>
+    <string name="paste">Вставить</string>
+    <string name="delete">Удалить</string>
+    <string name="share">Отправить</string>
+
+    <!--Drawer-->
+    <string name="open_drawer">Drawer Open</string>
+    <string name="close_drawer">Drawer Close</string>
+    <string name="nav_about">О нас</string>
+    <string name="nav_logout">Выйти</string>
+    <string name="nav_retry">Retry</string>
+    <string name="nav_main">Главная</string>
+    <string name="nav_schedule">Расписание</string>
+    <string name="nav_record">Записаться</string>
+    <string name="nav_price">Прейскурант</string>
+    <string name="nav_contacts">Контакты</string>
+    <string name="nav_sale">Акции</string>
+    <string name="nav_settings">Настройки</string>
+    <string name="nav_staff">Специалисты</string>
+    <string name="nav_feedback">Обратная связь</string>
+
+    <!--Error MessageResponse-->
+    <string name="api_retry_error">Повторите позже!</string>
+    <string name="api_default_error">Что-то пошло не так!</string>
+    <string name="some_error">Произошла непредвиденная ошибка!</string>
+    <string name="connection_error">Отсутствует соединение с интернетом!</string>
+
+    <!--Login-->
+    <string name="login">Войти</string>
+    <string name="isRead">Имя пользователя</string>
+    <string name="password">Пароль</string>
+
+    <!--Login Validation-->
+    <string name="empty_data">Все поля дожны быть заполнены.</string>
+    <string name="invalid_data">Пожалуйста введите корректные данные.</string>
+
+    <!--about fragment-->
+    <string name="project_info">Информация о разработчике, ссылки на ресурсы</string>
+    <string name="version">"version"</string>
+
+    <!--rating dialog-->
+    <string name="rate_us">Оценить приложение</string>
+    <string name="rating_message">Хотите сообщите нам, как мы можем сделлать наше приложение лучше?</string>
+    <string name="rating_play_store_redirect_message_line_1">Потрясающие! Спасибо за 5 звезд.</string>
+    <string name="rating_play_store_redirect_message_line_2">Вы можете помочь другим, зная некоторые хорошие вещи об этом приложении.</string>
+    <string name="rating_play_store_text">Оцените наше приложение в Play Market</string>
+    <string name="rating_not_provided_error">Пожалуйста, оцените наше приложение.</string>
+    <string name="rating_thanks">Спасибо!</string>
+
+    <!--play store-->
+    <string name="app_google_play_store_link">"https://play.google.com/store/apps/details?id="</string>
+    <string name="app_market_link">"market://details?id="</string>
+
+    <!--button-->
+    <string name="later">Позже</string>
+    <string name="submit">Оценить</string>
+
+    <!--feed-->
+    <string name="title">My Feed</string>
+    <string name="open_source">Open Source</string>
+    <string name="blog">Blog</string>
+
+    <!--empty state-->
+    <string name="empty_screen">У нас сейчас к сожалению \nдля Вас ничего нет.</string>
+    <string name="please_retry">Попробуйте позже</string>
+    <string name="action_search">Поиск</string>
+    <string name="about">О нас</string>
+    <string name="action_retry">Повторить</string>
+    <string name="login_header">Введите учетные данные</string>
+    <string name="add_contact">Добавить пользователя</string>
+    <string name="empty_chat_message">Вы еще не отправляли \n и не получали сообщений \n от этого пользователя</string>
+    <string name="action_settings">Настройки</string>
+    <string name="chat_edit_text_hint">Введите сообщение …</string>
+    <string name="chat_send">Отправить</string>
+    <string name="action_info">Информация</string>
+    <string name="action_send">Отправить</string>
+    <string name="keyboard">Клавиатура</string>
+    <string name="empty_error_message">Не удалось \\n загрузить даные</string>
+    <string name="user">Пользователь</string>
+    <string name="last_message">Последнее сообщение</string>
+    <string name="user_image">Изображение пользователя</string>
+    <string name="save_password">Запомнить пароль</string>
+    <string name="register">Регистрация</string>
+    <string name="action_save">Сохранить</string>
+
+    <string name="username">Имя пользователя</string>
+    <string name="company_logo">Логотип компании</string>
+    <string name="nav_chat">Чат</string>
+    <string name="photo_doctor">Фотография специалиста</string>
+    <string name="title_activity_drawer">DrawerActivity</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <!--Calendar-->
+
+    <array name="calendar_days_array">
+        <item>Вс</item>
+        <item>Пн</item>
+        <item>Вт</item>
+        <item>Ср</item>
+        <item>Чт</item>
+        <item>Пт</item>
+        <item>Сб</item>
+    </array>
+
+    <array name="calendar_months_array">
+        <item>Январь,</item>
+        <item>Февраль,</item>
+        <item>Март,</item>
+        <item>Апрель,</item>
+        <item>Май,</item>
+        <item>Июнь,</item>
+        <item>Июль,</item>
+        <item>Август,</item>
+        <item>Сентябрь,</item>
+        <item>Октябрь,</item>
+        <item>Ноябрь,</item>
+        <item>Декабрь,</item>
+    </array>
+</resources>
