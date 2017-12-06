@@ -16,6 +16,8 @@ public interface ScheduleViewHelper extends MvpView
 
     void showProfileActivity();
 
+    void showSearchActivity();
+
     void showContactsActivity();
 
     void showLoginActivity();

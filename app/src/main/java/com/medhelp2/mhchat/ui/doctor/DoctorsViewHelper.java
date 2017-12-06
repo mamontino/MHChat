@@ -15,6 +15,10 @@ public interface DoctorsViewHelper extends MvpView
 
     void closeNavigationDrawer();
 
+    void showDocDetailsDialog();
+
+    void showScheduleActivity();
+
     void showProfileActivity();
 
     void showSearchActivity();

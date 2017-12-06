@@ -3,25 +3,23 @@ package com.medhelp2.mhchat.ui.about;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.di.component.ActivityComponent;
-import com.medhelp2.mhchat.ui.base.BaseFragment;
+import com.medhelp2.mhchat.ui.base.BaseDialog;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-public class AboutFragment extends BaseFragment implements AboutViewHelper
+public class AboutFragment extends BaseDialog implements AboutViewHelper
 {
     public static final String TAG = "AboutFragment";
 
     @Inject
-    AboutPresenterHelper<AboutViewHelper> mPresenter;
+    AboutPresenterHelper<AboutViewHelper> presenter;
 
     public static AboutFragment newInstance()
     {
@@ -41,32 +39,27 @@ public class AboutFragment extends BaseFragment implements AboutViewHelper
         if (component != null)
         {
             component.inject(this);
-            setUnBinder(ButterKnife.bind(this, view));
-            mPresenter.onAttach(this);
+            presenter.onAttach(this);
         }
 
         return view;
     }
 
+    public void show(FragmentManager fragmentManager)
+    {
+        super.show(fragmentManager, TAG);
+    }
+
     @Override
     protected void setUp(View view)
     {
-        view.setOnClickListener(v ->
-        {
-
-        });
-    }
-
-    @OnClick(R.id.nav_back_btn)
-    void onNavBackClick()
-    {
-        getBaseActivity().onFragmentDetached(TAG);
+        view.setOnClickListener(v -> super.dismissDialog(TAG));
     }
 
     @Override
     public void onDestroyView()
     {
-        mPresenter.onDetach();
+        presenter.onDetach();
         super.onDestroyView();
     }
 }

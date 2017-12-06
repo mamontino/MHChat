@@ -144,14 +144,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @Override
     public void showAboutFragment()
     {
-        Timber.d("showAboutFragment");
-        lockDrawer();
-        getSupportFragmentManager()
-                .beginTransaction()
-                .disallowAddToBackStack()
-                .setCustomAnimations(R.anim.slide_left, R.anim.slide_right)
-                .add(R.id.app_bar_profile, AboutFragment.newInstance(), AboutFragment.TAG)
-                .commit();
+        AboutFragment.newInstance().show(getSupportFragmentManager());
     }
 
     @Override
@@ -345,6 +338,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     private void showLoginActivity()
     {
         Intent intent = LoginActivity.getStartIntent(this);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 

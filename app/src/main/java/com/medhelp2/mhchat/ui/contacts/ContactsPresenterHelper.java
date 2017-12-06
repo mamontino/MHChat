@@ -7,4 +7,10 @@ import com.medhelp2.mhchat.ui.base.MvpPresenter;
 public interface ContactsPresenterHelper<V extends ContactsViewHelper> extends MvpPresenter<V>
 {
     public void getCenterInfo();
+
+    void updateUserList();
+
+//    void loadUserInfo(int id);
+
+//    void updateUnread();
 }

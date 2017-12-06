@@ -6,11 +6,9 @@ import com.medhelp2.mhchat.ui.about.AboutFragment;
 import com.medhelp2.mhchat.ui.chat.ChatActivity;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
-import com.medhelp2.mhchat.ui.contacts.contacts_list.ContactsListFragment;
-import com.medhelp2.mhchat.ui.details.DetailsFragment;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
+import com.medhelp2.mhchat.ui.doctor.details.DocDetailsFragment;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
-import com.medhelp2.mhchat.ui.login.login_fr.FormFragment;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rating.RateDialog;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
@@ -37,13 +35,9 @@ public interface ActivityComponent
 
     void inject(SettingsActivity fragment);
 
-    void inject(DetailsFragment fragment);
-
     void inject(ChatListFragment fragment);
 
-    void inject(ContactsListFragment fragment);
-
-    void inject(FormFragment fragment);
+    void inject(DocDetailsFragment fragment);
 
     void inject(AboutFragment fragment);
 

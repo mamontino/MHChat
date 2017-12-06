@@ -14,26 +14,20 @@ import com.medhelp2.mhchat.ui.chat.ChatViewHelper;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListPresenter;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListPresenterHelper;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListViewHelper;
+import com.medhelp2.mhchat.ui.contacts.ContactsAdapter;
 import com.medhelp2.mhchat.ui.contacts.ContactsPresenter;
 import com.medhelp2.mhchat.ui.contacts.ContactsPresenterHelper;
 import com.medhelp2.mhchat.ui.contacts.ContactsViewHelper;
-import com.medhelp2.mhchat.ui.contacts.contacts_list.ContactsAdapter;
-import com.medhelp2.mhchat.ui.contacts.contacts_list.ContactsListPresenter;
-import com.medhelp2.mhchat.ui.contacts.contacts_list.ContactsListPresenterHelper;
-import com.medhelp2.mhchat.ui.contacts.contacts_list.ContactsListViewHelper;
-import com.medhelp2.mhchat.ui.details.DetailsPresenter;
-import com.medhelp2.mhchat.ui.details.DetailsPresenterHelper;
-import com.medhelp2.mhchat.ui.details.DetailsViewHelper;
 import com.medhelp2.mhchat.ui.doctor.DocListAdapter;
 import com.medhelp2.mhchat.ui.doctor.DoctorsPresenter;
 import com.medhelp2.mhchat.ui.doctor.DoctorsPresenterHelper;
 import com.medhelp2.mhchat.ui.doctor.DoctorsViewHelper;
+import com.medhelp2.mhchat.ui.doctor.details.DocDetailsPresenter;
+import com.medhelp2.mhchat.ui.doctor.details.DocDetailsPresenterHelper;
+import com.medhelp2.mhchat.ui.doctor.details.DocDetailsViewHelper;
 import com.medhelp2.mhchat.ui.login.LoginPresenter;
 import com.medhelp2.mhchat.ui.login.LoginPresenterHelper;
 import com.medhelp2.mhchat.ui.login.LoginViewHelper;
-import com.medhelp2.mhchat.ui.login.login_fr.FormPresenter;
-import com.medhelp2.mhchat.ui.login.login_fr.FormPresenterHelper;
-import com.medhelp2.mhchat.ui.login.login_fr.FormViewHelper;
 import com.medhelp2.mhchat.ui.profile.ProfilePresenter;
 import com.medhelp2.mhchat.ui.profile.ProfilePresenterHelper;
 import com.medhelp2.mhchat.ui.profile.ProfileViewHelper;
@@ -124,14 +118,14 @@ public class ActivityModule
 
     @PerActivity
     @Provides
-    DoctorsPresenterHelper<DoctorsViewHelper> provideDoctorsPresenter(DoctorsPresenter<DoctorsViewHelper> presenter)
+    DocDetailsPresenterHelper<DocDetailsViewHelper> provideDocDetailsPresenter(DocDetailsPresenter<DocDetailsViewHelper> presenter)
     {
         return presenter;
     }
 
     @PerActivity
     @Provides
-    DetailsPresenterHelper<DetailsViewHelper> provideDetailsPresenter(DetailsPresenter<DetailsViewHelper> presenter)
+    DoctorsPresenterHelper<DoctorsViewHelper> provideDoctorsPresenter(DoctorsPresenter<DoctorsViewHelper> presenter)
     {
         return presenter;
     }
@@ -145,20 +139,6 @@ public class ActivityModule
 
     @Provides
     ChatListPresenterHelper<ChatListViewHelper> provideChatListPresenter(ChatListPresenter<ChatListViewHelper> presenter)
-    {
-        return presenter;
-    }
-
-    @PerActivity
-    @Provides
-    ContactsListPresenterHelper<ContactsListViewHelper> provideContactsListPresenter(ContactsListPresenter<ContactsListViewHelper> presenter)
-    {
-        return presenter;
-    }
-
-    @PerActivity
-    @Provides
-    FormPresenterHelper<FormViewHelper> provideFormPresenter(FormPresenter<FormViewHelper> presenter)
     {
         return presenter;
     }

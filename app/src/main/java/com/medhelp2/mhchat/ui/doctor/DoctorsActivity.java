@@ -30,10 +30,13 @@ import android.widget.TextView;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.Doctor;
+import com.medhelp2.mhchat.ui.about.AboutFragment;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
+import com.medhelp2.mhchat.ui.doctor.details.DocDetailsFragment;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
+import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.view.ListDivider;
@@ -41,6 +44,7 @@ import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -139,9 +143,15 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        List<Doctor> spinnerList = new ArrayList<>();
-        spinnerList.add(0, new Doctor("Все"));
-        spinnerList.addAll(response);
+        List<String> spinnerList = new ArrayList<>();
+        HashSet<String> hashSet = new HashSet<>();
+        for (Doctor doc: response)
+        {
+            hashSet.add(doc.getSpecialty());
+        }
+
+        spinnerList.add(0, "Все");
+        spinnerList.addAll(hashSet);
 
         DocSpinnerAdapter spinnerAdapter = new DocSpinnerAdapter(this, spinnerList);
         spinner.setAdapter(spinnerAdapter);
@@ -158,7 +168,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
                     List<Doctor> sortList = new ArrayList<>();
                     for (Doctor doctor : response)
                     {
-                        if (doctor.getIdSpec() == spinnerList.get(position).getIdSpec())
+                        if (doctor.getSpecialty().equals(spinnerList.get(position)))
                         {
                             sortList.add(doctor);
                         }
@@ -183,6 +193,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
 //                intent.putExtra(AppConstants.ID_ROOM, cashList.get(position).getIdRoom());
 //                intent.putExtra(AppConstants.ROOM_NAME, cashList.get(position).getFullName());
 //                startActivity(intent);
+                showDocDetailsDialog();
             }
 
             @Override
@@ -376,6 +387,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
     public void showLoginActivity()
     {
         Intent intent = LoginActivity.getStartIntent(this);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
@@ -389,6 +401,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
     @Override
     public void showAboutFragment()
     {
+        AboutFragment.newInstance().show(getSupportFragmentManager());
     }
 
     @Override
@@ -422,7 +435,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
                 return true;
 
             case R.id.nav_item_schedule:
-                showSearchActivity();
+                showScheduleActivity();
                 return true;
 
 //            case R.id.nav_item_settings:
@@ -435,6 +448,18 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void showScheduleActivity()
+    {
+        Intent intent = ScheduleActivity.getStartIntent(this);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showDocDetailsDialog() {
+        DocDetailsFragment.newInstance().show(getSupportFragmentManager());
     }
 
     @Override

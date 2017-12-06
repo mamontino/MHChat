@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_SETTINGS"/>
-    <uses-permission android:name="android.permission.GET_TASKS"/>
+    <!--<uses-permission android:name="android.permission.GET_TASKS"/>-->
 
     <application
         android:name=".MainApp"
@@ -20,6 +20,7 @@
 
         <activity
             android:name=".ui.splash.SplashActivity"
+            android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
 
             <intent-filter>
@@ -38,28 +39,42 @@
 
         <activity
             android:name=".ui.login.LoginActivity"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".ui.chat.ChatActivity">
+        <activity
+            android:name=".ui.chat.ChatActivity"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".ui.contacts.ContactsActivity">
+        <activity
+            android:name=".ui.contacts.ContactsActivity">
         </activity>
 
-        <activity android:name=".ui.settings.SettingsActivity">
+        <activity
+            android:name=".ui.settings.SettingsActivity"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".ui.schedule.ScheduleActivity">
+        <activity
+            android:name=".ui.schedule.ScheduleActivity"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".ui.search.SearchActivity">
+        <activity
+            android:name=".ui.search.SearchActivity"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".ui.doctor.DoctorsActivity">
+        <activity
+            android:name=".ui.doctor.DoctorsActivity"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".ui.profile.ProfileActivity">
+        <activity
+            android:name=".ui.profile.ProfileActivity"
+            android:screenOrientation="portrait">
         </activity>
 
         <service

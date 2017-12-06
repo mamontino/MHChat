@@ -1,6 +1,5 @@
 package com.medhelp2.mhchat.ui.schedule;
 
-import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -26,6 +25,7 @@ import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CenterResponse;
+import com.medhelp2.mhchat.ui.about.AboutFragment;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
@@ -33,6 +33,7 @@ import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.schedule.decorators.DayDecorator;
 import com.medhelp2.mhchat.ui.schedule.decorators.SelectDecorator;
+import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.view.GridDecorator;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
@@ -97,10 +98,10 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         setContentView(R.layout.activity_schedule);
         getActivityComponent().inject(this);
 
-        ScheduleViewModel model = ViewModelProviders.of(this).get(ScheduleViewModel.class);
-        model.getUsers().observe(this, users -> {
-            // update UI
-        });
+//        ScheduleViewModel model = ViewModelProviders.of(this).get(ScheduleViewModel.class);
+//        model.getUsers().observe(this, users -> {
+//            // update UI
+//        });
 
         setUp();
     }
@@ -293,9 +294,11 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
                 return true;
 
             case R.id.nav_item_price:
+                showSearchActivity();
                 return true;
 
             case R.id.nav_item_record:
+                showSearchActivity();
                 return true;
 
             case R.id.nav_item_schedule:
@@ -315,9 +318,17 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     }
 
     @Override
+    public void showSearchActivity()
+    {
+        Intent intent = SearchActivity.getStartIntent(this);
+        startActivity(intent);
+    }
+
+    @Override
     public void showLoginActivity()
     {
         Intent intent = LoginActivity.getStartIntent(this);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
@@ -331,7 +342,7 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @Override
     public void showAboutFragment()
     {
-
+        AboutFragment.newInstance().show(getSupportFragmentManager());
     }
 
     @Override

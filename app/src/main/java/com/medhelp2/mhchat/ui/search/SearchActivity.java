@@ -32,11 +32,13 @@ import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.ServiceResponse;
+import com.medhelp2.mhchat.ui.about.AboutFragment;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
+import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.view.ListDivider;
 
@@ -312,6 +314,7 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
                 return true;
 
             case R.id.nav_item_schedule:
+                showScheduleActivity();
                 return true;
 
 //            case R.id.nav_item_settings:
@@ -331,6 +334,7 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     public void showLoginActivity()
     {
         Intent intent = LoginActivity.getStartIntent(this);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
@@ -344,7 +348,7 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     @Override
     public void showAboutFragment()
     {
-
+        AboutFragment.newInstance().show(getSupportFragmentManager());
     }
 
     @Override
@@ -415,6 +419,13 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     public void showSettingsActivity()
     {
         Intent intent = SettingsActivity.getStartIntent(this);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showScheduleActivity()
+    {
+        Intent intent = ScheduleActivity.getStartIntent(this);
         startActivity(intent);
     }
 

@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment;
-import com.medhelp2.mhchat.ui.details.DetailsFragment;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.main.AppConstants;
 
@@ -77,18 +76,6 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper
     }
 
     @Override
-    public void showDetailsFragment()
-    {
-        Timber.d("showDetailsFragment");
-        getSupportFragmentManager()
-                .beginTransaction()
-                .disallowAddToBackStack()
-                .setCustomAnimations(R.anim.slide_left, R.anim.slide_right)
-                .add(R.id.fr_chat, DetailsFragment.newInstance(), DetailsFragment.TAG)
-                .commit();
-    }
-
-    @Override
     public void showChatListFragment()
     {
         Timber.d("showChatListFragment");
@@ -128,21 +115,6 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper
         }
     }
 
-    @Override
-    public void onBackPressed()
-    {
-        Timber.d("onBackPressed");
-        super.onBackPressed();
-        Fragment fragment = getSupportFragmentManager().findFragmentByTag(DetailsFragment.TAG);
-        if (fragment != null)
-        {
-            onFragmentDetached(DetailsFragment.TAG);
-        } else
-        {
-            super.onBackPressed();
-        }
-    }
-
     private void setupToolbar()
     {
         Timber.d("setupToolbar");
@@ -165,31 +137,14 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper
         }
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu)
-//    {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_chat, menu);
-//        return true;
-//    }
-//
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
         {
-//            case R.id.action_settings_chat:
-//                showSettingsActivity();
-//                return true;
-
-//            case R.id.action_about_chat:
-//                showDetailsFragment();
-//                return true;
-
             case android.R.id.home:
                 super.onBackPressed();
                 return true;
-
             default:
                 return super.onOptionsItemSelected(item);
         }

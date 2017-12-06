@@ -15,7 +15,6 @@ import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
-import com.medhelp2.mhchat.ui.contacts.contacts_list.ContactsListFragment;
 import com.medhelp2.mhchat.ui.splash.SplashActivity;
 import com.medhelp2.mhchat.utils.main.NotificationUtils;
 
@@ -91,9 +90,9 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
                 {
                     Timber.d("DoctorsActivity запущено");
                     Intent startActivity = new Intent(BROADCAST_INCOMING_MESSAGE);
-                    startActivity.putExtra(ContactsListFragment.PARAM_STATUS, ContactsListFragment.STATUS_START);
+                    startActivity.putExtra(ContactsActivity.PARAM_STATUS, ContactsActivity.STATUS_START);
                     sendBroadcast(startActivity);
-                    startActivity.putExtra(ContactsListFragment.PARAM_STATUS, ContactsListFragment.STATUS_FINISH);
+                    startActivity.putExtra(ContactsActivity.PARAM_STATUS, ContactsActivity.STATUS_FINISH);
                 } catch (Exception e)
                 {
                     Timber.e("Ошибка создания BroadcastReceiver: " + e.getMessage());

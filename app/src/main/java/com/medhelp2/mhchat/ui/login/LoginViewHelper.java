@@ -4,5 +4,15 @@ import com.medhelp2.mhchat.ui.base.MvpView;
 
 public interface LoginViewHelper extends MvpView
 {
-    void showLoginContent();
+    void openContactsActivity();
+
+    void openProfileActivity();
+
+    void openChatActivity();
+
+    void openNetworkSettings();
+
+    boolean isNeedSave();
+
+    void closeActivity();
 }

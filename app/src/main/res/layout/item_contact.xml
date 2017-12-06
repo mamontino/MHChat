@@ -57,7 +57,7 @@
         android:id="@+id/contacts_tv_unread"
         android:layout_width="20dp"
         android:layout_height="20dp"
-        android:background="@drawable/bg_circle"
+        android:background="@drawable/rouded_bg_circle"
         android:gravity="center"
         android:text=""
         android:textColor="@android:color/white"
