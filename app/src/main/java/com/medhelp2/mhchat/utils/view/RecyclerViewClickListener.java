@@ -2,8 +2,8 @@ package com.medhelp2.mhchat.utils.view;
 
 import android.view.View;
 
-public interface RecyclerViewClickListener {
-
+public interface RecyclerViewClickListener
+{
     void onClick(View view, int position);
 
     void onLongClick(View view, int position);

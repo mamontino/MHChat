@@ -33,17 +33,15 @@
     <string name="nav_feedback">Обратная связь</string>
 
     <!--Error MessageResponse-->
-    <string name="api_retry_error">Повторите позже!</string>
-    <string name="api_default_error">Что-то пошло не так!</string>
-    <string name="some_error">Произошла непредвиденная ошибка!</string>
-    <string name="connection_error">Отсутствует соединение с интернетом!</string>
+    <string name="api_retry_error">Повторите позже…</string>
+    <string name="api_default_error">Что-то пошло не так.</string>
+    <string name="some_error">Произошла непредвиденная ошибка.</string>
+    <string name="connection_error">Отсутствует соединение с интернетом.</string>
 
     <!--Login-->
     <string name="login">Войти</string>
     <string name="isRead">Имя пользователя</string>
     <string name="password">Пароль</string>
-
-    <!--Login Validation-->
     <string name="empty_data">Все поля дожны быть заполнены.</string>
     <string name="invalid_data">Пожалуйста введите корректные данные.</string>
 
@@ -53,11 +51,11 @@
 
     <!--rating dialog-->
     <string name="rate_us">Оценить приложение</string>
-    <string name="rating_message">Хотите сообщите нам, как мы можем сделлать наше приложение лучше?</string>
-    <string name="rating_play_store_redirect_message_line_1">Потрясающие! Спасибо за 5 звезд.</string>
-    <string name="rating_play_store_redirect_message_line_2">Вы можете помочь другим, зная некоторые хорошие вещи об этом приложении.</string>
-    <string name="rating_play_store_text">Оцените наше приложение в Play Market</string>
-    <string name="rating_not_provided_error">Пожалуйста, оцените наше приложение.</string>
+    <string name="rating_message">Сообщите нам, как мы можем улучшить приложение.</string>
+    <string name="rating_play_store_redirect_message_line_1">Потрясающе!\n Спасибо за 5 звезд.</string>
+    <string name="rating_play_store_redirect_message_line_2">Вы можете помочь сделать лучше наше приложение, оставив отзыв в Play Market.</string>
+    <string name="rating_play_store_text">Оценить в Play Market</string>
+    <string name="rating_not_provided_error">Сначала укажите количество звезд.</string>
     <string name="rating_thanks">Спасибо!</string>
 
     <!--play store-->
@@ -69,9 +67,9 @@
     <string name="submit">Оценить</string>
 
     <!--feed-->
-    <string name="title">My Feed</string>
-    <string name="open_source">Open Source</string>
-    <string name="blog">Blog</string>
+    <!--<string name="title">My Feed</string>-->
+    <!--<string name="open_source">Open Source</string>-->
+    <!--<string name="blog">Blog</string>-->
 
     <!--empty state-->
     <string name="empty_screen">У нас сейчас к сожалению \nдля Вас ничего нет.</string>
@@ -88,7 +86,7 @@
     <string name="action_info">Информация</string>
     <string name="action_send">Отправить</string>
     <string name="keyboard">Клавиатура</string>
-    <string name="empty_error_message">Не удалось \\n загрузить даные</string>
+    <string name="empty_error_message">Не удалось \n загрузить даные</string>
     <string name="user">Пользователь</string>
     <string name="last_message">Последнее сообщение</string>
     <string name="user_image">Изображение пользователя</string>
@@ -110,6 +108,7 @@
         Close navigation drawer Close navigation drawer Close navigation drawer  Close navigation drawer
         Close navigation drawer Close navigation drawer Close navigation drawerClose navigation drawerClose navigation
         drawerClose navigation drawerClose navigation drawerClose navigation drawerClose navigation drawer</string>
+    <string name="nav_rate">Оценить приложение</string>
 
     <!--Calendar-->
 

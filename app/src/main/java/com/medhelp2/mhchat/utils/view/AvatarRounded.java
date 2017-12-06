@@ -10,11 +10,14 @@ import android.graphics.Shader;
 import com.medhelp2.mhchat.utils.main.AppConstants;
 import com.squareup.picasso.Transformation;
 
-public class AvatarRounded implements Transformation {
+public class AvatarRounded implements Transformation
+{
     @Override
-    public Bitmap transform(Bitmap source) {
+    public Bitmap transform(Bitmap source)
+    {
         int radius = (int) (source.getHeight() / AppConstants.RADIUS_ROUND_AVATAR);
-        if (source == null) {
+        if (source == null)
+        {
             return null;
         }
 
@@ -35,7 +38,8 @@ public class AvatarRounded implements Transformation {
         return targetBitmap;
     }
 
-    public static Bitmap scaleTo(Bitmap source, int size) {
+    public static Bitmap scaleTo(Bitmap source, int size)
+    {
         int destWidth = source.getWidth();
 
         int destHeight = source.getHeight();
@@ -43,7 +47,8 @@ public class AvatarRounded implements Transformation {
         destHeight = destHeight * size / destWidth;
         destWidth = size;
 
-        if (destHeight < size) {
+        if (destHeight < size)
+        {
             destWidth = destWidth * size / destHeight;
             destHeight = size;
         }
@@ -55,7 +60,8 @@ public class AvatarRounded implements Transformation {
     }
 
     @Override
-    public String key() {
+    public String key()
+    {
         return "square()";
     }
 }

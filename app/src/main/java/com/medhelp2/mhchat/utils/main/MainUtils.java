@@ -16,15 +16,18 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 
-public final class MainUtils {
-
-    private MainUtils() {
+public final class MainUtils
+{
+    private MainUtils()
+    {
     }
 
-    public static ProgressDialog showLoadingDialog(Context context) {
+    public static ProgressDialog showLoadingDialog(Context context)
+    {
         ProgressDialog progressDialog = new ProgressDialog(context);
         progressDialog.show();
-        if (progressDialog.getWindow() != null) {
+        if (progressDialog.getWindow() != null)
+        {
             progressDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         }
         progressDialog.setContentView(R.layout.dialog_progress);
@@ -35,11 +38,13 @@ public final class MainUtils {
     }
 
     @SuppressLint("all")
-    public static String getDeviceId(Context context) {
+    public static String getDeviceId(Context context)
+    {
         return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
-    public static boolean isEmailValid(String email) {
+    public static boolean isEmailValid(String email)
+    {
         Pattern pattern;
         Matcher matcher;
         final String EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
@@ -48,7 +53,8 @@ public final class MainUtils {
         return matcher.matches();
     }
 
-    public static String loadJsonFromAsset(Context context, String jsonFileName) throws IOException {
+    public static String loadJsonFromAsset(Context context, String jsonFileName) throws IOException
+    {
 
         AssetManager manager = context.getAssets();
         InputStream is = manager.open(jsonFileName);

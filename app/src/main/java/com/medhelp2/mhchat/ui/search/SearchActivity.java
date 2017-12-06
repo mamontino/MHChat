@@ -40,7 +40,7 @@ import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
-import com.medhelp2.mhchat.utils.view.ListDivider;
+import com.medhelp2.mhchat.utils.view.ItemListDecorator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -196,7 +196,7 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
         Timber.d("updateCategory");
 
         adapter = new SearchAdapter(serviceCash);
-        recyclerView.addItemDecoration(new ListDivider(this));
+        recyclerView.addItemDecoration(new ItemListDecorator(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 

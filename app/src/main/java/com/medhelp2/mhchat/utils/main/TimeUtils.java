@@ -9,7 +9,6 @@ import java.util.Locale;
 
 public class TimeUtils
 {
-
     private TimeUtils()
     {
     }
@@ -18,12 +17,6 @@ public class TimeUtils
     {
         return Calendar.getInstance().getTimeInMillis();
     }
-
-//    public static long getShiftDate(int month)
-//    {
-//getDate()
-//    }
-
 
     public static String getTime(long milliseconds)
     {

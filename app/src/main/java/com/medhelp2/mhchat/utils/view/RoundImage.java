@@ -12,9 +12,10 @@ import android.graphics.RectF;
 
 import com.squareup.picasso.Transformation;
 
-public class RoundImage implements Transformation {
-
-    public static Bitmap getRoundedBitmap(Bitmap bitmap) {
+public class RoundImage implements Transformation
+{
+    public static Bitmap getRoundedBitmap(Bitmap bitmap)
+    {
         final Bitmap output = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight(), Bitmap.Config.ARGB_8888);
         final Canvas canvas = new Canvas(output);
         final int color = Color.RED;
@@ -27,7 +28,7 @@ public class RoundImage implements Transformation {
         paint.setColor(color);
         canvas.drawOval(rectF, paint);
 
-              paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
+        paint.setXfermode(new PorterDuffXfermode(PorterDuff.Mode.SRC_IN));
         canvas.drawBitmap(bitmap, rect, rect, paint);
 
         bitmap.recycle();
@@ -36,12 +37,14 @@ public class RoundImage implements Transformation {
     }
 
     @Override
-    public Bitmap transform(Bitmap source) {
+    public Bitmap transform(Bitmap source)
+    {
         return getRoundedBitmap(source);
     }
 
     @Override
-    public String key() {
+    public String key()
+    {
         return "circleTransformation";
     }
 }

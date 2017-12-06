@@ -3,17 +3,8 @@
     <color name="list_divider">#dedede</color>
     <color name="bg_bubble_self">#E1E1E1</color>
 
-    <!--Blue-->
     <color name="colorPrimary">#44A5F6</color>
     <color name="colorPrimaryDark">#2395F5</color>
-
-    <!--Green-->
-    <!--<color name="colorPrimary">#558B2F</color>-->
-    <!--<color name="colorPrimaryDark">#33691E</color>-->
-
-    <!--Black-->
-    <!--<color name="colorPrimary">#000000</color>-->
-    <!--<color name="colorPrimaryDark">#000000</color>-->
 
     <color name="colorAccent">#FF4081</color>
     <color name="light_gray">#dbdbdb</color>
@@ -30,7 +21,6 @@
     <color name="fb">#3b5998</color>
     <color name="google">#d34836</color>
 
-    <!--Design colors-->
     <color name="red_dark">#F06423</color>
     <color name="red_dark2">#D85A1B</color>
     <color name="cyan_light">#c9ebee</color>
@@ -47,7 +37,6 @@
     <color name="blue_grey_light">#A5B4C8</color>
     <color name="orange">#FFA500</color>
     <color name="yellow">#fff44f</color>
-
 
     <color name="background">#FBEDD2</color>
 </resources>

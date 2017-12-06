@@ -39,7 +39,7 @@ import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
-import com.medhelp2.mhchat.utils.view.ListDivider;
+import com.medhelp2.mhchat.utils.view.ItemListDecorator;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 
@@ -139,7 +139,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
     public void updateView(List<Doctor> response)
     {
         adapter = new DocListAdapter(cashList);
-        recyclerView.addItemDecoration(new ListDivider(this));
+        recyclerView.addItemDecoration(new ItemListDecorator(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 

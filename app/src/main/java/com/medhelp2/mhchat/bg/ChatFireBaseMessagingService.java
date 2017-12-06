@@ -108,15 +108,6 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
                     Timber.d("Ошибка перехода к DoctorsActivity: " + e.getMessage());
                 }
             }
-
-//            if (/* Check if data needs to be processed by long running job */ true) {
-            // For long-running tasks (10 seconds or more) use Firebase Job Dispatcher.
-//                scheduleJob();
-//            } else {
-            // Handle message within 10 seconds
-//                handleNow();
-//            }
-
         }
 
         // TODO: Исли remoteMessage содержит Notification
@@ -157,7 +148,10 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(notificationId, notificationBuilder.build());
+        if (notificationManager != null)
+        {
+            notificationManager.notify(notificationId, notificationBuilder.build());
+        }
     }
 
     private void showSplashActivity(String message)
@@ -180,43 +174,9 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
                 .setAutoCancel(true)
                 .setSound(defaultSoundUri);
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        notificationManager.notify(notificationId, notificationBuilder.build());
+        if (notificationManager != null)
+        {
+            notificationManager.notify(notificationId, notificationBuilder.build());
+        }
     }
-
-//    private void sendNotification(String message)
-//    {
-//        Timber.d("sendNotification");
-//
-//        Intent intent = new Intent(this, DoctorsActivity.class);
-//        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//        final PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
-//
-//        notificationId = NOTIFICATION_ID;
-//
-//
-//        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
-//        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-//                .setSmallIcon(R.drawable.ic_message_white_24dp)
-//                .setLargeIcon(BitmapFactory.decodeResource(this.getResources(), R.drawable.ic_message_white_24dp))
-//                .setContentTitle(this.getString(R.string.app_name))
-//                .setContentText(message)
-//                .setContentIntent(resultPendingIntent)
-//                .setAutoCancel(true)
-//                .setSound(defaultSoundUri);
-//        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.notify(notificationId, notificationBuilder.build());
-//    }
-//
-//    private void showIncommingMessage()
-//    {
-//
-//    }
-//
-//    private void showChatActivity(int idRoom, String name)
-//    {
-//        Intent intent = new Intent(this, ChatActivity.class);
-//        intent.putExtra(AppConstants.ID_ROOM, idRoom);
-//        intent.putExtra(AppConstants.ROOM_NAME, name);
-//        startActivity(intent);
-//    }
 }

@@ -10,11 +10,11 @@ import android.view.View;
 
 import com.medhelp2.mhchat.R;
 
-public class ListDivider extends RecyclerView.ItemDecoration
+public class ItemListDecorator extends RecyclerView.ItemDecoration
 {
     private Drawable divider;
 
-    public ListDivider(Context context)
+    public ItemListDecorator(Context context)
     {
         divider = ContextCompat.getDrawable(context, R.drawable.divider_grey_1dp);
     }

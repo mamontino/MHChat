@@ -32,6 +32,7 @@ import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
+import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
@@ -127,24 +128,16 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         }
     }
 
-//    @Override
-//    protected void onSaveInstanceState(Bundle outState)
-//    {
-//        super.onSaveInstanceState(outState);
-//        adapter.onSaveInstanceState(outState);
-//    }
-//
-//    @Override
-//    protected void onRestoreInstanceState(Bundle savedInstanceState)
-//    {
-//        super.onRestoreInstanceState(savedInstanceState);
-//        adapter.onRestoreInstanceState(savedInstanceState);
-//    }
-
     @Override
     public void showAboutFragment()
     {
         AboutFragment.newInstance().show(getSupportFragmentManager());
+    }
+
+    @Override
+    public void showRateFragment()
+    {
+        RateFragment.newInstance().show(getSupportFragmentManager());
     }
 
     @Override
@@ -220,7 +213,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
             }
             adapter = new ProfileAdapter(this, parentModels);
             recyclerView.setAdapter(adapter);
-//            recyclerView.addItemDecoration(new ProfileDivider(this));
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             adapter.onGroupClick(0);
             recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
@@ -319,6 +311,10 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
 //            case R.id.nav_item_settings:
 //                showSettingsActivity();
 //                return true;
+
+            case R.id.nav_item_rate:
+                showRateFragment();
+                return true;
 
             case R.id.nav_item_staff:
                 showDoctorsActivity();

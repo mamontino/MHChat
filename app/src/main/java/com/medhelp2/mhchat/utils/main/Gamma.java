@@ -1,8 +1,7 @@
-//package com.medhelp2.mhchat;
+//package com.medhelp2.mhchat.utils.main;
 //
 //
 //import java.util.Random;
-//
 //
 //class Gamma
 //{
@@ -127,7 +126,5 @@
 //        {
 //        }
 //    }
-//
-//
 //}
 //

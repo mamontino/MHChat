@@ -23,6 +23,8 @@ public interface ProfileViewHelper extends MvpView
 
     void showSearchActivity();
 
+    void showRateFragment();
+
     void updateHeader(CenterResponse response);
 
     void updateData(List<VisitResponse> response);

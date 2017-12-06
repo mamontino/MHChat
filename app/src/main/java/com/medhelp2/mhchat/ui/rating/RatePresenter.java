@@ -2,7 +2,7 @@ package com.medhelp2.mhchat.ui.rating;
 
 
 import com.medhelp2.mhchat.R;
-import com.medhelp2.mhchat.data.DataManager;
+import com.medhelp2.mhchat.data.DataHelper;
 import com.medhelp2.mhchat.ui.base.BasePresenter;
 import com.medhelp2.mhchat.utils.rx.SchedulerProvider;
 
@@ -12,15 +12,14 @@ import io.reactivex.disposables.CompositeDisposable;
 
 public class RatePresenter<V extends RateViewHelper> extends BasePresenter<V> implements RatePresenterHelper<V>
 {
-    public static final String TAG = "RatePresenter";
     private boolean isRatingSecondaryActionShown = false;
 
     @Inject
-    public RatePresenter(DataManager dataManager,
+    public RatePresenter(DataHelper dataHelper,
             SchedulerProvider schedulerProvider,
             CompositeDisposable compositeDisposable)
     {
-        super(dataManager, schedulerProvider, compositeDisposable);
+        super(dataHelper, schedulerProvider, compositeDisposable);
     }
 
     @Override
@@ -50,7 +49,6 @@ public class RatePresenter<V extends RateViewHelper> extends BasePresenter<V> im
 
         getMvpView().showLoading();
 
-        //for demo
         getMvpView().hideLoading();
         getMvpView().showMessage(R.string.rating_thanks);
         getMvpView().dismissDialog();

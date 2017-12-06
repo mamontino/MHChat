@@ -128,7 +128,8 @@ public final class MessagingService extends Service
     void sendMessageToServer()
     {
         Timber.d("sendMessageToServer ");
-        msgQueue.forEach(body ->
+
+        for (NotificationMessage body: msgQueue)
         {
             Timber.d("Отправка сообщения: " + body.getMessage());
 
@@ -162,7 +163,7 @@ public final class MessagingService extends Service
                             Timber.e("Непредвиденная ошибка отправки сообщения");
                         }
                     }));
-        });
+        }
     }
 }
 

@@ -17,16 +17,18 @@ import com.medhelp2.mhchat.di.component.ActivityComponent;
 import com.medhelp2.mhchat.ui.base.BaseDialog;
 import com.medhelp2.mhchat.utils.main.PlayStoreUtils;
 
+import javax.inject.Inject;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-
-public class RateDialog extends BaseDialog implements RateViewHelper
+public class RateFragment extends BaseDialog implements RateViewHelper
 {
-    private static final String TAG = "RateDialog";
+    private static final String TAG = "RateFragment";
 
-//    @Inject
-//    RatePresenterHelper<RateViewHelper> presenter;
+    @Inject
+    RatePresenterHelper<RateViewHelper> presenter;
 
     @BindView(R.id.rating_bar_feedback)
     RatingBar ratingBar;
@@ -44,9 +46,9 @@ public class RateDialog extends BaseDialog implements RateViewHelper
     Button submitButton;
 
 
-    public static RateDialog newInstance()
+    public static RateFragment newInstance()
     {
-        RateDialog fragment = new RateDialog();
+        RateFragment fragment = new RateFragment();
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
         return fragment;
@@ -56,13 +58,13 @@ public class RateDialog extends BaseDialog implements RateViewHelper
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.dialog_rate_us, container, false);
+        View view = inflater.inflate(R.layout.fragment_rate, container, false);
         ActivityComponent component = getActivityComponent();
         if (component != null)
         {
             component.inject(this);
             setUnBinder(ButterKnife.bind(this, view));
-//            presenter.onAttach(this);
+            presenter.onAttach(this);
         }
         return view;
     }
@@ -71,7 +73,6 @@ public class RateDialog extends BaseDialog implements RateViewHelper
     {
         super.show(fragmentManager, TAG);
     }
-
 
     @Override
     public void openPlayStoreForRating()
@@ -98,27 +99,27 @@ public class RateDialog extends BaseDialog implements RateViewHelper
         playStoreRatingView.setVisibility(View.GONE);
 
         LayerDrawable stars = (LayerDrawable) ratingBar.getProgressDrawable();
-        stars.getDrawable(2)
-                .setColorFilter(ContextCompat.getColor(getContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(0)
                 .setColorFilter(ContextCompat.getColor(getContext(), R.color.shadow), PorterDuff.Mode.SRC_ATOP);
         stars.getDrawable(1)
                 .setColorFilter(ContextCompat.getColor(getContext(), R.color.shadow), PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(2)
+                .setColorFilter(ContextCompat.getColor(getContext(), R.color.yellow), PorterDuff.Mode.SRC_ATOP);
 
-//        submitButton.setOnClickListener(v -> presenter.onRatingSubmitted(ratingBar.getRating(), message.getText().toString()));
+        submitButton.setOnClickListener(v -> presenter.onRatingSubmitted(ratingBar.getRating(), message.getText().toString()));
     }
 
-//    @OnClick(R.id.btn_later)
-//    void onLaterClick()
-//    {
-//        presenter.onLaterClicked();
-//    }
+    @OnClick(R.id.btn_later)
+    void onLaterClick()
+    {
+        presenter.onLaterClicked();
+    }
 
-//    @OnClick(R.id.btn_rate_on_play_store)
-//    void onPlayStoreRateClick()
-//    {
-//        presenter.onPlayStoreRatingClicked();
-//    }
+    @OnClick(R.id.btn_rate_on_play_store)
+    void onPlayStoreRateClick()
+    {
+        presenter.onPlayStoreRatingClicked();
+    }
 
     @Override
     public void disableRatingStars()
@@ -141,7 +142,7 @@ public class RateDialog extends BaseDialog implements RateViewHelper
     @Override
     public void onDestroyView()
     {
-//        presenter.onDetach();
+        presenter.onDetach();
         super.onDestroyView();
     }
 }

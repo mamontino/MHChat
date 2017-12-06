@@ -22,7 +22,7 @@
 //import com.medhelp2.mhchat.ui.contacts.ContactsAdapter;
 //import com.medhelp2.mhchat.utils.main.AppConstants;
 //import com.medhelp2.mhchat.utils.main.NotificationUtils;
-//import com.medhelp2.mhchat.utils.view.ContactsDivider;
+//import com.medhelp2.mhchat.utils.view.ContactsDecorator;
 //import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 //import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 //
@@ -99,7 +99,7 @@
 //    {
 //        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
 //        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.addItemDecoration(new ContactsDivider(getContext()));
+//        recyclerView.addItemDecoration(new ContactsDecorator(getContext()));
 //        recyclerView.setItemAnimator(new DefaultItemAnimator());
 //        recyclerView.setAdapter(adapter);
 //        recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(getContext(), recyclerView, new RecyclerViewClickListener()

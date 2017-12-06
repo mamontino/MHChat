@@ -9,10 +9,8 @@ import com.medhelp2.mhchat.R;
 
 public final class PlayStoreUtils
 {
-
     private PlayStoreUtils()
     {
-
     }
 
     public static void openPlayStoreForApp(Context context)
@@ -32,5 +30,4 @@ public final class PlayStoreUtils
                             .getString(R.string.app_google_play_store_link) + appPackageName)));
         }
     }
-
 }

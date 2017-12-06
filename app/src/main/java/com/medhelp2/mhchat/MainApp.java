@@ -19,7 +19,6 @@ public class MainApp extends Application  implements Application.ActivityLifecyc
 {
     private AppComponent appComponent;
     private int activityCount = 0;
-    private static MainApp getInstanse;
     public boolean isChatActivityStarted = false;
     public boolean isContactsActivityStarted = false;
 
@@ -27,8 +26,11 @@ public class MainApp extends Application  implements Application.ActivityLifecyc
     public void onCreate()
     {
         super.onCreate();
+
         registerActivityLifecycleCallbacks(this);
+
         Realm.init(this);
+
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
                 .build();
@@ -40,11 +42,6 @@ public class MainApp extends Application  implements Application.ActivityLifecyc
             Timber.plant(new Timber.DebugTree());
             AndroidNetworking.enableLogging(HttpLoggingInterceptor.Level.BODY);
         }
-    }
-
-    public static synchronized MainApp getInstance()
-    {
-        return getInstanse;
     }
 
     public AppComponent getComponent()
