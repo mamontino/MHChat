@@ -23,6 +23,12 @@ public class DoctorsPresenter<V extends DoctorsViewHelper> extends BasePresenter
     }
 
     @Override
+    public void removePassword()
+    {
+        getDataHelper().setCurrentPassword("");
+    }
+
+    @Override
     public void getCenterInfo()
     {
         Timber.d("Получение информации о центре из локального хранилища");

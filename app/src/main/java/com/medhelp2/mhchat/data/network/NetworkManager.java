@@ -2,7 +2,7 @@ package com.medhelp2.mhchat.data.network;
 
 import com.medhelp2.mhchat.data.model.CategoryList;
 import com.medhelp2.mhchat.data.model.CenterList;
-import com.medhelp2.mhchat.data.model.DoctorInfo;
+import com.medhelp2.mhchat.data.model.DoctorInfoList;
 import com.medhelp2.mhchat.data.model.DoctorList;
 import com.medhelp2.mhchat.data.model.MessageList;
 import com.medhelp2.mhchat.data.model.RequestResponse;
@@ -174,13 +174,14 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<DoctorInfo> getDoctorApiCall(int idDoctor)
+    public Observable<DoctorInfoList> getDoctorApiCall(int idDoctor)
     {
         return Rx2AndroidNetworking.get(ApiEndPoint.DOCTOR_BY_ID)
+                .addHeaders(AUTH, AppConstants.API_KEY)
                 .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
                 .addPathParameter(ID_DOCTOR, String.valueOf(idDoctor))
                 .build()
-                .getObjectObservable(DoctorInfo.class);
+                .getObjectObservable(DoctorInfoList.class);
     }
 
     @Override

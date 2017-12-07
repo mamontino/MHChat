@@ -73,6 +73,12 @@ public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresent
                 }));
     }
 
+    @Override
+    public void removePassword()
+    {
+        getDataHelper().setCurrentPassword("");
+    }
+
 //    @Override
 //    public void updateUnread()
 //    {

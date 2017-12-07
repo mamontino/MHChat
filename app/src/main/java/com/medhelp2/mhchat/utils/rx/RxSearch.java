@@ -7,7 +7,6 @@ import io.reactivex.subjects.PublishSubject;
 
 public class RxSearch
 {
-
     private RxSearch()
     {
     }

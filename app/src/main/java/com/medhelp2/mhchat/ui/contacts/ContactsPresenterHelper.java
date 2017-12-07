@@ -10,6 +10,8 @@ public interface ContactsPresenterHelper<V extends ContactsViewHelper> extends M
 
     void updateUserList();
 
+    void removePassword();
+
 //    void loadUserInfo(int id);
 
 //    void updateUnread();

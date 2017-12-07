@@ -15,7 +15,7 @@
             android:layout_width="@dimen/ic_size_big"
             android:layout_height="@dimen/ic_size_big"
             android:layout_marginTop="@dimen/base_element_margin"
-            app:srcCompat="@drawable/ic_logo"/>
+            app:srcCompat="@drawable/holder_doctor"/>
 
         <TextView
             android:id="@+id/tv_price_name_item_no"

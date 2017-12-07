@@ -14,5 +14,7 @@ public interface ProfilePresenterHelper<V extends ProfileViewHelper> extends Mvp
 
     void updateToken();
 
+    void removePassword();
+
     CenterResponse getCenterInfo();
 }

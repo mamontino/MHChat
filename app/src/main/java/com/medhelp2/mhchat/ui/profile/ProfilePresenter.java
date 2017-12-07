@@ -108,6 +108,12 @@ public class ProfilePresenter<V extends ProfileViewHelper> extends BasePresenter
         }
     }
 
+    @Override
+    public void removePassword()
+    {
+        getDataHelper().setCurrentPassword("");
+    }
+
     private void saveCenterInfo(CenterResponse response)
     {
         Timber.d("Сохранение CenterResponse в локальное хранилище");

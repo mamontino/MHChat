@@ -15,6 +15,8 @@ public interface SearchPresenterHelper<V extends SearchViewHelper> extends MvpPr
 
 //    void getLocalPrice(int idCategory);
 
+    void removePassword();
+
     void getData();
 
     public void getCenterInfo();

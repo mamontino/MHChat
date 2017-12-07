@@ -9,7 +9,7 @@ import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterList;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.Doctor;
-import com.medhelp2.mhchat.data.model.DoctorInfo;
+import com.medhelp2.mhchat.data.model.DoctorInfoList;
 import com.medhelp2.mhchat.data.model.DoctorList;
 import com.medhelp2.mhchat.data.model.MessageList;
 import com.medhelp2.mhchat.data.model.MessageResponse;
@@ -120,7 +120,7 @@ public class DataManager implements DataHelper
     }
 
     @Override
-    public Observable<DoctorInfo> getDoctorApiCall(int idDoctor)
+    public Observable<DoctorInfoList> getDoctorApiCall(int idDoctor)
     {
         return networkHelper.getDoctorApiCall(idDoctor);
     }

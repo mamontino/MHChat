@@ -116,6 +116,7 @@
         Close navigation drawer Close navigation drawer Close navigation drawerClose navigation drawerClose navigation
         drawerClose navigation drawerClose navigation drawerClose navigation drawerClose navigation drawer</string>
     <string name="nav_rate">Оценить приложение</string>
+    <string name="hint_phone">Телефон:</string>
 
     <!--Calendar-->
     <array name="calendar_days_array">

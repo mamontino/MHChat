@@ -3,6 +3,7 @@ package com.medhelp2.mhchat.ui.doctor.details;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.DataHelper;
+import com.medhelp2.mhchat.data.model.DoctorInfoList;
 import com.medhelp2.mhchat.ui.base.BasePresenter;
 import com.medhelp2.mhchat.utils.rx.SchedulerProvider;
 
@@ -25,24 +26,34 @@ public class DocDetailsPresenter<V extends DocDetailsViewHelper> extends BasePre
     @Override
     public void loadDocInfo(int idDoctor)
     {
-        if (getMvpView().isNetworkConnected()){
-            Timber.d("Получение информации о докторе из сети");
-            getCompositeDisposable().add(getDataHelper().getDoctorApiCall(idDoctor)
-                    .subscribeOn(getSchedulerProvider().io())
-                    .observeOn(getSchedulerProvider().ui())
-                    .subscribe(response ->
-                    {
-                        try
-                        {
-                            Timber.d("Данные успешно загружены из сети");
-                            getMvpView().updateDocInfo(response);
-                        } catch (Exception e)
-                        {
-                            e.printStackTrace();
-                        }
-                    }, throwable -> Timber.d("Данные из сети загружены с ошибкой: " + throwable.getMessage())));
-        }else{
+        if (idDoctor == 0)
+        {
             getMvpView().showError(R.string.connection_error);
+        } else
+        {
+            if (getMvpView().isNetworkConnected())
+            {
+                Timber.d("Получение информации о докторе из сети: \n" +
+                        "idDoctor: " + idDoctor);
+                getCompositeDisposable().add(getDataHelper().getDoctorApiCall(idDoctor)
+                        .subscribeOn(getSchedulerProvider().io())
+                        .map(DoctorInfoList::getResponse)
+                        .observeOn(getSchedulerProvider().ui())
+                        .subscribe(response ->
+                        {
+                            try
+                            {
+                                Timber.d("Данные успешно загружены из сети");
+                                getMvpView().updateDocInfo(response.get(0));
+                            } catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                        }, throwable -> Timber.d("Данные из сети загружены с ошибкой: " + throwable.getMessage())));
+            } else
+            {
+                getMvpView().showError(R.string.connection_error);
+            }
         }
     }
 

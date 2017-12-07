@@ -3,9 +3,7 @@ package com.medhelp2.mhchat.utils.rx;
 
 public class RxEvents
 {
-
 //    Класс содержит методы для шины событий
-
 
     private RxEvents()
     {
@@ -18,5 +16,4 @@ public class RxEvents
     public static class AutoEvent
     {
     }
-
 }

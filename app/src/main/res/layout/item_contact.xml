@@ -12,22 +12,21 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_centerVertical="true"
-        app:srcCompat="@drawable/ic_account_circle_white_24dp"/>
+        app:srcCompat="@drawable/holder_doctor"/>
 
     <TextView
         android:id="@+id/contacts_tv_username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxLines="1"
-        android:layout_margin="@dimen/base_margin_8dp"
-        android:text="Пользователь"
-        android:textColor="#444444"
         android:layout_centerVertical="true"
-        android:textSize="@dimen/text_size_16sp"
+        android:layout_margin="@dimen/base_margin_8dp"
+        android:layout_toEndOf="@+id/contacts_img"
         android:layout_toLeftOf="@+id/contacts_tv_unread"
-        android:layout_toStartOf="@+id/contacts_tv_unread"
         android:layout_toRightOf="@+id/contacts_img"
-        android:layout_toEndOf="@+id/contacts_img"/>
+        android:layout_toStartOf="@+id/contacts_tv_unread"
+        android:maxLines="1"
+        android:textColor="#444444"
+        android:textSize="@dimen/text_size_16sp"/>
 
     <!--<TextView-->
     <!--android:id="@+id/contacts_tv_last_message"-->
@@ -57,16 +56,16 @@
         android:id="@+id/contacts_tv_unread"
         android:layout_width="20dp"
         android:layout_height="20dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="@dimen/base_margin_8dp"
+        android:layout_marginRight="@dimen/base_margin_8dp"
         android:background="@drawable/rouded_bg_circle"
         android:gravity="center"
         android:text=""
         android:textColor="@android:color/white"
         android:textSize="@dimen/text_size_12sp"
-        android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
-        android:visibility="gone"
-        android:layout_marginEnd="@dimen/base_margin_8dp"
-        android:layout_marginRight="@dimen/base_margin_8dp"
-        android:layout_alignParentEnd="true"/>
+        android:visibility="gone"/>
 
 </RelativeLayout>

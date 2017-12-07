@@ -328,6 +328,7 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     {
         Intent intent = LoginActivity.getStartIntent(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        presenter.removePassword();
         startActivity(intent);
     }
 

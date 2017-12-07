@@ -15,7 +15,7 @@
         android:layout_alignParentTop="true"
         android:layout_marginEnd="@dimen/base_element_margin"
         android:layout_marginRight="@dimen/base_element_margin"
-        app:srcCompat="@drawable/ic_account_circle_blue_400_24dp"/>
+        app:srcCompat="@drawable/holder_doctor"/>
 
     <TextView
         android:id="@+id/doc_name_tv"

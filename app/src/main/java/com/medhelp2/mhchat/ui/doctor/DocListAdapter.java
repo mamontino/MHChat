@@ -19,7 +19,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class DocListAdapter extends RecyclerView.Adapter<BaseViewHolder>
 {
@@ -48,7 +47,6 @@ public class DocListAdapter extends RecyclerView.Adapter<BaseViewHolder>
         switch (viewType)
         {
             case VIEW_TYPE_NORMAL:
-                Timber.d("VIEW_TYPE_NORMAL");
                 return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_doctor, parent, false));
             case VIEW_TYPE_EMPTY:
                 return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_empty_contact, parent, false));
@@ -74,7 +72,6 @@ public class DocListAdapter extends RecyclerView.Adapter<BaseViewHolder>
     {
         if (response != null && response.size() > 0)
         {
-            Timber.d("response != null");
             return response.size();
         } else
         {
@@ -92,10 +89,10 @@ public class DocListAdapter extends RecyclerView.Adapter<BaseViewHolder>
     class ViewHolder extends BaseViewHolder
     {
         @BindView(R.id.doc_name_tv)
-        TextView tvTitle;
+        TextView docName;
 
         @BindView(R.id.doc_spec_tv)
-        TextView tvPrice;
+        TextView docSpec;
 
 
         ViewHolder(View itemView)
@@ -106,8 +103,8 @@ public class DocListAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
         protected void clear()
         {
-            tvTitle.setText("");
-            tvPrice.setText("");
+            docName.setText("");
+            docSpec.setText("");
         }
 
         public void onBind(int position)
@@ -116,8 +113,8 @@ public class DocListAdapter extends RecyclerView.Adapter<BaseViewHolder>
             final Doctor repo = response.get(position);
             if (repo != null)
             {
-                tvTitle.setText(repo.getFullName());
-                tvPrice.setText(repo.getSpecialty());
+                docName.setText(repo.getFullName());
+                docSpec.setText(repo.getSpecialty());
             }
         }
     }
@@ -142,7 +139,8 @@ public class DocListAdapter extends RecyclerView.Adapter<BaseViewHolder>
         }
     }
 
-    public void setFilter(List<Doctor> filterService) {
+    public void setFilter(List<Doctor> filterService)
+    {
         response = new ArrayList<>();
         response.addAll(filterService);
         notifyDataSetChanged();

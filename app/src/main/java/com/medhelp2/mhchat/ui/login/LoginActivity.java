@@ -129,6 +129,7 @@ public class LoginActivity extends BaseActivity implements LoginViewHelper
     {
         Timber.d("openProfileActivity");
         Intent intent = ProfileActivity.getStartIntent(this);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 

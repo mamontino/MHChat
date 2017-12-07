@@ -13,7 +13,11 @@ public final class NetworkUtils
     public static boolean isNetworkConnected(Context context)
     {
         ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo isOnline = cm.getActiveNetworkInfo();
+        NetworkInfo isOnline = null;
+        if (cm != null)
+        {
+            isOnline = cm.getActiveNetworkInfo();
+        }
         return isOnline != null && isOnline.isConnectedOrConnecting();
     }
 }

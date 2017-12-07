@@ -12,4 +12,6 @@ public interface SchedulePresenterHelper<V extends ScheduleViewHelper> extends M
     void getCenterInfo();
 
     void updateCalendar();
+
+    void removePassword();
 }

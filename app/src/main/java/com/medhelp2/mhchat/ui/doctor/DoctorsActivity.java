@@ -85,7 +85,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     RecyclerView recyclerView;
 
     private List<Doctor> cashList;
-    private int idDoctor = 1;
     private ActionBarDrawerToggle drawerToggle;
 
     private TextView headerTitle;
@@ -148,7 +147,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
 
         List<String> spinnerList = new ArrayList<>();
         HashSet<String> hashSet = new HashSet<>();
-        for (Doctor doc: response)
+        for (Doctor doc : response)
         {
             hashSet.add(doc.getSpecialty());
         }
@@ -192,7 +191,8 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
             @Override
             public void onClick(View view, int position)
             {
-                showDocDetailsDialog(idDoctor);
+                int idDoctor = cashList.get(position).getIdDoctor();
+                showDocDetailsFragment(idDoctor);
             }
 
             @Override
@@ -393,6 +393,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     {
         Intent intent = LoginActivity.getStartIntent(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        presenter.removePassword();
         startActivity(intent);
     }
 
@@ -467,7 +468,9 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     }
 
     @Override
-    public void showDocDetailsDialog(int idDoctor) {
+    public void showDocDetailsFragment(int idDoctor)
+    {
+        Timber.d("showDocDetailsFragment with idDoctor: " + idDoctor);
         DocDetailsFragment.newInstance(idDoctor).show(getSupportFragmentManager());
     }
 

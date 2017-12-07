@@ -143,8 +143,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
             {
                 Picasso.with(itemView.getContext())
                         .load(repo.getIdRoom())
-                        .error(R.drawable.ic_account_circle_blue_400_24dp)
-                        .placeholder(R.drawable.ic_account_circle_blue_400_24dp)
+                        .error(R.drawable.holder_doctor)
+                        .placeholder(R.drawable.holder_doctor)
                         .transform(new RoundImage())
                         .into(mContactImage);
 

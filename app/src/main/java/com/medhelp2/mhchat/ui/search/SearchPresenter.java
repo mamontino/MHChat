@@ -50,6 +50,12 @@ public class SearchPresenter<V extends SearchViewHelper> extends BasePresenter<V
     }
 
     @Override
+    public void removePassword()
+    {
+        getDataHelper().setCurrentPassword("");
+    }
+
+    @Override
     public void getData()
     {
         Timber.d("getData");

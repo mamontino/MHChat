@@ -41,7 +41,7 @@ public class DoctorInfo implements Parcelable
 
     @SerializedName("specialty")
     @Expose
-    private int specialty;
+    private String specialty;
 
     @SerializedName("fb_key")
     @Expose
@@ -117,12 +117,12 @@ public class DoctorInfo implements Parcelable
         this.info = info;
     }
 
-    public int getSpecialty()
+    public String getSpecialty()
     {
         return specialty;
     }
 
-    public void setSpecialty(int specialty)
+    public void setSpecialty(String specialty)
     {
         this.specialty = specialty;
     }
@@ -153,7 +153,7 @@ public class DoctorInfo implements Parcelable
         dest.writeString(this.photo);
         dest.writeInt(this.expr);
         dest.writeString(this.info);
-        dest.writeInt(this.specialty);
+        dest.writeString(this.specialty);
         dest.writeString(this.fbKey);
         dest.writeInt(this.idDoctor);
     }
@@ -170,7 +170,7 @@ public class DoctorInfo implements Parcelable
         this.photo = in.readString();
         this.expr = in.readInt();
         this.info = in.readString();
-        this.specialty = in.readInt();
+        this.specialty = in.readString();
         this.fbKey = in.readString();
         this.idDoctor = in.readInt();
     }

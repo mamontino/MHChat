@@ -15,7 +15,7 @@
             android:layout_width="@dimen/ic_size_big"
             android:layout_height="@dimen/ic_size_big"
             android:layout_marginTop="@dimen/base_element_margin"
-            app:srcCompat="@drawable/ic_logo"
+            app:srcCompat="@drawable/holder_doctor"
             android:contentDescription="@string/photo_doctor"/>
 
         <TextView
@@ -91,7 +91,6 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_below="@+id/tv_date_item"
-            android:layout_marginBottom="@dimen/base_element_margin"
             android:layout_marginTop="@dimen/base_element_margin"
             android:text="Отменить"/>
 
@@ -102,7 +101,6 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tv_date_item"
-            android:layout_marginBottom="@dimen/base_element_margin"
             android:layout_marginTop="@dimen/base_element_margin"
             android:visibility="gone"
             android:text="Подтвердить"/>

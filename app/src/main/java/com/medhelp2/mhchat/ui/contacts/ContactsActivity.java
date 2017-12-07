@@ -315,6 +315,7 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
     {
         Intent intent = LoginActivity.getStartIntent(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        presenter.removePassword();
         startActivity(intent);
     }
 
