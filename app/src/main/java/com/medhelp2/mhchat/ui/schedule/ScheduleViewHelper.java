@@ -22,6 +22,8 @@ public interface ScheduleViewHelper extends MvpView
 
     void showLoginActivity();
 
+    void showSaleActivity();
+
     void showAboutFragment();
 
     void showRateFragment();

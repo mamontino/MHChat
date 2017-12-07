@@ -1,13 +1,12 @@
-package com.medhelp2.mhchat.ui.doctor;
+package com.medhelp2.mhchat.ui.sale;
 
 import com.medhelp2.mhchat.data.model.CenterResponse;
-import com.medhelp2.mhchat.data.model.Doctor;
+import com.medhelp2.mhchat.data.model.SaleResponse;
 import com.medhelp2.mhchat.ui.base.MvpView;
 
 import java.util.List;
 
-public interface DoctorsViewHelper extends MvpView
-{
+public interface SaleViewHelper extends MvpView {
 
     void lockDrawer();
 
@@ -15,19 +14,17 @@ public interface DoctorsViewHelper extends MvpView
 
     void closeNavigationDrawer();
 
-    void showDocDetailsFragment(int idDoctor);
-
-    void showScheduleActivity();
-
     void showProfileActivity();
 
-    void showSaleActivity();
+    void showDoctorsActivity();
 
     void showSearchActivity();
 
-    void showContactsActivity();
+    void showScheduleActivity();
 
     void showSettingsActivity();
+
+    void showContactsActivity();
 
     void showAboutFragment();
 
@@ -37,5 +34,5 @@ public interface DoctorsViewHelper extends MvpView
 
     void updateHeader(CenterResponse response);
 
-    void updateView(List<Doctor> response);
+    void updateSaleData(List<SaleResponse> response);
 }

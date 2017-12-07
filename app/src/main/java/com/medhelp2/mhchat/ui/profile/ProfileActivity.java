@@ -33,6 +33,7 @@ import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
+import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
@@ -285,9 +286,9 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
                 showContactsActivity();
                 return true;
 
-            case R.id.nav_item_feedback:
-                showAboutFragment();
-                return true;
+//            case R.id.nav_item_feedback:
+//                showAboutFragment();
+//                return true;
 
             case R.id.nav_item_logout:
                 showLoginActivity();
@@ -302,6 +303,10 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
 
             case R.id.nav_item_record:
                 showSearchActivity();
+                return true;
+
+                case R.id.nav_item_sale:
+                showSaleActivity();
                 return true;
 
             case R.id.nav_item_schedule:
@@ -323,6 +328,13 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
             default:
                 return false;
         }
+    }
+
+    @Override
+    public void showSaleActivity()
+    {
+        Intent intent = SaleActivity.getStartIntent(this);
+        startActivity(intent);
     }
 
     private void showScheduleActivity()

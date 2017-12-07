@@ -24,7 +24,6 @@ import butterknife.OnClick;
 
 public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
 {
-
     @Inject
     ContactsPresenter presenter;
 

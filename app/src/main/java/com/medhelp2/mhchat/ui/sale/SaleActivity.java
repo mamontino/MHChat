@@ -1,9 +1,7 @@
-package com.medhelp2.mhchat.ui.contacts;
+package com.medhelp2.mhchat.ui.sale;
 
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -25,23 +23,18 @@ import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CenterResponse;
-import com.medhelp2.mhchat.data.model.RoomResponse;
+import com.medhelp2.mhchat.data.model.SaleResponse;
 import com.medhelp2.mhchat.ui.about.AboutFragment;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
-import com.medhelp2.mhchat.ui.chat.ChatActivity;
+import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
-import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
-import com.medhelp2.mhchat.utils.main.AppConstants;
-import com.medhelp2.mhchat.utils.main.NotificationUtils;
 import com.medhelp2.mhchat.utils.view.ContactsDecorator;
-import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
-import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,42 +45,33 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-import static com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment.BROADCAST_INCOMING_MESSAGE;
-
-public class ContactsActivity extends BaseActivity implements ContactsViewHelper,
+public class SaleActivity extends BaseActivity implements SaleViewHelper,
         NavigationView.OnNavigationItemSelectedListener
 {
-    public static final String TAG = "ChatListFragment";
-    public static final String PARAM_STATUS = "status";
-    public static final int STATUS_START = 150;
-    public static final int STATUS_FINISH = 250;
-
-    private BroadcastReceiver incomingMessageReceiver;
-
     @Inject
-    ContactsAdapter adapter;
+    SaleAdapter adapter;
 
     @Inject
     LinearLayoutManager layoutManager;
 
-    @BindView(R.id.rv_contacts)
+    @BindView(R.id.rv_sale)
     RecyclerView recyclerView;
 
-    private ArrayList<RoomResponse> contactsList;
+    private ArrayList<SaleResponse> saleList;
 
     @Inject
-    ContactsPresenterHelper<ContactsViewHelper> presenter;
+    SalePresenterHelper<SaleViewHelper> presenter;
 
-    @BindView(R.id.toolbar_contacts)
+    @BindView(R.id.toolbar_sale)
     Toolbar toolbar;
 
-    @BindView(R.id.collapsing_toolbar_contacts)
+    @BindView(R.id.collapsing_toolbar_sale)
     CollapsingToolbarLayout toolbarLayout;
 
-    @BindView(R.id.drawer_contacts)
+    @BindView(R.id.drawer_sale)
     DrawerLayout drawer;
 
-    @BindView(R.id.nav_view_contacts)
+    @BindView(R.id.nav_view_sale)
     NavigationView navView;
 
     private ActionBarDrawerToggle drawerToggle;
@@ -98,20 +82,20 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
 
     public static Intent getStartIntent(Context context)
     {
-        return new Intent(context, ContactsActivity.class);
+        return new Intent(context, SaleActivity.class);
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_contacts);
+        setContentView(R.layout.activity_sale);
         getActivityComponent().inject(this);
         setUnBinder(ButterKnife.bind(this));
         presenter.onAttach(this);
         presenter.getCenterInfo();
         setUp();
-        presenter.updateUserList();
+        presenter.updateSaleList();
     }
 
     @Override
@@ -175,13 +159,6 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         }
     }
 
-    public void showChatActivity()
-    {
-        Intent intent = ChatActivity.getStartIntent(this);
-        startActivity(intent);
-        Timber.d("showChatActivity");
-    }
-
     @Override
     protected void onResume()
     {
@@ -201,23 +178,6 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         recyclerView.addItemDecoration(new ContactsDecorator(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-        recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
-        {
-            @Override
-            public void onClick(View view, int position)
-            {
-                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-                intent.putExtra(AppConstants.ID_ROOM, contactsList.get(position).getIdRoom());
-                intent.putExtra(AppConstants.ROOM_NAME, contactsList.get(position).getFullName());
-                startActivity(intent);
-            }
-
-            @Override
-            public void onLongClick(View view, int position)
-            {
-
-            }
-        }));
     }
 
     private void setupDrawer()
@@ -333,6 +293,7 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         switch (item.getItemId())
         {
             case R.id.nav_item_chat:
+                showContactsActivity();
                 return true;
 
 //            case R.id.nav_item_feedback:
@@ -341,10 +302,6 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
 
             case R.id.nav_item_logout:
                 showLoginActivity();
-                return true;
-
-            case R.id.nav_item_sale:
-                showSaleActivity();
                 return true;
 
             case R.id.nav_item_main:
@@ -381,65 +338,25 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
     }
 
     @Override
-    public void showSaleActivity()
+    public void showContactsActivity()
     {
-        Intent intent = SaleActivity.getStartIntent(this);
+        Intent intent = ContactsActivity.getStartIntent(this);
         startActivity(intent);
     }
 
     @Override
     public void onDestroy()
     {
-        if (incomingMessageReceiver != null)
-        {
-            unregisterReceiver(incomingMessageReceiver);
-        }
         presenter.onDetach();
         super.onDestroy();
     }
 
     @Override
-    public void onStart()
+    public void updateSaleData(List<SaleResponse> response)
     {
-        super.onStart();
-        registerIncomingMessageReceiver();
-    }
-
-
-    @Override
-    public void updateUserListData(List<RoomResponse> response)
-    {
-        contactsList = new ArrayList<>();
-        contactsList.addAll(response);
-        adapter.addItems(contactsList);
-        adapter.addItems(response);
-    }
-
-    private void registerIncomingMessageReceiver()
-    {
-        incomingMessageReceiver = new BroadcastReceiver()
-        {
-            @Override
-            public void onReceive(Context context, Intent intent)
-            {
-                Timber.d("Получено новое сообщение");
-                int status = intent.getIntExtra(PARAM_STATUS, 0);
-                Timber.d("onReceive: status = " + status);
-
-                if (status == STATUS_START)
-                {
-                    Timber.d("Запуск BroadcastReceiver");
-                }
-                if (status == STATUS_FINISH)
-                {
-                    Timber.d("Остановка BroadcastReceiver");
-                    presenter.updateUserList();
-                    NotificationUtils.clearNotifications(getApplicationContext());
-                }
-            }
-        };
-
-        IntentFilter filterIncomingMessage = new IntentFilter(BROADCAST_INCOMING_MESSAGE);
-        registerReceiver(incomingMessageReceiver, filterIncomingMessage);
+//        saleList = new ArrayList<>();
+//        saleList.addAll(response);
+//        adapter.addItems(saleList);
+//        adapter.addItems(response);
     }
 }

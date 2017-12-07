@@ -38,11 +38,11 @@
             android:checked="true"
             android:icon="@drawable/ic_person_pin_white_24dp"
             android:title="@string/nav_staff"/>
-        <item
-            android:id="@+id/nav_item_feedback"
-            android:checked="true"
-            android:icon="@drawable/ic_question_answer_white_24dp"
-            android:title="@string/nav_feedback"/>
+        <!--<item-->
+            <!--android:id="@+id/nav_item_feedback"-->
+            <!--android:checked="true"-->
+            <!--android:icon="@drawable/ic_question_answer_white_24dp"-->
+            <!--android:title="@string/nav_feedback"/>-->
         <!--<item-->
             <!--android:id="@+id/nav_item_settings"-->
             <!--android:checked="true"-->

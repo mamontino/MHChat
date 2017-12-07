@@ -39,6 +39,7 @@ import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
+import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.view.ItemListDecorator;
@@ -296,9 +297,9 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
                 showContactsActivity();
                 return true;
 
-            case R.id.nav_item_feedback:
-                showAboutFragment();
-                return true;
+//            case R.id.nav_item_feedback:
+//                showAboutFragment();
+//                return true;
 
             case R.id.nav_item_logout:
                 showLoginActivity();
@@ -316,6 +317,10 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
 
             case R.id.nav_item_schedule:
                 showScheduleActivity();
+                return true;
+
+                case R.id.nav_item_sale:
+                showSaleActivity();
                 return true;
 
 //            case R.id.nav_item_settings:
@@ -341,6 +346,13 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
         Intent intent = LoginActivity.getStartIntent(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         presenter.removePassword();
+        startActivity(intent);
+    }
+
+    @Override
+    public void showSaleActivity()
+    {
+        Intent intent = SaleActivity.getStartIntent(this);
         startActivity(intent);
     }
 

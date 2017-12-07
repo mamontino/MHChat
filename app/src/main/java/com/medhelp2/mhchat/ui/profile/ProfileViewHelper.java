@@ -19,6 +19,8 @@ public interface ProfileViewHelper extends MvpView
 
     void showContactsActivity();
 
+    void showSaleActivity();
+
     void showDoctorsActivity();
 
     void showSearchActivity();

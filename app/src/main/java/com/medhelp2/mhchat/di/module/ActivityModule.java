@@ -34,6 +34,10 @@ import com.medhelp2.mhchat.ui.profile.ProfileViewHelper;
 import com.medhelp2.mhchat.ui.rating.RatePresenter;
 import com.medhelp2.mhchat.ui.rating.RatePresenterHelper;
 import com.medhelp2.mhchat.ui.rating.RateViewHelper;
+import com.medhelp2.mhchat.ui.sale.SaleAdapter;
+import com.medhelp2.mhchat.ui.sale.SalePresenter;
+import com.medhelp2.mhchat.ui.sale.SalePresenterHelper;
+import com.medhelp2.mhchat.ui.sale.SaleViewHelper;
 import com.medhelp2.mhchat.ui.schedule.ScheduleAdapter;
 import com.medhelp2.mhchat.ui.schedule.SchedulePresenter;
 import com.medhelp2.mhchat.ui.schedule.SchedulePresenterHelper;
@@ -108,6 +112,14 @@ public class ActivityModule
     {
         return presenter;
     }
+
+    @PerActivity
+    @Provides
+    SalePresenterHelper<SaleViewHelper> provideSalePresenter(SalePresenter<SaleViewHelper> presenter)
+    {
+        return presenter;
+    }
+
 
     @PerActivity
     @Provides
@@ -195,6 +207,13 @@ public class ActivityModule
     ContactsAdapter provideContactsAdapter()
     {
         return new ContactsAdapter(new ArrayList<>());
+    }
+
+    @PerActivity
+    @Provides
+    SaleAdapter provideSaleAdapter()
+    {
+        return new SaleAdapter(new ArrayList<>());
     }
 
     @PerActivity

@@ -46,6 +46,12 @@
         </activity>
 
         <activity
+            android:name=".ui.sale.SaleActivity"
+            android:screenOrientation="portrait"
+            android:label="@string/app_sale">
+        </activity>
+
+        <activity
             android:name=".ui.contacts.ContactsActivity"
             android:screenOrientation="portrait"
             android:label="@string/app_chat">

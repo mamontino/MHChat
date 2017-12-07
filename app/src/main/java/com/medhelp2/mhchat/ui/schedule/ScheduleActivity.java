@@ -32,6 +32,7 @@ import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
+import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.decorators.DayDecorator;
 import com.medhelp2.mhchat.ui.schedule.decorators.SelectDecorator;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
@@ -276,12 +277,16 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
                 showContactsActivity();
                 return true;
 
-            case R.id.nav_item_feedback:
-                showAboutFragment();
-                return true;
+//            case R.id.nav_item_feedback:
+//                showAboutFragment();
+//                return true;
 
             case R.id.nav_item_logout:
                 showLoginActivity();
+                return true;
+
+            case R.id.nav_item_sale:
+                showSaleActivity();
                 return true;
 
             case R.id.nav_item_main:
@@ -320,6 +325,13 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     public void showSearchActivity()
     {
         Intent intent = SearchActivity.getStartIntent(this);
+        startActivity(intent);
+    }
+
+    @Override
+    public void showSaleActivity()
+    {
+        Intent intent = SaleActivity.getStartIntent(this);
         startActivity(intent);
     }
 

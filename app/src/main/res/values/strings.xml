@@ -16,6 +16,13 @@
     <string name="hint_message">Введите сообщение</string>
     <string name="btn_send">Отправить</string>
 
+    <string name="hint_doctor">Врач:</string>
+    <string name="hint_doctor_name">ФИО доктора</string>
+    <string name="hint_reception_date">Дата приема:</string>
+    <string name="btn_confirm">Подтвердить</string>
+    <string name="btn_cancel">Отменить</string>
+    <string name="hint_phone">Телефон:</string>
+
     <string name="clear">Очистить</string>
     <string name="cut">Вырезать</string>
     <string name="copy">Копировать</string>
@@ -38,6 +45,7 @@
     <string name="nav_settings">Настройки</string>
     <string name="nav_staff">Специалисты</string>
     <string name="nav_feedback">Обратная связь</string>
+    <string name="nav_rate">Оценить приложение</string>
 
     <!--Error MessageResponse-->
     <string name="api_retry_error">Повторите позже…</string>
@@ -115,8 +123,7 @@
         Close navigation drawer Close navigation drawer Close navigation drawer  Close navigation drawer
         Close navigation drawer Close navigation drawer Close navigation drawerClose navigation drawerClose navigation
         drawerClose navigation drawerClose navigation drawerClose navigation drawerClose navigation drawer</string>
-    <string name="nav_rate">Оценить приложение</string>
-    <string name="hint_phone">Телефон:</string>
+    <string name="app_sale">Акции</string>
 
     <!--Calendar-->
     <array name="calendar_days_array">

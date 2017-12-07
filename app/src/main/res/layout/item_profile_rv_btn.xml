@@ -8,7 +8,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/activity_horizontal_margin">
+        android:paddingTop="@dimen/activity_horizontal_margin"
+        android:paddingLeft="@dimen/activity_horizontal_margin"
+        android:paddingRight="@dimen/activity_horizontal_margin"
+        android:paddingBottom="@dimen/base_element_margin">
 
         <ImageView
             android:id="@+id/image_doc_item"
@@ -30,8 +33,7 @@
             android:layout_marginTop="@dimen/base_element_margin"
             android:layout_toEndOf="@+id/image_doc_item"
             android:layout_toRightOf="@+id/image_doc_item"
-            android:gravity="center_horizontal"
-            android:text="Наименование услуги"/>
+            android:gravity="center_horizontal"/>
 
         <TextView
             android:id="@+id/tv_doc_hint_item"
@@ -42,7 +44,7 @@
             android:layout_below="@+id/tv_price_name_item"
             android:layout_marginTop="@dimen/base_element_margin"
             android:gravity="start"
-            android:text="Врач: "/>
+            android:text="@string/hint_doctor"/>
 
         <TextView
             android:id="@+id/tv_doc_name_item"
@@ -58,14 +60,14 @@
             android:layout_toEndOf="@+id/tv_doc_hint_item"
             android:layout_toRightOf="@+id/tv_doc_hint_item"
             android:gravity="end"
-            android:text="ФИО доктора"/>
+            android:text="@string/hint_doctor_name"/>
 
         <TextView
             android:id="@+id/tv_date_hint_item"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="start"
-            android:text="Дата приема: "
+            android:text="@string/hint_reception_date"
             android:layout_alignBaseline="@+id/tv_date_item"
             android:layout_alignBottom="@+id/tv_date_item"
             android:layout_alignLeft="@+id/tv_doc_hint_item"
@@ -81,8 +83,7 @@
             android:layout_marginTop="@dimen/base_element_margin"
             android:layout_toEndOf="@+id/tv_date_hint_item"
             android:layout_toRightOf="@+id/tv_date_hint_item"
-            android:gravity="end"
-            android:text="21.01.2018 14:30"/>
+            android:gravity="end"/>
 
         <Button
             android:id="@+id/btn_cancel_profile_item"
@@ -92,7 +93,7 @@
             android:layout_alignParentStart="true"
             android:layout_below="@+id/tv_date_item"
             android:layout_marginTop="@dimen/base_element_margin"
-            android:text="Отменить"/>
+            android:text="@string/btn_cancel"/>
 
         <Button
             android:id="@+id/btn_confirm_profile_item"
@@ -103,7 +104,7 @@
             android:layout_below="@+id/tv_date_item"
             android:layout_marginTop="@dimen/base_element_margin"
             android:visibility="gone"
-            android:text="Подтвердить"/>
+            android:text="@string/btn_confirm"/>
 
     </RelativeLayout>
 

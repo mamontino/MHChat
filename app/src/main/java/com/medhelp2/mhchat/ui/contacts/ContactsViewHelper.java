@@ -20,6 +20,8 @@ public interface ContactsViewHelper extends MvpView {
 
     void showSearchActivity();
 
+    void showSaleActivity();
+
     void showScheduleActivity();
 
     void showSettingsActivity();
