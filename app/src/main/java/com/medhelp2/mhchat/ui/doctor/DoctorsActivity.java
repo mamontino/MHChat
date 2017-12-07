@@ -54,7 +54,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import timber.log.Timber;
 
-public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, NavigationView.OnNavigationItemSelectedListener, Spinner.OnItemSelectedListener
+public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
+        NavigationView.OnNavigationItemSelectedListener, Spinner.OnItemSelectedListener
 {
     @Inject
     DoctorsPresenterHelper<DoctorsViewHelper> presenter;
@@ -84,6 +85,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
     RecyclerView recyclerView;
 
     private List<Doctor> cashList;
+    private int idDoctor = 1;
     private ActionBarDrawerToggle drawerToggle;
 
     private TextView headerTitle;
@@ -190,11 +192,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
             @Override
             public void onClick(View view, int position)
             {
-//                Intent intent = new Intent(getApplicationContext(), ChatActivity.class);
-//                intent.putExtra(AppConstants.ID_ROOM, cashList.get(position).getIdRoom());
-//                intent.putExtra(AppConstants.ROOM_NAME, cashList.get(position).getFullName());
-//                startActivity(intent);
-                showDocDetailsDialog();
+                showDocDetailsDialog(idDoctor);
             }
 
             @Override
@@ -469,8 +467,8 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
     }
 
     @Override
-    public void showDocDetailsDialog() {
-        DocDetailsFragment.newInstance().show(getSupportFragmentManager());
+    public void showDocDetailsDialog(int idDoctor) {
+        DocDetailsFragment.newInstance(idDoctor).show(getSupportFragmentManager());
     }
 
     @Override

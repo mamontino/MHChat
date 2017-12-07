@@ -14,7 +14,8 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresenter<V> implements ChatListPresenterHelper<V>
+public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresenter<V>
+        implements ChatListPresenterHelper<V>
 {
     @Inject
     public ChatListPresenter(DataHelper dataHelper,
@@ -163,12 +164,4 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
                         Timber.d("sendReadMessages: успешная отправка запроса на прочтение сообщений: " + response.getMessage()), throwable ->
                         Timber.e("sendReadMessages: отправка запроса на прочтение сообщений: " + throwable.getMessage())));
     }
-
-//    private void sendRealmReadMessages(int idRoom)
-//    {
-//        getCompositeDisposable().add(getDataHelper().setRealmReadMessages(idRoom)
-//                .subscribeOn(getSchedulerProvider().io())
-//                .observeOn(getSchedulerProvider().ui())
-//                .subscribe(() -> Timber.d("Успешная отправка сообщения")));
-//    }
 }

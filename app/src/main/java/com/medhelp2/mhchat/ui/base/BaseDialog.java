@@ -22,122 +22,147 @@ import com.medhelp2.mhchat.di.component.ActivityComponent;
 import butterknife.Unbinder;
 
 
-public abstract class BaseDialog extends DialogFragment implements DialogMvpView {
-
-    private BaseActivity mActivity;
-    private Unbinder mUnBinder;
+public abstract class BaseDialog extends DialogFragment implements DialogMvpView
+{
+    private BaseActivity activity;
+    private Unbinder unbinder;
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Context context)
+    {
         super.onAttach(context);
-        if (context instanceof BaseActivity) {
+        if (context instanceof BaseActivity)
+        {
             BaseActivity mActivity = (BaseActivity) context;
-            this.mActivity = mActivity;
+            this.activity = mActivity;
             mActivity.onFragmentAttached();
         }
     }
 
     @Override
-    public void showLoading() {
-        if (mActivity != null) {
-            mActivity.showLoading();
+    public void showLoading()
+    {
+        if (activity != null)
+        {
+            activity.showLoading();
         }
     }
 
     @Override
-    public void hideLoading() {
-        if (mActivity != null) {
-            mActivity.hideLoading();
+    public void hideLoading()
+    {
+        if (activity != null)
+        {
+            activity.hideLoading();
         }
     }
 
     @Override
-    public void showError(String message) {
-        if (mActivity != null) {
-            mActivity.showError(message);
+    public void showError(String message)
+    {
+        if (activity != null)
+        {
+            activity.showError(message);
         }
     }
 
     @Override
-    public void showError(@StringRes int resId) {
-        if (mActivity != null) {
-            mActivity.showError(resId);
+    public void showError(@StringRes int resId)
+    {
+        if (activity != null)
+        {
+            activity.showError(resId);
         }
     }
 
     @Override
-    public void showMessage(String message) {
-        if (mActivity != null) {
-            mActivity.showMessage(message);
+    public void showMessage(String message)
+    {
+        if (activity != null)
+        {
+            activity.showMessage(message);
         }
     }
 
     @Override
-    public void showMessage(@StringRes int resId) {
-        if (mActivity != null) {
-            mActivity.showMessage(resId);
+    public void showMessage(@StringRes int resId)
+    {
+        if (activity != null)
+        {
+            activity.showMessage(resId);
         }
     }
 
     @Override
-    public boolean isNetworkConnected() {
-        if (mActivity != null) {
-            return mActivity.isNetworkConnected();
+    public boolean isNetworkConnected()
+    {
+        if (activity != null)
+        {
+            return activity.isNetworkConnected();
         }
         return false;
     }
 
     @Override
-    public void onDetach() {
-        mActivity = null;
+    public void onDetach()
+    {
+        activity = null;
         super.onDetach();
     }
 
     @Override
-    public void hideKeyboard() {
-        if (mActivity != null) {
-            mActivity.hideKeyboard();
+    public void hideKeyboard()
+    {
+        if (activity != null)
+        {
+            activity.hideKeyboard();
         }
     }
 
     @Override
-    public void openActivityLogin() {
-        if (mActivity != null) {
-            mActivity.openActivityLogin();
+    public void openActivityLogin()
+    {
+        if (activity != null)
+        {
+            activity.openActivityLogin();
         }
     }
 
-    public BaseActivity getBaseActivity() {
-        return mActivity;
+    public BaseActivity getBaseActivity()
+    {
+        return activity;
     }
 
-    public ActivityComponent getActivityComponent() {
-        if (mActivity != null) {
-            return mActivity.getActivityComponent();
+    public ActivityComponent getActivityComponent()
+    {
+        if (activity != null)
+        {
+            return activity.getActivityComponent();
         }
         return null;
     }
 
-    public void setUnBinder(Unbinder unBinder) {
-        mUnBinder = unBinder;
+    public void setUnBinder(Unbinder unBinder)
+    {
+        unbinder = unBinder;
     }
 
     protected abstract void setUp(View view);
 
     @NonNull
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) {
-        // the content
+    public Dialog onCreateDialog(Bundle savedInstanceState)
+    {
         final RelativeLayout root = new RelativeLayout(getActivity());
         root.setLayoutParams(new ViewGroup.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
 
-        // creating the fullscreen dialog
         final Dialog dialog = new Dialog(getContext());
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(root);
-        if (dialog.getWindow() != null) {
+        if (dialog.getWindow() != null)
+        {
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
             dialog.getWindow().setLayout(
                     ViewGroup.LayoutParams.MATCH_PARENT,
@@ -149,15 +174,18 @@ public abstract class BaseDialog extends DialogFragment implements DialogMvpView
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    {
         super.onViewCreated(view, savedInstanceState);
         setUp(view);
     }
 
-    public void show(FragmentManager fragmentManager, String tag) {
+    public void show(FragmentManager fragmentManager, String tag)
+    {
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         Fragment prevFragment = fragmentManager.findFragmentByTag(tag);
-        if (prevFragment != null) {
+        if (prevFragment != null)
+        {
             transaction.remove(prevFragment);
         }
         transaction.addToBackStack(null);
@@ -165,15 +193,18 @@ public abstract class BaseDialog extends DialogFragment implements DialogMvpView
     }
 
     @Override
-    public void dismissDialog(String tag) {
+    public void dismissDialog(String tag)
+    {
         dismiss();
         getBaseActivity().onFragmentDetached(tag);
     }
 
     @Override
-    public void onDestroy() {
-        if (mUnBinder != null) {
-            mUnBinder.unbind();
+    public void onDestroy()
+    {
+        if (unbinder != null)
+        {
+            unbinder.unbind();
         }
         super.onDestroy();
     }

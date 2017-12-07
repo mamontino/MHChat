@@ -7,7 +7,7 @@ import com.medhelp2.mhchat.ui.base.MvpPresenter;
 @PerActivity
 public interface DocDetailsPresenterHelper<V extends DocDetailsViewHelper> extends MvpPresenter<V>
 {
-    void loadDocInfo();
+    void loadDocInfo(int idDoctor);
 
     void onScheduleClicked();
 

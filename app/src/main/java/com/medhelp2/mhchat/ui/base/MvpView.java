@@ -5,8 +5,8 @@ import android.support.annotation.StringRes;
 
 // TODO: Базовый интерфейс для View в MVP (Model View Presenter)
 
-public interface MvpView {
-
+public interface MvpView
+{
     void showLoading();
 
     void hideLoading();
@@ -24,5 +24,4 @@ public interface MvpView {
     boolean isNetworkConnected();
 
     void hideKeyboard();
-
 }

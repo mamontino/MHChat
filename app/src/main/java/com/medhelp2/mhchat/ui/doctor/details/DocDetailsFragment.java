@@ -11,14 +11,17 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
+import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.di.component.ActivityComponent;
 import com.medhelp2.mhchat.ui.base.BaseDialog;
+import com.medhelp2.mhchat.utils.main.AppConstants;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelper
 {
@@ -42,10 +45,17 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
     @BindView(R.id.doc_info_spec)
     TextView docInfoSpec;
 
-    public static DocDetailsFragment newInstance()
+    private int idDoctor;
+
+    public static DocDetailsFragment newInstance(int idDoctor)
     {
+        Timber.d("DocDetailsFragment newInstance for idDoctor " + idDoctor);
         Bundle args = new Bundle();
         DocDetailsFragment fragment = new DocDetailsFragment();
+        if (idDoctor != 0)
+        {
+            args.putInt(AppConstants.ID_ROOM, idDoctor);
+        }
         fragment.setArguments(args);
         return fragment;
     }
@@ -81,6 +91,7 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
     @Override
     protected void setUp(View view)
     {
+        presenter.loadDocInfo(idDoctor);
         view.setOnClickListener(v -> super.dismissDialog(TAG));
     }
 
@@ -103,7 +114,7 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
     }
 
     @Override
-    public void updateDocInfo()
+    public void updateDocInfo(DoctorInfo doctorInfo)
     {
 
     }

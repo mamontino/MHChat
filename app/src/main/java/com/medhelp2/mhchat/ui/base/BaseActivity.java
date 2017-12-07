@@ -18,22 +18,21 @@ import android.widget.Toast;
 
 import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
-import com.medhelp2.mhchat.utils.main.MainUtils;
-import com.medhelp2.mhchat.utils.main.NetworkUtils;
 import com.medhelp2.mhchat.di.component.ActivityComponent;
 import com.medhelp2.mhchat.di.component.DaggerActivityComponent;
 import com.medhelp2.mhchat.di.module.ActivityModule;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
+import com.medhelp2.mhchat.utils.main.MainUtils;
+import com.medhelp2.mhchat.utils.main.NetworkUtils;
 
 import butterknife.Unbinder;
 
 
-public abstract class BaseActivity extends AppCompatActivity implements MvpView, BaseFragment.Callback
+public abstract class BaseActivity extends AppCompatActivity
+        implements MvpView, BaseFragment.Callback
 {
     private ProgressDialog dialog;
-
     private ActivityComponent activityComponent;
-
     private Unbinder unbinder;
 
     @Override
@@ -152,7 +151,10 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView,
         {
             InputMethodManager imm = (InputMethodManager)
                     getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            if (imm != null)
+            {
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            }
         }
     }
 
@@ -171,10 +173,10 @@ public abstract class BaseActivity extends AppCompatActivity implements MvpView,
     @Override
     protected void onDestroy()
     {
-//        if (unbinder != null)
-//        {
-//            unbinder.unbind();
-//        }
+        if (unbinder != null)
+        {
+            unbinder.unbind();
+        }
         super.onDestroy();
     }
 

@@ -145,7 +145,6 @@ public class DocListAdapter extends RecyclerView.Adapter<BaseViewHolder>
     public void setFilter(List<Doctor> filterService) {
         response = new ArrayList<>();
         response.addAll(filterService);
-//        addItems(filterService);
         notifyDataSetChanged();
     }
 }
