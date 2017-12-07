@@ -2,6 +2,7 @@ package com.medhelp2.mhchat.data.network;
 
 import com.medhelp2.mhchat.data.model.CategoryList;
 import com.medhelp2.mhchat.data.model.CenterList;
+import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.data.model.DoctorList;
 import com.medhelp2.mhchat.data.model.MessageList;
 import com.medhelp2.mhchat.data.model.RequestResponse;
@@ -14,8 +15,8 @@ import java.util.List;
 
 import io.reactivex.Observable;
 
-public interface NetworkHelper {
-
+public interface NetworkHelper
+{
     Observable<UserList> doLogin(String username, String password);
 
     Observable<RequestResponse> sendTokenToServer(String token);
@@ -40,7 +41,7 @@ public interface NetworkHelper {
 
     Observable<DoctorList> getStaffApiCall();
 
-//    Observable<DoctorInfo> getDoctorApiCall();
+    Observable<DoctorInfo> getDoctorApiCall(int idDoctor);
 
     Observable<VisitList> getAllReceptionApiCall();
 

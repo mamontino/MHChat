@@ -26,6 +26,8 @@ public interface SearchViewHelper extends MvpView
 
     void showAboutFragment();
 
+    void showRateFragment();
+
     void showDoctorsActivity();
 
     void showSettingsActivity();

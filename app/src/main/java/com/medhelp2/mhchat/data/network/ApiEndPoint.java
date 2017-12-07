@@ -4,9 +4,8 @@ package com.medhelp2.mhchat.data.network;
 interface ApiEndPoint
 {
     String BASE_URL = "http://192.168.0.110/api/v1/";
-//    String BASE_URL = "http://89.189.183.200:8648/mh_api/v1/";
 
-//    POST
+    //    POST AUTH
 
     String LOGIN = BASE_URL + "login";
 
@@ -14,13 +13,13 @@ interface ApiEndPoint
 
     String SEND_MESSAGE = BASE_URL + "send/message";
 
-//    GET ROOM
+    //    GET ROOM
 
     String ROOM_BY_ID = BASE_URL + "rooms/{id_user}/{id_room}";
 
     String ROOM_LIST = BASE_URL + "rooms/{id_user}";
 
-//    GET MESSAGE
+    //    GET MESSAGE
 
     String MESSAGE_LIST = BASE_URL + "message/{id_room}";
 

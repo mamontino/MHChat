@@ -29,6 +29,8 @@ public interface DoctorsViewHelper extends MvpView
 
     void showAboutFragment();
 
+    void showRateFragment();
+
     void showLoginActivity();
 
     void updateHeader(CenterResponse response);

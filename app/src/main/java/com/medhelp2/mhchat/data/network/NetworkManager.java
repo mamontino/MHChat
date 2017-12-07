@@ -2,6 +2,7 @@ package com.medhelp2.mhchat.data.network;
 
 import com.medhelp2.mhchat.data.model.CategoryList;
 import com.medhelp2.mhchat.data.model.CenterList;
+import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.data.model.DoctorList;
 import com.medhelp2.mhchat.data.model.MessageList;
 import com.medhelp2.mhchat.data.model.RequestResponse;
@@ -30,14 +31,11 @@ public class NetworkManager implements NetworkHelper
     private static final String ID_CENTER = "id_center";
     private static final String ID_CLIENT = "id_client";
     private static final String ID_DOCTOR = "id_doctor";
-    private static final String ID_SPEC = "id_spec";
     private static final String ID_USER = "id_user";
     private static final String ID_ROOM = "id_room";
     private static final String USERNAME = "username";
     private static final String PASSWORD = "password";
     private static final String FB_TOKEN = "fb_token";
-    private static final String TOKEN = "token";
-    private static final String API_KEY = "api_key";
     private static final String MESSAGE = "message";
     private static final String AUTH = "Authorization";
 
@@ -69,7 +67,6 @@ public class NetworkManager implements NetworkHelper
                 .getObjectObservable(RoomList.class)
                 .map(roomList -> (List<RoomResponse>) new ArrayList<>(roomList.getResponses()));
     }
-
 
     @Override
     public Observable<RoomResponse> getRoomById(int id)
@@ -176,15 +173,15 @@ public class NetworkManager implements NetworkHelper
                 .getObjectObservable(DoctorList.class);
     }
 
-//    @Override
-//    public Observable<DoctorInfo> getDoctorApiCall()
-//    {
-//        return Rx2AndroidNetworking.get(ApiEndPoint.DOCTOR_BY_ID)
-//                .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
-//                .addPathParameter(ID_DOCTOR, String.valueOf(prefManager.getCurrentDoctorId()))
-//                .build()
-//                .getObjectObservable(DoctorInfo.class);
-//    }
+    @Override
+    public Observable<DoctorInfo> getDoctorApiCall(int idDoctor)
+    {
+        return Rx2AndroidNetworking.get(ApiEndPoint.DOCTOR_BY_ID)
+                .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
+                .addPathParameter(ID_DOCTOR, String.valueOf(idDoctor))
+                .build()
+                .getObjectObservable(DoctorInfo.class);
+    }
 
     @Override
     public Observable<VisitList> getAllReceptionApiCall()

@@ -26,6 +26,8 @@ public interface ContactsViewHelper extends MvpView {
 
     void showAboutFragment();
 
+    void showRateFragment();
+
     void showLoginActivity();
 
     void updateHeader(CenterResponse response);

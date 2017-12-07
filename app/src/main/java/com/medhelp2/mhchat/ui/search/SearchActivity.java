@@ -38,6 +38,7 @@ import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
+import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.view.ItemListDecorator;
@@ -321,6 +322,10 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
 //                showSettingsActivity();
 //                return true;
 
+            case R.id.nav_item_rate:
+                showRateFragment();
+                return true;
+
             case R.id.nav_item_staff:
                 showDoctorsActivity();
                 return true;
@@ -349,6 +354,12 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     public void showAboutFragment()
     {
         AboutFragment.newInstance().show(getSupportFragmentManager());
+    }
+
+    @Override
+    public void showRateFragment()
+    {
+        RateFragment.newInstance().show(getSupportFragmentManager());
     }
 
     @Override

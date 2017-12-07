@@ -32,6 +32,7 @@ import com.medhelp2.mhchat.ui.chat.ChatActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
+import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
@@ -52,7 +53,8 @@ import timber.log.Timber;
 
 import static com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment.BROADCAST_INCOMING_MESSAGE;
 
-public class ContactsActivity extends BaseActivity implements ContactsViewHelper, NavigationView.OnNavigationItemSelectedListener
+public class ContactsActivity extends BaseActivity implements ContactsViewHelper,
+        NavigationView.OnNavigationItemSelectedListener
 {
     public static final String TAG = "ChatListFragment";
     public static final String PARAM_STATUS = "status";
@@ -111,17 +113,6 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         presenter.updateUserList();
     }
 
-
-//    private void showContactList()
-//    {
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .disallowAddToBackStack()
-//                .add(R.id.fr_contacts, ContactsListFragment.newInstance(), ContactsListFragment.TAG)
-//                .commit();
-//        Timber.d("showContactList");
-//    }
-
     @Override
     public void updateHeader(CenterResponse response)
     {
@@ -146,7 +137,9 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         ActionBar actionBar = getSupportActionBar();
         toolbarLayout.setTitleEnabled(false);
 
-        AppBarLayout.LayoutParams appBarParams = (AppBarLayout.LayoutParams) toolbarLayout.getLayoutParams();
+        AppBarLayout.LayoutParams appBarParams =
+                (AppBarLayout.LayoutParams) toolbarLayout.getLayoutParams();
+
         if (actionBar != null)
         {
             actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
@@ -154,51 +147,6 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
             actionBar.setDisplayShowHomeEnabled(true);
         }
     }
-
-
-//    @Override
-//    public void onFragmentAttached()
-//    {
-//    }
-//
-//    @Override
-//    public void onFragmentDetached(String tag)
-//    {
-//        Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
-//        if (fragment != null)
-//        {
-//            getSupportFragmentManager()
-//                    .beginTransaction()
-//                    .disallowAddToBackStack()
-//                    .setCustomAnimations(R.anim.slide_left, R.anim.slide_right)
-//                    .remove(fragment)
-//                    .commitNow();
-//            Timber.d("onFragmentDetached: " + tag);
-//        }
-//    }
-
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu)
-//    {
-//        MenuInflater inflater = getMenuInflater();
-//        inflater.inflate(R.menu.menu_settings, menu);
-//        return true;
-//    }
-//
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item)
-//    {
-//        switch (item.getItemId())
-//        {
-//            case R.id.action_settings:
-//                showSettingsActivity();
-//                return true;
-//            case android.R.id.home:
-//                return true;
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//    }
 
     @Override
     public void lockDrawer()
@@ -233,18 +181,6 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         Timber.d("showChatActivity");
     }
 
-//    public void openDetailsFragment()
-//    {
-//        getSupportFragmentManager()
-//                .beginTransaction()
-//                .disallowAddToBackStack()
-//                .setCustomAnimations(R.anim.slide_left, R.anim.slide_right)
-//                .add(R.id.fr, DocDetailsFragment.newInstance(), DocDetailsFragment.TAG)
-//                .commit();
-//
-//        Timber.d("openDetailsFragment");
-//    }
-
     @Override
     protected void onResume()
     {
@@ -252,7 +188,6 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         if (drawer != null)
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
-
 
     @Override
     protected void setUp()
@@ -307,6 +242,7 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
                 super.onDrawerClosed(drawerView);
             }
         };
+
         drawer.addDrawerListener(drawerToggle);
         drawerToggle.syncState();
         setupNavMenu();
@@ -322,6 +258,12 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         {
             super.onBackPressed();
         }
+    }
+
+    @Override
+    public void showRateFragment()
+    {
+        RateFragment.newInstance().show(getSupportFragmentManager());
     }
 
     private void setupNavMenu()
@@ -419,6 +361,10 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
 //                showSettingsActivity();
 //                return true;
 
+            case R.id.nav_item_rate:
+                showRateFragment();
+                return true;
+
             case R.id.nav_item_staff:
                 showDoctorsActivity();
                 return true;
@@ -479,6 +425,7 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
                 }
             }
         };
+
         IntentFilter filterIncomingMessage = new IntentFilter(BROADCAST_INCOMING_MESSAGE);
         registerReceiver(incomingMessageReceiver, filterIncomingMessage);
     }

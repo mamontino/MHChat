@@ -5,7 +5,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
@@ -82,6 +84,16 @@ public class LoginActivity extends BaseActivity implements LoginViewHelper
             etPassword.setText(password);
         }
         setUp();
+
+        etPassword.setOnEditorActionListener((v, actionId, event) ->
+        {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_NAVIGATE_NEXT))
+                    || (actionId == EditorInfo.IME_ACTION_DONE))
+            {
+                    userLogin();
+            }
+            return false;
+        });
     }
 
     private void cleanUserData()
@@ -147,6 +159,11 @@ public class LoginActivity extends BaseActivity implements LoginViewHelper
     void onLoginClick(View view)
     {
         Timber.d("onLoginClick");
+        userLogin();
+    }
+
+    private void userLogin()
+    {
         username = etUsername.getText().toString();
         password = etPassword.getText().toString();
         Timber.d("onLoginClick: " + "username: " + username + " password: " + password);

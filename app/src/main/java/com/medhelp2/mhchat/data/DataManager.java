@@ -9,6 +9,7 @@ import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterList;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.Doctor;
+import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.data.model.DoctorList;
 import com.medhelp2.mhchat.data.model.MessageList;
 import com.medhelp2.mhchat.data.model.MessageResponse;
@@ -118,11 +119,11 @@ public class DataManager implements DataHelper
         return networkHelper.getStaffApiCall();
     }
 
-//    @Override
-//    public Observable<DoctorInfo> getDoctorApiCall()
-//    {
-//        return networkHelper.getDoctorApiCall();
-//    }
+    @Override
+    public Observable<DoctorInfo> getDoctorApiCall(int idDoctor)
+    {
+        return networkHelper.getDoctorApiCall(idDoctor);
+    }
 
     @Override
     public Observable<VisitList> getAllReceptionApiCall()
@@ -387,12 +388,6 @@ public class DataManager implements DataHelper
     {
         return realmHelper.getRealmStaff();
     }
-
-//    @Override
-//    public Completable setRealmReadMessages(int idRoom)
-//    {
-//        return realmHelper.setRealmReadMessages(idRoom);
-//    }
 
     @Override
     public Single<List<CategoryResponse>> getRealmCategory()

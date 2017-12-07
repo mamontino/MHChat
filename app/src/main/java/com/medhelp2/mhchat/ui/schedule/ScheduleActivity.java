@@ -31,6 +31,7 @@ import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
+import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.schedule.decorators.DayDecorator;
 import com.medhelp2.mhchat.ui.schedule.decorators.SelectDecorator;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
@@ -97,12 +98,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
         getActivityComponent().inject(this);
-
-//        ScheduleViewModel model = ViewModelProviders.of(this).get(ScheduleViewModel.class);
-//        model.getUsers().observe(this, users -> {
-//            // update UI
-//        });
-
         setUp();
     }
 
@@ -308,6 +303,10 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
 //                showSettingsActivity();
 //                return true;
 
+            case R.id.nav_item_rate:
+                showRateFragment();
+                return true;
+
             case R.id.nav_item_staff:
                 showDoctorsActivity();
                 return true;
@@ -330,6 +329,12 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         Intent intent = LoginActivity.getStartIntent(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+    @Override
+    public void showRateFragment()
+    {
+        RateFragment.newInstance().show(getSupportFragmentManager());
     }
 
     @Override
@@ -384,7 +389,7 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @Override
     public void onBackPressed()
     {
-        DrawerLayout drawer = findViewById(R.id.drawer_profile);
+        DrawerLayout drawer = findViewById(R.id.drawer_schedule);
         if (drawer.isDrawerOpen(GravityCompat.START))
         {
             drawer.closeDrawer(GravityCompat.START);

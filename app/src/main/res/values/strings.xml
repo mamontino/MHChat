@@ -1,5 +1,12 @@
 <resources>
-    <string name="app_name">MHChat</string>
+
+    <!--Application-->
+    <string name="app_name">Медицинский помощник</string>
+    <string name="app_profile">Профиль</string>
+    <string name="app_schedule">Расписание</string>
+    <string name="app_chat">Чат</string>
+    <string name="app_doctors">Специалисты</string>
+    <string name="app_search">Поиск услуг</string>
 
     <string name="btn_enter">Войти</string>
     <string name="hint_name">Введите имя</string>
@@ -111,7 +118,6 @@
     <string name="nav_rate">Оценить приложение</string>
 
     <!--Calendar-->
-
     <array name="calendar_days_array">
         <item>Вс</item>
         <item>Пн</item>

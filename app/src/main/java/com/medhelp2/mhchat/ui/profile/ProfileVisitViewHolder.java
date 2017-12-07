@@ -69,8 +69,6 @@ public class ProfileVisitViewHolder extends ChildViewHolder
 
         });
 
-
-
 //        if (group.getTitle().equals("Прошедшие")) {
 //            mReception.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_reception_complete_green_24dp, 0, 0, 0);
 //        } else if (group.getTitle().equals("Предстоящие")) {

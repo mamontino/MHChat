@@ -34,7 +34,11 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
     public ProfileTitleViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
-        View view = inflater.inflate(R.layout.item_viewholder_groupe, parent, false);
+        View view = null;
+        if (inflater != null)
+        {
+            view = inflater.inflate(R.layout.item_viewholder_groupe, parent, false);
+        }
         return new ProfileTitleViewHolder(view);
     }
 
@@ -46,10 +50,18 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
         switch (viewType)
         {
             case BUTTON_MODE:
-                View viewBtn = inflater.inflate(R.layout.item_profile_rv_btn, parent, false);
+                View viewBtn = null;
+                if (inflater != null)
+                {
+                    viewBtn = inflater.inflate(R.layout.item_profile_rv_btn, parent, false);
+                }
                 return new ProfileVisitViewHolder(viewBtn);
             case NO_BUTTON_MODE:
-                View viewNoBtn = inflater.inflate(R.layout.item_profile_rv_no_btn, parent, false);
+                View viewNoBtn = null;
+                if (inflater != null)
+                {
+                    viewNoBtn = inflater.inflate(R.layout.item_profile_rv_no_btn, parent, false);
+                }
                 return new ProfileVisitViewHolder(viewNoBtn);
             default:
                 throw new IllegalArgumentException("Invalid viewType");
@@ -102,8 +114,5 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
             ExpandableGroup group)
     {
         holder.setGroupName(group);
-        if (flatPosition > 0){
-
-        }
     }
 }

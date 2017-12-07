@@ -366,8 +366,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         Timber.d("setUp");
         setupToolbar();
         setupDrawer();
-        fab.setOnClickListener(v ->
-                showSearchActivity());
+        fab.setOnClickListener(v -> showSearchActivity());
     }
 
     private void setupDrawer()

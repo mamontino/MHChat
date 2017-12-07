@@ -36,6 +36,7 @@ import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.details.DocDetailsFragment;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
+import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
@@ -370,6 +371,12 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
     }
 
     @Override
+    public void showRateFragment()
+    {
+        RateFragment.newInstance().show(getSupportFragmentManager());
+    }
+
+    @Override
     public void showSearchActivity()
     {
         Intent intent = SearchActivity.getStartIntent(this);
@@ -441,6 +448,10 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper, 
 //            case R.id.nav_item_settings:
 //                showSettingsActivity();
 //                return true;
+
+            case R.id.nav_item_rate:
+                showRateFragment();
+                return true;
 
             case R.id.nav_item_staff:
                 return true;
