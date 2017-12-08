@@ -7,6 +7,7 @@ import com.medhelp2.mhchat.data.model.DoctorList;
 import com.medhelp2.mhchat.data.model.MessageList;
 import com.medhelp2.mhchat.data.model.RequestResponse;
 import com.medhelp2.mhchat.data.model.RoomResponse;
+import com.medhelp2.mhchat.data.model.SaleList;
 import com.medhelp2.mhchat.data.model.ServiceList;
 import com.medhelp2.mhchat.data.model.UserList;
 import com.medhelp2.mhchat.data.model.VisitList;
@@ -40,6 +41,8 @@ public interface NetworkHelper
     Observable<CenterList> getCenterApiCall();
 
     Observable<DoctorList> getStaffApiCall();
+
+    Observable<SaleList> getSaleApiCall();
 
     Observable<DoctorInfoList> getDoctorApiCall(int idDoctor);
 

@@ -8,6 +8,7 @@ import com.medhelp2.mhchat.data.model.MessageList;
 import com.medhelp2.mhchat.data.model.RequestResponse;
 import com.medhelp2.mhchat.data.model.RoomList;
 import com.medhelp2.mhchat.data.model.RoomResponse;
+import com.medhelp2.mhchat.data.model.SaleList;
 import com.medhelp2.mhchat.data.model.ServiceList;
 import com.medhelp2.mhchat.data.model.UserList;
 import com.medhelp2.mhchat.data.model.VisitList;
@@ -171,6 +172,16 @@ public class NetworkManager implements NetworkHelper
                 .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
                 .build()
                 .getObjectObservable(DoctorList.class);
+    }
+
+    @Override
+    public Observable<SaleList> getSaleApiCall()
+    {
+        return Rx2AndroidNetworking.get(ApiEndPoint.SALE)
+                .addHeaders(AUTH, prefManager.getAccessToken())
+                .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
+                .build()
+                .getObjectObservable(SaleList.class);
     }
 
     @Override

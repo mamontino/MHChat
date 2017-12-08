@@ -51,7 +51,7 @@
             android:background="@drawable/rounded_view"
             android:cursorVisible="true"
             android:gravity="start|center_vertical"
-            android:hint="@string/isRead"
+            android:hint="@string/username"
             android:inputType="textEmailAddress"
             android:maxLength="30"
             android:paddingEnd="@dimen/activity_horizontal_margin"
@@ -101,7 +101,7 @@
             android:layout_marginTop="@dimen/activity_horizontal_margin"
             android:background="@color/colorPrimary"
             android:gravity="center"
-            android:text="@string/login"
+            android:text="@string/action_login"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_16sp"/>
 

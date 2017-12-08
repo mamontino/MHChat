@@ -48,4 +48,8 @@ interface ApiEndPoint
     //    GET VISITS TO CENTER
 
     String VISITS = BASE_URL + "visits/{id_center}/{id_client}";
+
+    //    GET SALE BY CENTER
+
+    String SALE = BASE_URL + "sale/{id_center}";
 }

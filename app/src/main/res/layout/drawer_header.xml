@@ -22,23 +22,11 @@
         android:layout_marginLeft="@dimen/base_element_margin"
         android:layout_marginStart="@dimen/base_element_margin"
         android:layout_toEndOf="@+id/header_logo"
+        android:layout_centerVertical="true"
         android:layout_toRightOf="@+id/header_logo"
         android:gravity="center_horizontal"
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_16sp"
         android:textStyle="bold"/>
-
-    <TextView
-        android:id="@+id/header_tv_desc"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/header_tv_title"
-        android:layout_marginLeft="@dimen/base_element_margin"
-        android:layout_marginStart="@dimen/base_element_margin"
-        android:layout_marginTop="@dimen/base_element_margin"
-        android:layout_toEndOf="@+id/header_logo"
-        android:layout_toRightOf="@+id/header_logo"
-        android:gravity="center_horizontal"
-        android:textColor="@color/white"/>
 
 </RelativeLayout>

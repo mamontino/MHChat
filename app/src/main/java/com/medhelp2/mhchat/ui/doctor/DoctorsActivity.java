@@ -126,7 +126,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     {
         View headerLayout = navView.getHeaderView(0);
         headerLogo = headerLayout.findViewById(R.id.header_logo);
-        headerDesc = headerLayout.findViewById(R.id.header_tv_desc);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
 
         Timber.d("updateHeader: " + response.getTitle());
@@ -358,7 +357,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
         View headerLayout = navView.getHeaderView(0);
         headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
-        headerDesc = headerLayout.findViewById(R.id.header_tv_desc);
         navView.setNavigationItemSelectedListener(this);
     }
 

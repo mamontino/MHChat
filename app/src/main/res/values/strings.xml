@@ -1,43 +1,30 @@
 <resources>
 
-    <!--Application-->
+    <!--title-->
     <string name="app_name">Медицинский помощник</string>
     <string name="app_profile">Профиль</string>
     <string name="app_schedule">Расписание</string>
     <string name="app_chat">Чат</string>
     <string name="app_doctors">Специалисты</string>
     <string name="app_search">Поиск услуг</string>
+    <string name="app_sale">Акции</string>
 
-    <string name="btn_enter">Войти</string>
+    <!--hint message-->
     <string name="hint_name">Введите имя</string>
     <string name="hint_email">Введите e-mail</string>
-    <string name="err_msg_name">Введите полное имя</string>
-    <string name="err_msg_email">Введите корректный e-mail</string>
     <string name="hint_message">Введите сообщение</string>
-    <string name="btn_send">Отправить</string>
-
     <string name="hint_doctor">Врач:</string>
     <string name="hint_doctor_name">ФИО доктора</string>
     <string name="hint_reception_date">Дата приема:</string>
-    <string name="btn_confirm">Подтвердить</string>
-    <string name="btn_cancel">Отменить</string>
     <string name="hint_phone">Телефон:</string>
-
-    <string name="clear">Очистить</string>
-    <string name="cut">Вырезать</string>
-    <string name="copy">Копировать</string>
-    <string name="paste">Вставить</string>
-    <string name="delete">Удалить</string>
-    <string name="share">Отправить</string>
 
     <!--Drawer-->
     <string name="open_drawer">Drawer Open</string>
     <string name="close_drawer">Drawer Close</string>
-    <string name="nav_about">О нас</string>
     <string name="nav_logout">Выйти</string>
-    <string name="nav_retry">Retry</string>
-    <string name="nav_main">Главная</string>
+    <string name="nav_main">Профиль</string>
     <string name="nav_schedule">Расписание</string>
+    <string name="nav_chat">Чат</string>
     <string name="nav_record">Записаться</string>
     <string name="nav_price">Прейскурант</string>
     <string name="nav_contacts">Контакты</string>
@@ -50,19 +37,24 @@
     <!--Error MessageResponse-->
     <string name="api_retry_error">Повторите позже…</string>
     <string name="api_default_error">Что-то пошло не так.</string>
+    <string name="err_msg_name">Введите полное имя</string>
+    <string name="err_msg_email">Введите корректный e-mail</string>
     <string name="some_error">Произошла непредвиденная ошибка.</string>
     <string name="connection_error">Отсутствует соединение с интернетом.</string>
+    <string name="empty_error_message">Не удалось \n загрузить даные</string>
+    <string name="empty_screen">У нас сейчас к сожалению \nдля Вас ничего нет.</string>
+    <string name="please_retry">Попробуйте позже</string>
+    <string name="empty_chat_message">Вы еще не отправляли \n и не получали сообщений \n от этого пользователя</string>
 
     <!--Login-->
-    <string name="login">Войти</string>
-    <string name="isRead">Имя пользователя</string>
+    <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
     <string name="empty_data">Все поля дожны быть заполнены.</string>
     <string name="invalid_data">Пожалуйста введите корректные данные.</string>
+    <string name="login_header">Введите учетные данные</string>
 
     <!--about fragment-->
     <string name="project_info">Информация о разработчике, ссылки на ресурсы</string>
-    <string name="version">"version"</string>
 
     <!--rating dialog-->
     <string name="rate_us">Оценить приложение</string>
@@ -74,56 +66,44 @@
     <string name="rating_thanks">Спасибо!</string>
 
     <!--play store-->
-    <string name="app_google_play_store_link">"https://play.google.com/store/apps/details?id="</string>
-    <string name="app_market_link">"market://details?id="</string>
+    <string name="google_play_store_link">"https://play.google.com/store/apps/details?id="</string>
+    <string name="google_market_link">"market://details?id="</string>
 
     <!--button-->
-    <string name="later">Позже</string>
-    <string name="submit">Оценить</string>
+    <string name="btn_later">Позже</string>
+    <string name="btn_submit">Оценить</string>
+    <string name="btn_enter">Войти</string>
+    <string name="btn_send">Отправить</string>
+    <string name="btn_confirm">Подтвердить</string>
+    <string name="btn_cancel">Отменить</string>
 
-    <!--feed-->
-    <!--<string name="title">My Feed</string>-->
-    <!--<string name="open_source">Open Source</string>-->
-    <!--<string name="blog">Blog</string>-->
-
-    <!--empty state-->
-    <string name="empty_screen">У нас сейчас к сожалению \nдля Вас ничего нет.</string>
-    <string name="please_retry">Попробуйте позже</string>
+    <!--action-->
+    <string name="action_login">Войти</string>
+    <string name="action_clear">Очистить</string>
+    <string name="action_cut">Вырезать</string>
+    <string name="action_copy">Копировать</string>
+    <string name="action_paste">Вставить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_share">Отправить</string>
     <string name="action_search">Поиск</string>
-    <string name="about">О нас</string>
     <string name="action_retry">Повторить</string>
-    <string name="login_header">Введите учетные данные</string>
-    <string name="add_contact">Добавить пользователя</string>
-    <string name="empty_chat_message">Вы еще не отправляли \n и не получали сообщений \n от этого пользователя</string>
+    <string name="action_add_contact">Добавить пользователя</string>
     <string name="action_settings">Настройки</string>
     <string name="chat_edit_text_hint">Введите сообщение …</string>
-    <string name="chat_send">Отправить</string>
-    <string name="action_info">Информация</string>
     <string name="action_send">Отправить</string>
-    <string name="keyboard">Клавиатура</string>
-    <string name="empty_error_message">Не удалось \n загрузить даные</string>
+    <string name="action_chat_send">Отправить</string>
+    <string name="action_info">Информация</string>
     <string name="user">Пользователь</string>
     <string name="last_message">Последнее сообщение</string>
-    <string name="user_image">Изображение пользователя</string>
     <string name="save_password">Запомнить пароль</string>
     <string name="register">Регистрация</string>
     <string name="action_save">Сохранить</string>
 
-    <string name="username">Имя пользователя</string>
+    <!--image description-->
     <string name="company_logo">Логотип компании</string>
-    <string name="nav_chat">Чат</string>
     <string name="photo_doctor">Фотография специалиста</string>
-    <string name="title_activity_drawer">DrawerActivity</string>
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
-    <string name="description"> Close navigation drawer Close navigation drawer Close navigation drawer
-    Close navigation drawer Close navigation drawer Close navigation drawer Close navigation drawer
-        Close navigation drawer Close navigation drawer Close navigation drawer  Close navigation drawer
-        Close navigation drawer Close navigation drawer Close navigation drawerClose navigation drawerClose navigation
-        drawerClose navigation drawerClose navigation drawerClose navigation drawerClose navigation drawer</string>
-    <string name="app_sale">Акции</string>
+    <string name="user_image">Изображение пользователя</string>
+    <string name="keyboard">Клавиатура</string>
 
     <!--Calendar-->
     <array name="calendar_days_array">

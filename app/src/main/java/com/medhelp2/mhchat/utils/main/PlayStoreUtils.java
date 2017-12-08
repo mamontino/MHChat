@@ -21,13 +21,13 @@ public final class PlayStoreUtils
             context.startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse(context
                             .getResources()
-                            .getString(R.string.app_market_link) + appPackageName)));
+                            .getString(R.string.google_market_link) + appPackageName)));
         } catch (android.content.ActivityNotFoundException e)
         {
             context.startActivity(new Intent(Intent.ACTION_VIEW,
                     Uri.parse(context
                             .getResources()
-                            .getString(R.string.app_google_play_store_link) + appPackageName)));
+                            .getString(R.string.google_play_store_link) + appPackageName)));
         }
     }
 }

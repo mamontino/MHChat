@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.SaleResponse;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import timber.log.Timber;
 
 public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
 {
@@ -50,7 +52,6 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-
         switch (viewType)
         {
             case VIEW_TYPE_NORMAL:
@@ -120,22 +121,22 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
         public void onBind(int position)
         {
+            Timber.d(response.get(position).getSaleDescription());
             super.onBind(position);
             final SaleResponse repo = response.get(position);
-//            if (repo != null)
-//            {
-//                Picasso.with(itemView.getContext())
-//                        .load(repo.getIdRoom())
-//                        .error(R.drawable.holder_doctor)
-//                        .placeholder(R.drawable.holder_doctor)
-//                        .transform(new RoundImage())
-//                        .into(saleImage);
+            if (repo != null)
+            {
+                Picasso.with(itemView.getContext())
+                        .load(repo.getIdSale())
+                        .error(R.drawable.holder_sale)
+                        .placeholder(R.drawable.holder_sale)
+                        .into(saleImage);
 
-//                if (repo.getFullName() != null)
-//                {
-//                    saleDescription.setText(repo.getFullName());
-//                }
-//            }
+                if (repo.getSaleDescription() != null)
+                {
+                    saleDescription.setText(repo.getSaleDescription());
+                }
+            }
         }
     }
 

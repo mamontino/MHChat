@@ -34,7 +34,6 @@ import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.ui.settings.SettingsActivity;
-import com.medhelp2.mhchat.utils.view.ContactsDecorator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,8 +56,6 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
     @BindView(R.id.rv_sale)
     RecyclerView recyclerView;
 
-    private ArrayList<SaleResponse> saleList;
-
     @Inject
     SalePresenterHelper<SaleViewHelper> presenter;
 
@@ -75,6 +72,8 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
     NavigationView navView;
 
     private ActionBarDrawerToggle drawerToggle;
+
+    private ArrayList<SaleResponse> saleList;
 
     private TextView headerTitle;
     private TextView headerDesc;
@@ -103,7 +102,6 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
     {
         View headerLayout = navView.getHeaderView(0);
         headerLogo = headerLayout.findViewById(R.id.header_logo);
-        headerDesc = headerLayout.findViewById(R.id.header_tv_desc);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
 
         Timber.d("updateHeader: " + response.getTitle());
@@ -175,7 +173,6 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
         setupDrawer();
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new ContactsDecorator(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
     }
@@ -232,7 +229,6 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
         View headerLayout = navView.getHeaderView(0);
         headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
-        headerDesc = headerLayout.findViewById(R.id.header_tv_desc);
         navView.setNavigationItemSelectedListener(this);
     }
 
@@ -354,9 +350,10 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
     @Override
     public void updateSaleData(List<SaleResponse> response)
     {
-//        saleList = new ArrayList<>();
-//        saleList.addAll(response);
-//        adapter.addItems(saleList);
+        Timber.d("updateSaleData: " + response.get(0).getSaleDescription());
+        saleList = new ArrayList<>();
+        saleList.addAll(response);
+        adapter.addItems(saleList);
 //        adapter.addItems(response);
     }
 }

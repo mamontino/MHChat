@@ -15,6 +15,7 @@ import com.medhelp2.mhchat.data.model.MessageList;
 import com.medhelp2.mhchat.data.model.MessageResponse;
 import com.medhelp2.mhchat.data.model.RequestResponse;
 import com.medhelp2.mhchat.data.model.RoomResponse;
+import com.medhelp2.mhchat.data.model.SaleList;
 import com.medhelp2.mhchat.data.model.ServiceList;
 import com.medhelp2.mhchat.data.model.ServiceResponse;
 import com.medhelp2.mhchat.data.model.UserList;
@@ -117,6 +118,12 @@ public class DataManager implements DataHelper
     public Observable<DoctorList> getStaffApiCall()
     {
         return networkHelper.getStaffApiCall();
+    }
+
+    @Override
+    public Observable<SaleList> getSaleApiCall()
+    {
+        return networkHelper.getSaleApiCall();
     }
 
     @Override

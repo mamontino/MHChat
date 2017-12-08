@@ -435,7 +435,7 @@ public class RealmManager implements RealmHelper
 //                {
 //                    try
 //                    {
-//                        RoomResponse room = new RoomResponse(idRoom, response.get(i).getIdDoctor(), response.get(i).getFullName());
+//                        RoomResponse room = new RoomResponse(idRoom, response.get(i).getIdCenter(), response.get(i).getSaleDescription());
 //                        response1.add(room);
 //                    } catch (Exception e)
 //                    {
