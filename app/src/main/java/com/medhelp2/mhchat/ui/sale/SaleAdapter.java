@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.SaleResponse;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -25,7 +26,6 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
     @Inject
     SalePresenter presenter;
 
-    private static final int VIEW_TYPE_EMPTY = 10;
     private static final int VIEW_TYPE_NORMAL = 11;
 
     private Callback callback;
@@ -54,11 +54,8 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
         {
             case VIEW_TYPE_NORMAL:
                 return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_sale, parent, false));
-            case VIEW_TYPE_EMPTY:
-                return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_download, parent, false));
-            default:
-                return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_download, parent, false));
         }
+        return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_download, parent, false));
     }
 
     @Override
@@ -69,7 +66,7 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
             return VIEW_TYPE_NORMAL;
         } else
         {
-            return VIEW_TYPE_EMPTY;
+            return 0;
         }
     }
 
@@ -124,11 +121,11 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
             final SaleResponse repo = response.get(position);
             if (repo != null)
             {
-//                Picasso.with(itemView.getContext())
-//                        .load(repo.getIdSale())
-//                        .error(R.drawable.holder_sale)
-//                        .placeholder(R.drawable.holder_sale)
-//                        .into(saleImage);
+                Picasso.with(itemView.getContext())
+                        .load(repo.getIdSale())
+                        .error(R.drawable.holder_sale)
+                        .placeholder(R.drawable.holder_sale)
+                        .into(saleImage);
 
                 if (repo.getSaleDescription() != null)
                 {

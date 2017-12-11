@@ -43,30 +43,38 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'com.google.firebase:firebase-messaging:11.6.2'
-    implementation 'javax.inject:javax.inject:1'
-    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    //    Android
     implementation "com.android.support:recyclerview-v7:$rootProject.supportVersion"
     implementation "com.android.support:cardview-v7:$rootProject.supportVersion"
     implementation "com.android.support:design:$rootProject.supportVersion"
     implementation "com.android.support:support-vector-drawable:$rootProject.supportVersion"
     implementation "com.android.support:animated-vector-drawable:$rootProject.supportVersion"
+    //    FireBase
+    implementation "com.google.firebase:firebase-messaging:$rootProject.firebaseVersion"
+    //    View
     implementation "de.hdodenhof:circleimageview:$rootProject.circleImageVersion"
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
     implementation "com.thoughtbot:expandablerecyclerview:$rootProject.expandRvVersion"
+    implementation "com.prolificinteractive:material-calendarview:$rootProject.calendarVersion"
+    //    Network
     implementation "com.amitshekhar.android:rx2-android-networking:$rootProject.rxNetworkVersion"
+    implementation "com.google.code.gson:gson:$rootProject.gsonVersion"
+    //    RxJava
     implementation "io.reactivex.rxjava2:rxjava:$rootProject.rxJavaVersion"
+    implementation "io.reactivex.rxjava2:rxandroid:$rootProject.rxAndroidVersion"
+    //    Dagger
     implementation "com.google.dagger:dagger-android:$rootProject.daggerVersion"
     implementation "com.google.dagger:dagger-android-support:$rootProject.daggerVersion"
-    implementation "io.realm:android-adapters:$rootProject.realmRvVersion"
-    implementation "com.prolificinteractive:material-calendarview:$rootProject.calendarVersion"
+    //    ButterKnife
     implementation "com.jakewharton:butterknife:$rootProject.butterknifeVersion"
+    //    Logger
     implementation "com.jakewharton.timber:timber:$rootProject.timberVersion"
+    //    Annotation
     annotationProcessor "com.jakewharton:butterknife-compiler:$rootProject.butterknifeVersion"
     annotationProcessor "com.google.dagger:dagger-android-processor:$rootProject.daggerVersion"
     annotationProcessor "com.google.dagger:dagger-compiler:$rootProject.daggerVersion"
+    //    Testing
     testCompile 'junit:junit:4.12'
-    provided 'javax.annotation:jsr250-api:1.0'
 }
 
 apply plugin: 'com.google.gms.google-services'

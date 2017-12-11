@@ -10,6 +10,8 @@ import android.widget.TextView;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.RoomResponse;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
+import com.medhelp2.mhchat.utils.view.RoundImage;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -100,7 +102,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
     {
 
         @BindView(R.id.contacts_img)
-        ImageView mContactImage;
+        ImageView contactImage;
 
         @BindView(R.id.contacts_tv_username)
         TextView tvUsername;
@@ -123,7 +125,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
         protected void clear()
         {
-            mContactImage.setImageDrawable(null);
+            contactImage.setImageDrawable(null);
             tvUsername.setText("");
 //            tvLastMessage.setText("");
 //            tvDate.setText("");
@@ -136,12 +138,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
             final RoomResponse repo = response.get(position);
             if (repo != null)
             {
-//                Glide.with(itemView.getContext())
-//                        .load(repo.getIdRoom())
-//                        .error(R.drawable.holder_doctor)
-//                        .placeholder(R.drawable.holder_doctor)
-//                        .transform(new RoundImage())
-//                        .into(mContactImage);
+                Picasso.with(itemView.getContext())
+                        .load(repo.getIdRoom())
+                        .error(R.drawable.holder_doctor)
+                        .placeholder(R.drawable.holder_doctor)
+                        .transform(new RoundImage())
+                        .into(contactImage);
 
                 if (repo.getFullName() != null)
                 {
@@ -174,11 +176,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
 //                    tvLastMessage.setText(repo.getLastMessage());
 //                }
 //
-//                mContactImage.setOnClickListener(v ->
+//                contactImage.setOnClickListener(v ->
 //                {
 //                    if (repo.getIdChatRoom() != 0)
 //                    {
-//                        Toast.makeText(mContactImage.getContext(), "Details Fragment open", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(contactImage.getContext(), "Details Fragment open", Toast.LENGTH_SHORT).show();
 //                    }
 //                });
             }
