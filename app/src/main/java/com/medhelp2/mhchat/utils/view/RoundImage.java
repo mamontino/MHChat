@@ -12,6 +12,7 @@ import android.graphics.RectF;
 
 import com.squareup.picasso.Transformation;
 
+
 public class RoundImage implements Transformation
 {
     public static Bitmap getRoundedBitmap(Bitmap bitmap)

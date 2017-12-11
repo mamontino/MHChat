@@ -13,6 +13,7 @@ import com.medhelp2.mhchat.bg.SyncService;
 
 import dagger.Component;
 
+
 @PerApplication
 @Component(modules = {AppModule.class})
 public interface AppComponent

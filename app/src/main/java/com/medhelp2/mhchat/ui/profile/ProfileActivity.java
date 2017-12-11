@@ -27,7 +27,6 @@ import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.bg.SyncService;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.VisitResponse;
-import com.medhelp2.mhchat.ui.about.AboutFragment;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
@@ -36,7 +35,6 @@ import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
-import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 
@@ -85,7 +83,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     private ActionBarDrawerToggle drawerToggle;
 
     private TextView headerTitle;
-    private TextView headerDesc;
     private ImageView headerLogo;
 
     private ProfileAdapter adapter;
@@ -130,12 +127,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     }
 
     @Override
-    public void showAboutFragment()
-    {
-        AboutFragment.newInstance().show(getSupportFragmentManager());
-    }
-
-    @Override
     public void showRateFragment()
     {
         RateFragment.newInstance().show(getSupportFragmentManager());
@@ -173,7 +164,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         centerName.setText(response.getTitle());
         centerPhone.setText(response.getPhone());
         headerTitle.setText(response.getTitle());
-        headerDesc.setText(response.getInfo());
     }
 
     @Override
@@ -202,19 +192,18 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
 
             if (actualReceptions.size() > 0)
             {
-                Timber.d("actualReceptions.size() > 0");
                 parentModels.add(new ProfileParentModel("Предстоящие", actualReceptions));
             }
 
             if (latestReceptions.size() > 0)
             {
-                Timber.d("latestReceptions.size() > 0");
                 parentModels.add(new ProfileParentModel("Прошедшие", latestReceptions));
             }
             adapter = new ProfileAdapter(this, parentModels);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             adapter.onGroupClick(0);
+
             recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
             {
                 @Override
@@ -304,7 +293,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
                 showSearchActivity();
                 return true;
 
-                case R.id.nav_item_sale:
+            case R.id.nav_item_sale:
                 showSaleActivity();
                 return true;
 
@@ -347,12 +336,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         Intent intent = LoginActivity.getStartIntent(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         presenter.removePassword();
-        startActivity(intent);
-    }
-
-    private void showSettingsActivity()
-    {
-        Intent intent = SettingsActivity.getStartIntent(this);
         startActivity(intent);
     }
 

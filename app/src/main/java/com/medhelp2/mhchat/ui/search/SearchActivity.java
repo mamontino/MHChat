@@ -32,7 +32,6 @@ import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.ServiceResponse;
-import com.medhelp2.mhchat.ui.about.AboutFragment;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
@@ -41,7 +40,6 @@ import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
-import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.view.ItemListDecorator;
 
 import java.util.ArrayList;
@@ -81,7 +79,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
 //    private SwipeRefreshLayout refreshLayout;
 
     private TextView headerTitle;
-    private TextView headerDesc;
     private ImageView headerLogo;
 
     private SearchAdapter adapter;
@@ -121,7 +118,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
             //       headerLogo.setImageBitmap(response.getLogo());
         }
         headerTitle.setText(response.getTitle());
-        headerDesc.setText(response.getInfo());
     }
 
     @Override
@@ -363,12 +359,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     }
 
     @Override
-    public void showAboutFragment()
-    {
-        AboutFragment.newInstance().show(getSupportFragmentManager());
-    }
-
-    @Override
     public void showRateFragment()
     {
         RateFragment.newInstance().show(getSupportFragmentManager());
@@ -410,19 +400,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
         setupNavMenu();
     }
 
-//    @Override
-//    public void onBackPressed()
-//    {
-//        DrawerLayout drawer = findViewById(R.id.drawer_profile);
-//        if (drawer.isDrawerOpen(GravityCompat.START))
-//        {
-//            drawer.closeDrawer(GravityCompat.START);
-//        } else
-//        {
-//            super.onBackPressed();
-//        }
-//    }
-
     private void setupNavMenu()
     {
         View headerLayout = navView.getHeaderView(0);
@@ -435,13 +412,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     public void onRefresh()
     {
         presenter.getData();
-    }
-
-    @Override
-    public void showSettingsActivity()
-    {
-        Intent intent = SettingsActivity.getStartIntent(this);
-        startActivity(intent);
     }
 
     @Override

@@ -61,7 +61,7 @@
         android:layout_centerVertical="true"
         android:layout_marginEnd="@dimen/base_margin_8dp"
         android:layout_marginRight="@dimen/base_margin_8dp"
-        android:background="@drawable/rouded_bg_circle"
+        android:background="@drawable/rounded_bg_primary_24dp"
         android:gravity="center"
         android:text=""
         android:textColor="@android:color/white"

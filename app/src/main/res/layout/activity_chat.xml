@@ -11,7 +11,7 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/chat_coordinator"
-        android:background="@color/background"
+        android:background="@color/bg_chat"
         style="@style/MatchParent">
 
         <FrameLayout

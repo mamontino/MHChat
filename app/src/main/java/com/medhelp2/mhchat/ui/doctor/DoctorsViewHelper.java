@@ -27,10 +27,6 @@ public interface DoctorsViewHelper extends MvpView
 
     void showContactsActivity();
 
-    void showSettingsActivity();
-
-    void showAboutFragment();
-
     void showRateFragment();
 
     void showLoginActivity();

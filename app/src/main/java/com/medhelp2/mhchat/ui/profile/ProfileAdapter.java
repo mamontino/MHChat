@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.profile;
 
+
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -19,8 +20,8 @@ import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<ProfileTitleViewHolder, ProfileVisitViewHolder>
 {
-    private static final int NO_BUTTON_MODE = 4;
     private static final int BUTTON_MODE = 3;
+    private static final int NO_BUTTON_MODE = 4;
     private static final int ERROR_MODE = 5;
     private Context context;
 
@@ -37,7 +38,7 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
         View view = null;
         if (inflater != null)
         {
-            view = inflater.inflate(R.layout.item_viewholder_groupe, parent, false);
+            view = inflater.inflate(R.layout.item_groupe, parent, false);
         }
         return new ProfileTitleViewHolder(view);
     }
@@ -53,14 +54,14 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
                 View viewBtn = null;
                 if (inflater != null)
                 {
-                    viewBtn = inflater.inflate(R.layout.item_profile_rv_btn, parent, false);
+                    viewBtn = inflater.inflate(R.layout.item_profile_btn, parent, false);
                 }
                 return new ProfileVisitViewHolder(viewBtn);
             case NO_BUTTON_MODE:
                 View viewNoBtn = null;
                 if (inflater != null)
                 {
-                    viewNoBtn = inflater.inflate(R.layout.item_profile_rv_no_btn, parent, false);
+                    viewNoBtn = inflater.inflate(R.layout.item_profile_no_btn, parent, false);
                 }
                 return new ProfileVisitViewHolder(viewNoBtn);
             default:
@@ -69,9 +70,14 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
     }
 
     @Override
+    public void onBindGroupViewHolder(ProfileTitleViewHolder holder, int flatPosition, ExpandableGroup group)
+    {
+        holder.setGroupName(group);
+    }
+
+    @Override
     public void onBindChildViewHolder(ProfileVisitViewHolder holder, int flatPosition, ExpandableGroup group, int childIndex)
     {
-        Timber.d("onBindChildViewHolder");
         int viewType = getItemViewType(flatPosition);
         VisitResponse visit = ((ProfileParentModel) group).getItems().get(childIndex);
         switch (viewType)
@@ -107,12 +113,5 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
     public boolean isChild(int viewType)
     {
         return viewType == BUTTON_MODE || viewType == NO_BUTTON_MODE;
-    }
-
-    @Override
-    public void onBindGroupViewHolder(ProfileTitleViewHolder holder, int flatPosition,
-            ExpandableGroup group)
-    {
-        holder.setGroupName(group);
     }
 }

@@ -104,7 +104,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/base_element_margin"
-                        android:background="@drawable/corner_border_rect_gray"
+                        android:background="@drawable/rect_border_grey_2dp"
                         android:gravity="start|top"
                         android:inputType="textMultiLine"
                         android:lines="4"

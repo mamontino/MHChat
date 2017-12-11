@@ -47,7 +47,7 @@
                 android:layout_height="wrap_content"
                 android:minHeight="100dp"
                 android:scaleType="centerCrop"
-                app:contentScrim="@color/blue_base_light"
+                app:contentScrim="@color/color_primary"
                 app:layout_collapseMode="parallax"
                 app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
                 app:titleEnabled="false">

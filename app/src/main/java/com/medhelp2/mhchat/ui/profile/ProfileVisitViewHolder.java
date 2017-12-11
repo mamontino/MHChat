@@ -19,7 +19,6 @@ public class ProfileVisitViewHolder extends ChildViewHolder
     private TextView receptionTime;
     private Button receptionCancel;
     private Button receptionConfirm;
-
     private ImageView receptionLogoNo;
     private TextView receptionTitleNo;
     private TextView receptionDoctorNo;
@@ -34,7 +33,6 @@ public class ProfileVisitViewHolder extends ChildViewHolder
         receptionTime = itemView.findViewById(R.id.tv_date_item);
         receptionCancel = itemView.findViewById(R.id.btn_cancel_profile_item);
         receptionConfirm = itemView.findViewById(R.id.btn_confirm_profile_item);
-
         receptionLogoNo = itemView.findViewById(R.id.image_doc_item_no);
         receptionTitleNo = itemView.findViewById(R.id.tv_price_name_item_no);
         receptionDoctorNo = itemView.findViewById(R.id.tv_doc_name_item_no);
@@ -68,12 +66,6 @@ public class ProfileVisitViewHolder extends ChildViewHolder
         {
 
         });
-
-//        if (group.getTitle().equals("Прошедшие")) {
-//            mReception.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_reception_complete_green_24dp, 0, 0, 0);
-//        } else if (group.getTitle().equals("Предстоящие")) {
-//            mReception.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_reception_actual_grey_24dp, 0, 0, 0);
-//        }
     }
 
     public void onBindNoButton(VisitResponse response)
@@ -90,6 +82,5 @@ public class ProfileVisitViewHolder extends ChildViewHolder
             }
         }
         Timber.d("response == null");
-
     }
 }

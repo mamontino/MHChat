@@ -188,11 +188,11 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
         getContext().startService(startOutgoingService);
     }
 
-    @OnClick(R.id.btn_hide_keyboard)
-    public void hideKeyClick()
-    {
-        hideKeyboard();
-    }
+//    @OnClick(R.id.btn_hide_keyboard)
+//    public void hideKeyClick()
+//    {
+//        hideKeyboard();
+//    }
 
     @Override
     public void onCreate(Bundle savedInstanceState)

@@ -16,11 +16,6 @@ public class AvatarRounded implements Transformation
     public Bitmap transform(Bitmap source)
     {
         int radius = (int) (source.getHeight() / AppConstants.RADIUS_ROUND_AVATAR);
-        if (source == null)
-        {
-            return null;
-        }
-
         int diam = radius << 1;
 
         Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -41,7 +36,6 @@ public class AvatarRounded implements Transformation
     public static Bitmap scaleTo(Bitmap source, int size)
     {
         int destWidth = source.getWidth();
-
         int destHeight = source.getHeight();
 
         destHeight = destHeight * size / destWidth;

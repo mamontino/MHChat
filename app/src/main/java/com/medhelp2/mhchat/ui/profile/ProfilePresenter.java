@@ -1,13 +1,11 @@
 package com.medhelp2.mhchat.ui.profile;
 
 import com.medhelp2.mhchat.data.DataHelper;
+import com.medhelp2.mhchat.data.model.CenterList;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.di.scope.PerActivity;
 import com.medhelp2.mhchat.ui.base.BasePresenter;
 import com.medhelp2.mhchat.utils.rx.SchedulerProvider;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -15,7 +13,8 @@ import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
 @PerActivity
-public class ProfilePresenter<V extends ProfileViewHelper> extends BasePresenter<V> implements ProfilePresenterHelper<V>
+public class ProfilePresenter<V extends ProfileViewHelper>
+        extends BasePresenter<V> implements ProfilePresenterHelper<V>
 {
     @Inject
     public ProfilePresenter(DataHelper dataHelper,
@@ -37,13 +36,17 @@ public class ProfilePresenter<V extends ProfileViewHelper> extends BasePresenter
                 {
                     if (response != null && response.getResponse() != null)
                     {
-                        Timber.d("Данные посещений загружены успешно: " + response.getResponse().size());
+                        Timber.d("Данные посещений загружены успешно: " +
+                                "" + response.getResponse().size());
+
                         getMvpView().updateData(response.getResponse());
                     }
                     getMvpView().hideLoading();
                 }, throwable ->
                 {
-                    Timber.e("Данные посещений загружены с ошибкой: " + throwable.getMessage());
+                    Timber.e("Данные посещений загружены с ошибкой: "
+                            + throwable.getMessage());
+
                     if (!isViewAttached())
                     {
                         return;
@@ -58,27 +61,24 @@ public class ProfilePresenter<V extends ProfileViewHelper> extends BasePresenter
         getMvpView().showLoading();
         getCompositeDisposable().add(getDataHelper()
                 .getCenterApiCall()
-                .map(response->{
-                    CenterResponse center = new CenterResponse();
-                    List<CenterResponse> ar = new ArrayList<>();
-                    ar.addAll(response.getResponse());
-                    center = ar.get(0);
-                    return center;
-                })
+                .map(CenterList::getResponse)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
                 {
                     if (response != null)
                     {
-                        Timber.d("Данные центра загружены успешно: " + response.getTitle() + " " + response.getPhone());
-                        getMvpView().updateHeader(response);
-                        saveCenterInfo(response);
+                        Timber.d("Данные центра загружены успешно: "
+                                + response.get(0).getTitle() + " " + response.get(0).getPhone());
+
+                        getMvpView().updateHeader(response.get(0));
+                        saveCenterInfo(response.get(0));
                     }
                     getMvpView().hideLoading();
                 }, throwable ->
                 {
-                    Timber.e("Данные центра загружены с ошибкой: " + throwable.getMessage());
+                    Timber.e("Данные центра загружены с ошибкой: "
+                            + throwable.getMessage());
                     if (!isViewAttached())
                     {
                         return;
@@ -96,11 +96,13 @@ public class ProfilePresenter<V extends ProfileViewHelper> extends BasePresenter
         {
             fbToken = getDataHelper().getFireBaseToken();
             idUser = getDataHelper().getCurrentUserId();
-            Timber.d("Успешное чтение данных из SharedPreference: " + idUser + " " + fbToken);
+            Timber.d("Успешное чтение данных из SharedPreference: "
+                    + idUser + " " + fbToken);
             if (fbToken != null && idUser != 0)
             {
                 getMvpView().runSendRegistrationService(fbToken, idUser);
-                Timber.d("Запуск сервиса для отправки токена на сервер: " + idUser + " " + fbToken);
+                Timber.d("Запуск сервиса для отправки токена на сервер: "
+                        + idUser + " " + fbToken);
             }
         } catch (Exception e)
         {
@@ -122,7 +124,8 @@ public class ProfilePresenter<V extends ProfileViewHelper> extends BasePresenter
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(() ->
                         Timber.d("Данные успешно сохранены в локальное хранилище"),
-                        throwable -> Timber.e("Ошибка сохранения CenterResponse в локальное хранилище: " + throwable.getMessage())));
+                        throwable -> Timber.e("Ошибка сохранения CenterResponse " +
+                                "в локальное хранилище: " + throwable.getMessage())));
     }
 
     @Override

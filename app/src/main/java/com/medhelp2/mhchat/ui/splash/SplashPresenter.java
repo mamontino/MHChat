@@ -28,6 +28,7 @@ public class SplashPresenter<V extends SplashViewHelper> extends BasePresenter<V
     private void openNextActivity()
     {
         Timber.d("openNextActivity");
+
         String username = null;
         String password = null;
 
@@ -37,13 +38,11 @@ public class SplashPresenter<V extends SplashViewHelper> extends BasePresenter<V
             password = getDataHelper().getCurrentPassword().trim();
         } catch (Exception e)
         {
-            Timber.d("Ошибка чтения учетных данных пользователя: " + e.getMessage());
-            getMvpView().openLoginActivity();
+            Timber.e("Ошибка чтения учетных данных пользователя: " + e.getMessage());
         }
 
         if (username != null && password != null)
         {
-            Timber.d(username + " " + password);
             getMvpView().openProfileActivity();
         } else
         {

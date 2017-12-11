@@ -12,42 +12,36 @@ public class CenterList
     @Expose
     private boolean error;
 
-    @SerializedName("response")
-    @Expose
-    private List<CenterResponse> response = new ArrayList<CenterResponse>();
-
     @SerializedName("message")
     @Expose
     private String message;
 
+    @SerializedName("response")
+    @Expose
+    private List<CenterResponse> response = new ArrayList<>();
 
-    public String getMessage()
-    {
-        return message;
-    }
-
-    public void setMessage(String message)
-    {
-        this.message = message;
-    }
-
-    public boolean isError()
-    {
+    public boolean isError() {
         return error;
     }
 
-    public void setError(boolean error)
-    {
+    public void setError(boolean error) {
         this.error = error;
     }
 
-    public List<CenterResponse> getResponse()
-    {
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    public List<CenterResponse> getResponse() {
         return response;
     }
 
-    public void setResponse(List<CenterResponse> response)
-    {
+    public void setResponse(List<CenterResponse> response) {
         this.response = response;
     }
+
 }

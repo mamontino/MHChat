@@ -24,7 +24,6 @@ import android.widget.TextView;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.SaleResponse;
-import com.medhelp2.mhchat.ui.about.AboutFragment;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
@@ -33,7 +32,6 @@ import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
-import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,7 +74,6 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
     private ArrayList<SaleResponse> saleList;
 
     private TextView headerTitle;
-    private TextView headerDesc;
     private ImageView headerLogo;
 
     public static Intent getStartIntent(Context context)
@@ -110,7 +107,6 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
             //       headerLogo.setImageBitmap(response.getLogo());
         }
         headerTitle.setText(response.getTitle());
-        headerDesc.setText(response.getInfo());
     }
 
     private void setupToolbar()
@@ -247,13 +243,6 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
     }
 
     @Override
-    public void showSettingsActivity()
-    {
-        Intent intent = SettingsActivity.getStartIntent(this);
-        startActivity(intent);
-    }
-
-    @Override
     public void showScheduleActivity()
     {
         Intent intent = ScheduleActivity.getStartIntent(this);
@@ -274,12 +263,6 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         presenter.removePassword();
         startActivity(intent);
-    }
-
-    @Override
-    public void showAboutFragment()
-    {
-        AboutFragment.newInstance().show(getSupportFragmentManager());
     }
 
     @Override

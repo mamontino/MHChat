@@ -5,9 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.medhelp2.mhchat.di.scope.PerActivity;
-import com.medhelp2.mhchat.ui.about.AboutPresenter;
-import com.medhelp2.mhchat.ui.about.AboutPresenterHelper;
-import com.medhelp2.mhchat.ui.about.AboutViewHelper;
 import com.medhelp2.mhchat.ui.chat.ChatPresenter;
 import com.medhelp2.mhchat.ui.chat.ChatPresenterHelper;
 import com.medhelp2.mhchat.ui.chat.ChatViewHelper;
@@ -46,9 +43,6 @@ import com.medhelp2.mhchat.ui.search.SearchAdapter;
 import com.medhelp2.mhchat.ui.search.SearchPresenter;
 import com.medhelp2.mhchat.ui.search.SearchPresenterHelper;
 import com.medhelp2.mhchat.ui.search.SearchViewHelper;
-import com.medhelp2.mhchat.ui.settings.SettingsPresenter;
-import com.medhelp2.mhchat.ui.settings.SettingsPresenterHelper;
-import com.medhelp2.mhchat.ui.settings.SettingsViewHelper;
 import com.medhelp2.mhchat.ui.splash.SplashPresenter;
 import com.medhelp2.mhchat.ui.splash.SplashPresenterHelper;
 import com.medhelp2.mhchat.ui.splash.SplashViewHelper;
@@ -60,6 +54,7 @@ import java.util.ArrayList;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.disposables.CompositeDisposable;
+
 
 @Module
 public class ActivityModule
@@ -155,22 +150,8 @@ public class ActivityModule
         return presenter;
     }
 
-    @PerActivity
-    @Provides
-    AboutPresenterHelper<AboutViewHelper> provideAboutPresenter(AboutPresenter<AboutViewHelper> presenter)
-    {
-        return presenter;
-    }
-
     @Provides
     RatePresenterHelper<RateViewHelper> provideRatePresenter(RatePresenter<RateViewHelper> presenter)
-    {
-        return presenter;
-    }
-
-    @PerActivity
-    @Provides
-    SettingsPresenterHelper<SettingsViewHelper> provideSettingsPresenter(SettingsPresenter<SettingsViewHelper> presenter)
     {
         return presenter;
     }

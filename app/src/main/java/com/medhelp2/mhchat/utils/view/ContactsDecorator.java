@@ -15,7 +15,7 @@ public class ContactsDecorator extends RecyclerView.ItemDecoration
 
     public ContactsDecorator(Context context)
     {
-        divider = ContextCompat.getDrawable(context, R.drawable.divider_grey_2dp);
+        divider = ContextCompat.getDrawable(context, R.drawable.divider_light_grey_2dp);
     }
 
     @Override

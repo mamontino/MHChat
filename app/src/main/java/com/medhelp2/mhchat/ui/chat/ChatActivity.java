@@ -13,7 +13,6 @@ import android.view.MenuItem;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment;
-import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.main.AppConstants;
 
 import javax.inject.Inject;
@@ -84,13 +83,6 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper
                 .disallowAddToBackStack()
                 .add(R.id.fr_chat, ChatListFragment.newInstance(chatRoomId), ChatListFragment.TAG)
                 .commit();
-    }
-
-    @Override
-    public void showSettingsActivity()
-    {
-        Intent intent = SettingsActivity.getStartIntent(this);
-        startActivity(intent);
     }
 
     @Override

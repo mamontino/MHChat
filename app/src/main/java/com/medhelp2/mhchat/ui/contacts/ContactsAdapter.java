@@ -4,15 +4,12 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.RoomResponse;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
-import com.medhelp2.mhchat.utils.view.RoundImage;
-import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -52,15 +49,14 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
     @Override
     public BaseViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
     {
-
         switch (viewType)
         {
             case VIEW_TYPE_NORMAL:
                 return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_contact, parent, false));
             case VIEW_TYPE_EMPTY:
-                return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_empty_contact, parent, false));
+                return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_download, parent, false));
             default:
-                return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_empty_contact, parent, false));
+                return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_download, parent, false));
         }
     }
 
@@ -140,12 +136,12 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
             final RoomResponse repo = response.get(position);
             if (repo != null)
             {
-                Picasso.with(itemView.getContext())
-                        .load(repo.getIdRoom())
-                        .error(R.drawable.holder_doctor)
-                        .placeholder(R.drawable.holder_doctor)
-                        .transform(new RoundImage())
-                        .into(mContactImage);
+//                Glide.with(itemView.getContext())
+//                        .load(repo.getIdRoom())
+//                        .error(R.drawable.holder_doctor)
+//                        .placeholder(R.drawable.holder_doctor)
+//                        .transform(new RoundImage())
+//                        .into(mContactImage);
 
                 if (repo.getFullName() != null)
                 {
@@ -191,11 +187,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
     class EmptyViewHolder extends BaseViewHolder
     {
-        @BindView(R.id.empty_image_add_contact)
-        ImageButton btnAddContact;
-
-        @BindView(R.id.empty_tv_add_contact)
-        TextView tvInfoMessage;
+//        @BindView(R.id.empty_image_add_contact)
+//        ImageButton btnAddContact;
+//
+//        @BindView(R.id.empty_tv_add_contact)
+//        TextView tvInfoMessage;
 
         EmptyViewHolder(View itemView)
         {
@@ -208,7 +204,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         {
         }
 
-        @OnClick(R.id.empty_image_add_contact)
+        @OnClick(R.id.err_btn_retry)
         void onClickAddContact()
         {
             if (callback != null)

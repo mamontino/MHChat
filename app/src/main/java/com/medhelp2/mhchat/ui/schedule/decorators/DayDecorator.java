@@ -33,8 +33,8 @@ public class DayDecorator implements DayViewDecorator
 
         this.day = day;
         this.dayMode = dayMode;
-        bgDrawableGreen = context.getResources().getDrawable(R.drawable.date_green);
-        bgDrawableYellow = context.getResources().getDrawable(R.drawable.date_yellow);
+        bgDrawableGreen = context.getResources().getDrawable(R.drawable.date_item_default);
+        bgDrawableYellow = context.getResources().getDrawable(R.drawable.date_orange);
     }
 
     @Override

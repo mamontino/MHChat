@@ -54,7 +54,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder>
                         LayoutInflater.from(parent.getContext()).inflate(R.layout.item_empty_chat, parent, false));
             default:
                 return new ErrorViewHolder(
-                        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_chat, parent, false));
+                        LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_download, parent, false));
         }
     }
 
@@ -214,7 +214,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
     class ErrorViewHolder extends BaseViewHolder
     {
-        @BindView(R.id.error_chat_tv_info)
+        @BindView(R.id.err_btn_retry)
         TextView tvErrorChatMessage;
 
         ErrorViewHolder(View itemView)

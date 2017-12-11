@@ -44,83 +44,67 @@ public class CenterResponse extends RealmObject implements Parcelable
     @Expose
     private String address;
 
-    public int getId()
-    {
+    public int getId() {
         return id;
     }
 
-    public void setId(int id)
-    {
+    public void setId(int id) {
         this.id = id;
     }
 
-    public int getIdCenter()
-    {
+    public int getIdCenter() {
         return idCenter;
     }
 
-    public void setIdCenter(int idCenter)
-    {
+    public void setIdCenter(int idCenter) {
         this.idCenter = idCenter;
     }
 
-    public String getTitle()
-    {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title)
-    {
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getInfo()
-    {
+    public String getInfo() {
         return info;
     }
 
-    public void setInfo(String info)
-    {
+    public void setInfo(String info) {
         this.info = info;
     }
 
-    public String getLogo()
-    {
+    public String getLogo() {
         return logo;
     }
 
-    public void setLogo(String logo)
-    {
+    public void setLogo(String logo) {
         this.logo = logo;
     }
 
-    public String getSite()
-    {
+    public String getSite() {
         return site;
     }
 
-    public void setSite(String site)
-    {
+    public void setSite(String site) {
         this.site = site;
     }
 
-    public String getPhone()
-    {
+    public String getPhone() {
         return phone;
     }
 
-    public void setPhone(String phone)
-    {
+    public void setPhone(String phone) {
         this.phone = phone;
     }
 
-    public String getAddress()
-    {
+    public String getAddress() {
         return address;
     }
 
-    public void setAddress(String address)
-    {
+    public void setAddress(String address) {
         this.address = address;
     }
 

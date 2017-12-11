@@ -30,7 +30,6 @@ import android.widget.TextView;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.Doctor;
-import com.medhelp2.mhchat.ui.about.AboutFragment;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.details.DocDetailsFragment;
@@ -40,7 +39,6 @@ import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
-import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.view.ItemListDecorator;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
@@ -89,7 +87,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     private ActionBarDrawerToggle drawerToggle;
 
     private TextView headerTitle;
-    private TextView headerDesc;
     private ImageView headerLogo;
 
     public static Intent getStartIntent(Context context)
@@ -134,7 +131,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
             //       headerLogo.setImageBitmap(response.getLogo());
         }
         headerTitle.setText(response.getTitle());
-        headerDesc.setText(response.getInfo());
     }
 
     @Override
@@ -381,13 +377,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     }
 
     @Override
-    public void showSettingsActivity()
-    {
-        Intent intent = SettingsActivity.getStartIntent(this);
-        startActivity(intent);
-    }
-
-    @Override
     public void showLoginActivity()
     {
         Intent intent = LoginActivity.getStartIntent(this);
@@ -401,12 +390,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     {
         Intent intent = ContactsActivity.getStartIntent(this);
         startActivity(intent);
-    }
-
-    @Override
-    public void showAboutFragment()
-    {
-        AboutFragment.newInstance().show(getSupportFragmentManager());
     }
 
     @Override

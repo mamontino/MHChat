@@ -25,7 +25,6 @@ import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CenterResponse;
-import com.medhelp2.mhchat.ui.about.AboutFragment;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
@@ -36,7 +35,6 @@ import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.decorators.DayDecorator;
 import com.medhelp2.mhchat.ui.schedule.decorators.SelectDecorator;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
-import com.medhelp2.mhchat.ui.settings.SettingsActivity;
 import com.medhelp2.mhchat.utils.view.GridDecorator;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
@@ -84,7 +82,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     private ActionBarDrawerToggle drawerToggle;
 
     private TextView headerTitle;
-    private TextView headerDesc;
     private ImageView headerLogo;
 
     public static Intent getStartIntent(Context context)
@@ -114,7 +111,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
             //       headerLogo.setImageBitmap(response.getLogo());
         }
         headerTitle.setText(response.getTitle());
-        headerDesc.setText(response.getInfo());
     }
 
     public void setRecyclerView()
@@ -357,12 +353,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     }
 
     @Override
-    public void showAboutFragment()
-    {
-        AboutFragment.newInstance().show(getSupportFragmentManager());
-    }
-
-    @Override
     protected void onResume()
     {
         super.onResume();
@@ -417,13 +407,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
         navView.setNavigationItemSelectedListener(this);
-    }
-
-    @Override
-    public void showSettingsActivity()
-    {
-        Intent intent = SettingsActivity.getStartIntent(this);
-        startActivity(intent);
     }
 
     @Override

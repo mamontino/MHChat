@@ -109,6 +109,7 @@ public class RealmManager implements RealmHelper
         }
         realm.close();
         Timber.d("getRealmUser");
+        assert response != null;
         return Single.just(response);
     }
 
@@ -127,6 +128,7 @@ public class RealmManager implements RealmHelper
         }
         realm.close();
         Timber.d("getCenterResponse");
+        assert response != null;
         return Single.just(response);
     }
 
@@ -162,6 +164,7 @@ public class RealmManager implements RealmHelper
         }
         realm.close();
         Timber.d("getRealmMessage");
+        assert response != null;
         return Single.just(response);
     }
 
@@ -195,6 +198,7 @@ public class RealmManager implements RealmHelper
         }
         realm.close();
         Timber.d("getRealmChatRoom");
+        assert response != null;
         return Single.just(response);
     }
 
@@ -214,6 +218,7 @@ public class RealmManager implements RealmHelper
         }
         realm.close();
         Timber.d("getRealmUser");
+        assert response != null;
         return Single.just(response);
     }
 
@@ -234,6 +239,7 @@ public class RealmManager implements RealmHelper
                 response = realm.copyFromRealm(realmResponse);
             }
             Timber.d("getRealmUserResponse");
+            assert response != null;
             return Single.just(response);
         } catch (Exception e)
         {
@@ -258,6 +264,7 @@ public class RealmManager implements RealmHelper
         }
         realm.close();
         Timber.d("getRealmChatRoom");
+        assert response != null;
         return Single.just(response);
     }
 

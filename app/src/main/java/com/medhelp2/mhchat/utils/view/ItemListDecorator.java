@@ -16,7 +16,7 @@ public class ItemListDecorator extends RecyclerView.ItemDecoration
 
     public ItemListDecorator(Context context)
     {
-        divider = ContextCompat.getDrawable(context, R.drawable.divider_grey_1dp);
+        divider = ContextCompat.getDrawable(context, R.drawable.divider_light_grey_1dp);
     }
 
     @Override

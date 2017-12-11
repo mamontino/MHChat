@@ -24,16 +24,16 @@
         android:paddingLeft="@dimen/base_element_margin"
         android:paddingRight="@dimen/base_element_margin">
 
-        <ImageButton
-            android:id="@+id/btn_hide_keyboard"
-            android:layout_width="@dimen/base_size_24dp"
-            android:layout_height="@dimen/base_size_24dp"
-            android:layout_gravity="top"
-            android:layout_marginEnd="@dimen/base_element_margin"
-            android:layout_marginRight="@dimen/base_element_margin"
-            android:background="@color/transparent"
-            android:contentDescription="@string/keyboard"
-            app:srcCompat="@drawable/ic_keyboard_gray_24dp"/>
+        <!--<ImageButton-->
+            <!--android:id="@+id/btn_hide_keyboard"-->
+            <!--android:layout_width="@dimen/base_size_24dp"-->
+            <!--android:layout_height="@dimen/base_size_24dp"-->
+            <!--android:layout_gravity="top"-->
+            <!--android:layout_marginEnd="@dimen/base_element_margin"-->
+            <!--android:layout_marginRight="@dimen/base_element_margin"-->
+            <!--android:background="@color/transparent"-->
+            <!--android:contentDescription="@string/keyboard"-->
+            <!--app:srcCompat="@drawable/ic_keyboard_gray_24dp"/>-->
 
         <EditText
             android:id="@+id/et_send_message"
@@ -42,7 +42,7 @@
             android:layout_marginEnd="@dimen/base_element_margin"
             android:layout_marginRight="@dimen/base_element_margin"
             android:layout_weight="1"
-            android:background="@drawable/text_field_oval"
+            android:background="@drawable/rounded_bg_light_grey_24dp"
             android:focusable="true"
             android:gravity="center_vertical"
             android:hint="@string/hint_message"
@@ -56,7 +56,7 @@
             android:layout_width="@dimen/base_size_48dp"
             android:layout_height="@dimen/base_size_48dp"
             android:layout_gravity="bottom"
-            android:background="@drawable/btn_oval_primary"
+            android:background="@drawable/oval_primary"
             android:contentDescription="@string/action_send"
             app:srcCompat="@drawable/ic_send_white_24dp"/>
 
