@@ -52,4 +52,10 @@ interface ApiEndPoint
     //    GET SALE BY CENTER
 
     String SALE = BASE_URL + "sale/{id_center}";
+
+    //    GET SALE BY CENTER
+
+    String SCHEDULE = BASE_URL + "schedule/{id_doctor}/{date}/{adm}";
+
+    String CURRENT_DATE = BASE_URL + "date";
 }

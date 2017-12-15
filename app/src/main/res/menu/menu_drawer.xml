@@ -38,21 +38,12 @@
             android:checked="true"
             android:icon="@drawable/ic_card_giftcard_white_24dp"
             android:title="@string/nav_sale"/>
-        <!--<item-->
-        <!--android:id="@+id/nav_item_feedback"-->
-        <!--android:checked="true"-->
-        <!--android:icon="@drawable/ic_question_answer_white_24dp"-->
-        <!--android:title="@string/nav_feedback"/>-->
-        <!--<item-->
-        <!--android:id="@+id/nav_item_settings"-->
-        <!--android:checked="true"-->
-        <!--android:icon="@drawable/ic_settings_white_24dp"-->
-        <!--android:title="@string/nav_settings"/>-->
         <item
             android:id="@+id/nav_item_rate"
             android:checked="true"
             android:icon="@drawable/ic_star_border_white_24dp"
             android:title="@string/nav_rate"/>
+
         <item
             android:id="@+id/nav_item_logout"
             android:checked="true"

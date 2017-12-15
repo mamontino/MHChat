@@ -153,7 +153,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/selector_corner_24_white_grey"
+            android:background="@drawable/selector_white_grey"
             android:text="@string/nav_schedule"/>
 
         <Button
@@ -163,7 +163,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_alignParentTop="true"
-            android:background="@drawable/selector_corner_24_white_grey"
+            android:background="@drawable/selector_white_grey"
             android:text="@string/nav_record"/>
 
     </RelativeLayout>

@@ -59,8 +59,6 @@ public interface RealmHelper
 
     Single<List<Doctor>> getRealmStaff();
 
-//    Completable setRealmReadMessages(int idRoom);
-
     Single<List<CategoryResponse>> getRealmCategory();
 
     Completable saveRealmCategory(List<CategoryResponse> response);

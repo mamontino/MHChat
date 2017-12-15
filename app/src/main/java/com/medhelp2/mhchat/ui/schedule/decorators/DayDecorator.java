@@ -15,12 +15,14 @@ public class DayDecorator implements DayViewDecorator
     public static final int DAY_MODE_MANY = 1;
     public static final int DAY_MODE_FEW = 2;
     public static final int DAY_MODE_NOT = 3;
+    public static final int DAY_MODE_NO = 4;
 
     private Context context;
     private final CalendarDay day;
     private int dayMode;
     private final Drawable bgDrawableGreen;
     private final Drawable bgDrawableYellow;
+    private final Drawable bgDrawableRed;
 
     public int getDayMode()
     {
@@ -35,6 +37,7 @@ public class DayDecorator implements DayViewDecorator
         this.dayMode = dayMode;
         bgDrawableGreen = context.getResources().getDrawable(R.drawable.date_item_default);
         bgDrawableYellow = context.getResources().getDrawable(R.drawable.date_orange);
+        bgDrawableRed = context.getResources().getDrawable(R.drawable.date_red);
     }
 
     @Override
@@ -52,6 +55,9 @@ public class DayDecorator implements DayViewDecorator
         } else if (dayMode == DAY_MODE_FEW)
         {
             view.setBackgroundDrawable(bgDrawableYellow);
+        } else if (dayMode == DAY_MODE_NO)
+        {
+            view.setBackgroundDrawable(bgDrawableRed);
         } else if (dayMode == DAY_MODE_NOT)
         {
             view.setDaysDisabled(true);

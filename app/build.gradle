@@ -52,7 +52,6 @@ dependencies {
     //    FireBase
     implementation "com.google.firebase:firebase-messaging:$rootProject.firebaseVersion"
     //    View
-    implementation "de.hdodenhof:circleimageview:$rootProject.circleImageVersion"
     implementation "com.squareup.picasso:picasso:$rootProject.picassoVersion"
     implementation "com.thoughtbot:expandablerecyclerview:$rootProject.expandRvVersion"
     implementation "com.prolificinteractive:material-calendarview:$rootProject.calendarVersion"

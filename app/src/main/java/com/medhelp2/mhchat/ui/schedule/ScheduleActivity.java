@@ -20,11 +20,13 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CenterResponse;
+import com.medhelp2.mhchat.data.model.DateResponse;
+import com.medhelp2.mhchat.data.model.ScheduleResponse;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
@@ -35,6 +37,7 @@ import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.decorators.DayDecorator;
 import com.medhelp2.mhchat.ui.schedule.decorators.SelectDecorator;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
+import com.medhelp2.mhchat.utils.main.TimesUtils;
 import com.medhelp2.mhchat.utils.view.GridDecorator;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
@@ -42,11 +45,13 @@ import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
 import com.prolificinteractive.materialcalendarview.OnDateSelectedListener;
+import com.prolificinteractive.materialcalendarview.OnMonthChangedListener;
 import com.prolificinteractive.materialcalendarview.format.ArrayWeekDayFormatter;
 import com.prolificinteractive.materialcalendarview.format.MonthArrayTitleFormatter;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -56,7 +61,7 @@ import butterknife.ButterKnife;
 import timber.log.Timber;
 
 public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper,
-        NavigationView.OnNavigationItemSelectedListener, OnDateSelectedListener
+        NavigationView.OnNavigationItemSelectedListener, OnDateSelectedListener, OnMonthChangedListener
 {
     @Inject
     SchedulePresenter<ScheduleViewHelper> presenter;
@@ -79,10 +84,15 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @BindView(R.id.calendar_schedule)
     MaterialCalendarView calendarView;
 
-    private ActionBarDrawerToggle drawerToggle;
+    @BindView(R.id.err_schedule)
+    TextView errorSchedule;
 
     private TextView headerTitle;
-    private ImageView headerLogo;
+    private String todayString;
+    private String lastModayString;
+    //    private ImageView headerLogo;
+    private List<ScheduleResponse> timeList = new ArrayList<>();
+    List<String> listSelectedTime = new ArrayList<>();
 
     public static Intent getStartIntent(Context context)
     {
@@ -100,119 +110,182 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     }
 
     @Override
+    protected void setUp()
+    {
+        setUnBinder(ButterKnife.bind(this));
+        setupCalendarView();
+
+        presenter.onAttach(this);
+        presenter.getCenterInfo();
+        presenter.getDateFromServer(3, 30);
+
+        setupToolbar();
+        setupDrawer();
+        setupRecyclerView();
+    }
+
+    private void setupCalendarView()
+    {
+        calendarView.state().edit()
+                .setFirstDayOfWeek(Calendar.MONDAY)
+                .setCalendarDisplayMode(CalendarMode.WEEKS)
+                .commit();
+        calendarView.setTitleFormatter(new MonthArrayTitleFormatter(getResources().getStringArray(R.array.calendar_months_array)));
+        calendarView.setWeekDayFormatter(new ArrayWeekDayFormatter(getResources().getStringArray(R.array.calendar_days_array)));
+        calendarView.setVisibility(View.GONE);
+    }
+
+    @Override
     public void updateHeader(CenterResponse response)
     {
         View headerLayout = navView.getHeaderView(0);
-        headerLogo = headerLayout.findViewById(R.id.header_logo);
+//        headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
         Timber.d("updateHeader: " + response.getTitle());
-        if (response.getLogo() != null)
-        {
-            //       headerLogo.setImageBitmap(response.getLogo());
-        }
+//        if (response.getLogo() != null)
+//        {
+        //       headerLogo.setImageBitmap(response.getLogo());
+//        }
         headerTitle.setText(response.getTitle());
     }
 
-    public void setRecyclerView()
+    public void setupRecyclerView()
     {
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 5);
+        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 4);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new GridDecorator(5, dpToPx(10), true));
+        recyclerView.addItemDecoration(new GridDecorator(4, dpToPx(), true));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
         {
             @Override
             public void onClick(View view, int position)
             {
-//                Toast.makeText(ScheduleActivity.this, "Item Click", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScheduleActivity.this, "Item Click", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onLongClick(View view, int position)
             {
-//                Toast.makeText(ScheduleActivity.this, "Item Click LONG", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ScheduleActivity.this, "Item Click LONG", Toast.LENGTH_SHORT).show();
             }
         }));
     }
 
     @Override
-    protected void setUp()
+    public void setupCalendar(DateResponse today, List<ScheduleResponse> response)
     {
-        setUnBinder(ButterKnife.bind(this));
-        presenter.onAttach(this);
-        presenter.getCenterInfo();
-        setCalendar();
-        setupToolbar();
-        setupDrawer();
-        presenter.getData();
-        setRecyclerView();
-    }
+        todayString = today.getToday();
+        lastModayString = today.getLastMonday();
 
-    private void setCalendar()
-    {
-        Calendar min = Calendar.getInstance();
-        min.add(Calendar.DAY_OF_YEAR, 0);
-
+        CalendarDay min = CalendarDay.from(TimesUtils.getDateSchedule(todayString));
         Calendar max = Calendar.getInstance();
-        max.add(Calendar.DAY_OF_MONTH, 30);
+        max.add(Calendar.DAY_OF_MONTH, 28);
 
         calendarView.state().edit()
-                .setFirstDayOfWeek(Calendar.MONDAY)
                 .setMinimumDate(min)
                 .setMaximumDate(max)
-                .setCalendarDisplayMode(CalendarMode.MONTHS)
                 .commit();
-        calendarView.setSelectedDate(CalendarDay.today());
-        calendarView.setTitleFormatter(new MonthArrayTitleFormatter(getResources().getStringArray(R.array.calendar_months_array)));
-        calendarView.setWeekDayFormatter(new ArrayWeekDayFormatter(getResources().getStringArray(R.array.calendar_days_array)));
-        calendarView.setOnDateChangedListener(this);
+        calendarView.setVisibility(View.VISIBLE);
+        calendarView.setSelectedDate(min);
         calendarView.addDecorators(new SelectDecorator(this));
-
-        presenter.updateCalendar();
+        calendarView.setOnDateChangedListener(this);
+        calendarView.setOnMonthChangedListener(this);
+        updateCalendar(lastModayString, response);
     }
 
     @Override
-    public void updateDateInfo(List<String> response)
+    public void updateCalendar(String day, List<ScheduleResponse> response)
     {
+        timeList.clear();
+        timeList.addAll(response);
+
+        Date nextDate = TimesUtils.getDateSchedule(day);
+        CalendarDay nextDay = CalendarDay.from(nextDate);
+
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, 0);
 
         ArrayList<CalendarDay> calendarDays = new ArrayList<>();
 
-        for (int i = 0; i < 30; i++)
+        for (ScheduleResponse scheduleResponse : response)
         {
-            CalendarDay day = CalendarDay.from(calendar);
-            calendarDays.add(day);
+            String currentDay = scheduleResponse.getAdmDay();
+            Date date = TimesUtils.getDateSchedule(currentDay);
+            CalendarDay calendarDay = CalendarDay.from(date);
 
-            if (i % 3 == 0)
+            calendarDays.add(calendarDay);
+
+            if (scheduleResponse.isWork())
             {
-                calendarView.addDecorator(new DayDecorator(this, day, DayDecorator.DAY_MODE_MANY));
-                calendar.add(Calendar.DATE, 1);
-            } else if (i % 2 == 0)
-            {
-                calendarView.addDecorator(new DayDecorator(this, day, DayDecorator.DAY_MODE_FEW));
-                calendar.add(Calendar.DATE, 1);
+                if (scheduleResponse.getAdmTime() == null)
+                {
+                    calendarView.addDecorator(new DayDecorator(this, calendarDay, DayDecorator.DAY_MODE_NO));
+                    calendar.add(Calendar.DATE, 1);
+                } else if (scheduleResponse.getAdmTime().size() > 3)
+                {
+                    calendarView.addDecorator(new DayDecorator(this, calendarDay, DayDecorator.DAY_MODE_MANY));
+                    calendar.add(Calendar.DATE, 1);
+                } else
+                {
+                    calendarView.addDecorator(new DayDecorator(this, calendarDay, DayDecorator.DAY_MODE_FEW));
+                    calendar.add(Calendar.DATE, 1);
+                }
             } else
             {
-                calendarView.addDecorator(new DayDecorator(this, day, DayDecorator.DAY_MODE_NOT));
+                calendarView.addDecorator(new DayDecorator(this, calendarDay, DayDecorator.DAY_MODE_NOT));
                 calendar.add(Calendar.DATE, 1);
             }
         }
 
-        recyclerView.setAdapter(new ItemAdapter(this, response));
+        if (nextDay != null)
+        {
+            if (nextDay.equals(CalendarDay.from(TimesUtils.getDateSchedule(lastModayString))))
+            {
+                onDateSelected(calendarView, CalendarDay.from(TimesUtils.getDateSchedule(todayString)), true);
+            }
+        }
     }
 
     @Override
-    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date, boolean selected)
+    public void onMonthChanged(MaterialCalendarView widget, CalendarDay date)
     {
-//        Toast.makeText(this, "Выбрана дата: " + date, Toast.LENGTH_SHORT).show();
-
+        Date d = date.getDate();
+        String nextDate = TimesUtils.getDateSchedule(d);
+        presenter.getCalendarData(3, nextDate, 30);
     }
 
-    private int dpToPx(int dp)
+    @Override
+    public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date,
+            boolean selected)
+    {
+        for (ScheduleResponse dateResponse : timeList)
+        {
+            Date selectedDate = TimesUtils.getDateSchedule(dateResponse.getAdmDay());
+            CalendarDay selectedDay = CalendarDay.from(selectedDate);
+
+            Timber.d(date + " " + selectedDay);
+
+            if (selectedDay != null && selectedDay.equals(date))
+            {
+                listSelectedTime.clear();
+                if (dateResponse.getAdmTime() != null
+                        && dateResponse.getAdmTime().size() > 0)
+                {
+                    errorSchedule.setVisibility(View.INVISIBLE);
+                    listSelectedTime.addAll(dateResponse.getAdmTime());
+                } else
+                {
+                    errorSchedule.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+        recyclerView.setAdapter(new ItemAdapter(this, listSelectedTime));
+    }
+
+    private int dpToPx()
     {
         Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dp, r.getDisplayMetrics()));
+        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, r.getDisplayMetrics()));
     }
 
     private void setupToolbar()
@@ -231,7 +304,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @Override
     protected void onDestroy()
     {
-        Timber.d("onDestroy");
         presenter.onDetach();
         super.onDestroy();
     }
@@ -239,23 +311,24 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @Override
     public void lockDrawer()
     {
-        Timber.d("lockDrawer");
         if (drawer != null)
+        {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
     }
 
     @Override
     public void unlockDrawer()
     {
-        Timber.d("unlockDrawer");
         if (drawer != null)
+        {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        }
     }
 
     @Override
     public void closeNavigationDrawer()
     {
-        Timber.d("closeNavigationDrawer");
         if (drawer != null)
         {
             drawer.closeDrawer(Gravity.START);
@@ -271,10 +344,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
             case R.id.nav_item_chat:
                 showContactsActivity();
                 return true;
-
-//            case R.id.nav_item_feedback:
-//                showAboutFragment();
-//                return true;
 
             case R.id.nav_item_logout:
                 showLoginActivity();
@@ -298,10 +367,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
 
             case R.id.nav_item_schedule:
                 return true;
-
-//            case R.id.nav_item_settings:
-//                showSettingsActivity();
-//                return true;
 
             case R.id.nav_item_rate:
                 showRateFragment();
@@ -357,13 +422,14 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     {
         super.onResume();
         if (drawer != null)
+        {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        }
     }
 
     private void setupDrawer()
     {
-        Timber.d("setupDrawer");
-        drawerToggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawer,
                 toolbar,
@@ -392,6 +458,7 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     public void onBackPressed()
     {
         DrawerLayout drawer = findViewById(R.id.drawer_schedule);
+
         if (drawer.isDrawerOpen(GravityCompat.START))
         {
             drawer.closeDrawer(GravityCompat.START);
@@ -404,7 +471,7 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     private void setupNavMenu()
     {
         View headerLayout = navView.getHeaderView(0);
-        headerLogo = headerLayout.findViewById(R.id.header_logo);
+//        headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
         navView.setNavigationItemSelectedListener(this);
     }

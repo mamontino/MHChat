@@ -1,7 +1,7 @@
 package com.medhelp2.mhchat.data.pref;
 
-public interface PreferencesHelper {
-
+public interface PreferencesHelper
+{
     int getCurrentUserId();
 
     void setCurrentUserId(int userId);

@@ -8,6 +8,8 @@ import com.medhelp2.mhchat.data.model.CategoryList;
 import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterList;
 import com.medhelp2.mhchat.data.model.CenterResponse;
+import com.medhelp2.mhchat.data.model.DateList;
+import com.medhelp2.mhchat.data.model.ScheduleList;
 import com.medhelp2.mhchat.data.model.Doctor;
 import com.medhelp2.mhchat.data.model.DoctorInfoList;
 import com.medhelp2.mhchat.data.model.DoctorList;
@@ -33,7 +35,6 @@ import javax.inject.Inject;
 import io.reactivex.Completable;
 import io.reactivex.Observable;
 import io.reactivex.Single;
-
 
 @PerApplication
 public class DataManager implements DataHelper
@@ -142,6 +143,18 @@ public class DataManager implements DataHelper
     public Observable<VisitList> getActualReceptionApiCall()
     {
         return networkHelper.getActualReceptionApiCall();
+    }
+
+    @Override
+    public Observable<ScheduleList> getScheduleByDoctor(int idDoctor, String date, int adm)
+    {
+        return networkHelper.getScheduleByDoctor(idDoctor, date, adm);
+    }
+
+    @Override
+    public Observable<DateList> getCurrentDate()
+    {
+        return networkHelper.getCurrentDate();
     }
 
     @Override

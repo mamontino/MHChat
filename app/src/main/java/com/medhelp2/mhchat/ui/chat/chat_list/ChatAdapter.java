@@ -10,7 +10,7 @@ import android.widget.TextView;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.MessageResponse;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
-import com.medhelp2.mhchat.utils.main.TimeUtils;
+import com.medhelp2.mhchat.utils.main.TimesUtils;
 
 import java.util.List;
 
@@ -132,7 +132,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
             if (repo.getTimeStamp() != null)
             {
-                timestampSelf.setText(TimeUtils.getTime(repo.getTimeStamp()));
+                timestampSelf.setText(TimesUtils.getTime(repo.getTimeStamp()));
             }
 
             if (repo.getMessage() != null)
@@ -184,7 +184,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
             if (repo.getTimeStamp() != null)
             {
-                timestampFrom.setText(TimeUtils.getTime(repo.getTimeStamp()));
+                timestampFrom.setText(TimesUtils.getTime(repo.getTimeStamp()));
             }
 
             if (repo.getMessage() != null)

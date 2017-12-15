@@ -2,6 +2,7 @@ package com.medhelp2.mhchat.ui.sale;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -40,6 +41,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import timber.log.Timber;
 
 public class SaleActivity extends BaseActivity implements SaleViewHelper,
@@ -337,6 +339,13 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
         saleList = new ArrayList<>();
         saleList.addAll(response);
         adapter.addItems(saleList);
-//        adapter.addItems(response);
+    }
+
+    @OnClick(R.id.fab_sale)
+    public void fabClick()
+    {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + "5551222"));
+        startActivity(intent);
     }
 }

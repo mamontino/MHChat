@@ -2,12 +2,14 @@ package com.medhelp2.mhchat.data.network;
 
 import com.medhelp2.mhchat.data.model.CategoryList;
 import com.medhelp2.mhchat.data.model.CenterList;
+import com.medhelp2.mhchat.data.model.DateList;
 import com.medhelp2.mhchat.data.model.DoctorInfoList;
 import com.medhelp2.mhchat.data.model.DoctorList;
 import com.medhelp2.mhchat.data.model.MessageList;
 import com.medhelp2.mhchat.data.model.RequestResponse;
 import com.medhelp2.mhchat.data.model.RoomResponse;
 import com.medhelp2.mhchat.data.model.SaleList;
+import com.medhelp2.mhchat.data.model.ScheduleList;
 import com.medhelp2.mhchat.data.model.ServiceList;
 import com.medhelp2.mhchat.data.model.UserList;
 import com.medhelp2.mhchat.data.model.VisitList;
@@ -49,4 +51,8 @@ public interface NetworkHelper
     Observable<VisitList> getAllReceptionApiCall();
 
     Observable<VisitList> getActualReceptionApiCall();
+
+    Observable<ScheduleList> getScheduleByDoctor(int idDoctor, String date,  int adm);
+
+    Observable<DateList> getCurrentDate();
 }

@@ -42,7 +42,7 @@
     <string name="some_error">Произошла непредвиденная ошибка.</string>
     <string name="connection_error">Отсутствует соединение с интернетом.</string>
     <string name="empty_error_message">Не удалось \n загрузить даные</string>
-    <string name="empty_screen">У нас сейчас к сожалению \nдля Вас ничего нет.</string>
+    <string name="empty_screen">Не у далось загрузить данные.\n Проверьте подключение \nк интернету и \nповторите попытку.</string>
     <string name="please_retry">Попробуйте позже</string>
     <string name="empty_chat_message">Вы еще не отправляли \n и не получали сообщений \n от этого пользователя</string>
 

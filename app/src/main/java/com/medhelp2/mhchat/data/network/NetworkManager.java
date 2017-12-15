@@ -2,6 +2,8 @@ package com.medhelp2.mhchat.data.network;
 
 import com.medhelp2.mhchat.data.model.CategoryList;
 import com.medhelp2.mhchat.data.model.CenterList;
+import com.medhelp2.mhchat.data.model.DateList;
+import com.medhelp2.mhchat.data.model.ScheduleList;
 import com.medhelp2.mhchat.data.model.DoctorInfoList;
 import com.medhelp2.mhchat.data.model.DoctorList;
 import com.medhelp2.mhchat.data.model.MessageList;
@@ -38,6 +40,8 @@ public class NetworkManager implements NetworkHelper
     private static final String PASSWORD = "password";
     private static final String FB_TOKEN = "fb_token";
     private static final String MESSAGE = "message";
+    private static final String ADM_DATE = "date";
+    private static final String ADM_TIME = "adm";
     private static final String AUTH = "Authorization";
 
 
@@ -46,6 +50,7 @@ public class NetworkManager implements NetworkHelper
     {
         this.prefManager = preferencesManager;
     }
+
 
     @Override
     public Observable<UserList> doLogin(String username, String password)
@@ -56,6 +61,8 @@ public class NetworkManager implements NetworkHelper
                 .addBodyParameter(PASSWORD, password)
                 .build()
                 .getObjectObservable(UserList.class);
+
+
     }
 
     @Override
@@ -215,6 +222,27 @@ public class NetworkManager implements NetworkHelper
                 .addPathParameter(ID_CLIENT, String.valueOf(prefManager.getCurrentUserId()))
                 .build()
                 .getObjectObservable(VisitList.class);
+    }
+
+    @Override
+    public Observable<ScheduleList> getScheduleByDoctor(int idDoctor, String date,  int adm)
+    {
+        return Rx2AndroidNetworking.get(ApiEndPoint.SCHEDULE)
+                .addHeaders(AUTH, prefManager.getAccessToken())
+                .addPathParameter(ID_DOCTOR, String.valueOf(idDoctor))
+                .addPathParameter(ADM_DATE, date)
+                .addPathParameter(ADM_TIME, String.valueOf(adm))
+                .build()
+                .getObjectObservable(ScheduleList.class);
+    }
+
+    @Override
+    public Observable<DateList> getCurrentDate()
+    {
+        return Rx2AndroidNetworking.get(ApiEndPoint.CURRENT_DATE)
+                .addHeaders(AUTH, prefManager.getAccessToken())
+                .build()
+                .getObjectObservable(DateList.class);
     }
 }
 

@@ -7,9 +7,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-public class TimeUtils
+public class TimesUtils
 {
-    private TimeUtils()
+    private TimesUtils()
     {
     }
 
@@ -70,5 +70,24 @@ public class TimeUtils
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yy HH:mm", Locale.getDefault());
         return dateFormat.format(new Date(dataLong));
+    }
+
+    public static Date getDateSchedule(String data)
+    {
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        try
+        {
+            return format.parse(data);
+        } catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public static String getDateSchedule(Date data)
+    {
+        DateFormat format = new SimpleDateFormat("dd.MM.yyyy", Locale.getDefault());
+        return format.format(data);
     }
 }

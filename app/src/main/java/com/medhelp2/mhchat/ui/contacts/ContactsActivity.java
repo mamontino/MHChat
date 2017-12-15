@@ -37,7 +37,7 @@ import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.utils.main.AppConstants;
 import com.medhelp2.mhchat.utils.main.NotificationUtils;
-import com.medhelp2.mhchat.utils.view.ContactsDecorator;
+import com.medhelp2.mhchat.utils.view.ItemListDecorator;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 
@@ -186,7 +186,7 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         setupDrawer();
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new ContactsDecorator(this));
+        recyclerView.addItemDecoration(new ItemListDecorator(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
         recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()

@@ -26,33 +26,42 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_margin_32dp"
-                    android:gravity="center"
                     android:background="@color/light_gray"
+                    android:gravity="center"
                     android:text="Выберите день:"/>
 
                 <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                     android:id="@+id/calendar_schedule"
                     android:layout_width="match_parent"
-                    android:layout_marginLeft="@dimen/base_margin_32dp"
-                    android:layout_marginStart="@dimen/base_margin_32dp"
-                    android:layout_marginRight="@dimen/base_margin_32dp"
-                    android:layout_marginEnd="@dimen/base_margin_32dp"
                     android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/base_margin_32dp"
+                    android:layout_marginLeft="@dimen/base_margin_32dp"
+                    android:layout_marginRight="@dimen/base_margin_32dp"
+                    android:layout_marginStart="@dimen/base_margin_32dp"
                     app:mcv_selectionColor="@color/color_primary_dark"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_margin_32dp"
-                    android:gravity="center"
                     android:background="@color/light_gray"
+                    android:gravity="center"
                     android:text="Выберите удобное время:"/>
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_schedule"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="wrap_content"
                     android:background="@color/transparent"
                     android:clipToPadding="false"/>
+
+                <TextView
+                    android:id="@+id/err_schedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="К сожалению, данный день уже расписан. Пожалуйста, выберите другую дату."
+                    android:visibility="gone"/>
 
             </LinearLayout>
 
