@@ -48,6 +48,12 @@ public abstract class BaseSubView extends ViewGroup implements SubMvpView
     }
 
     @Override
+    public boolean isLoading()
+    {
+        return mvpView.isLoading();
+    }
+
+    @Override
     public void hideLoading()
     {
         if (mvpView != null)

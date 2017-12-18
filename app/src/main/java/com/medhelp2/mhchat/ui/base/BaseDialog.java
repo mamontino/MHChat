@@ -49,6 +49,12 @@ public abstract class BaseDialog extends DialogFragment implements DialogMvpView
     }
 
     @Override
+    public boolean isLoading()
+    {
+        return activity.isLoading();
+    }
+
+    @Override
     public void hideLoading()
     {
         if (activity != null)

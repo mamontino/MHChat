@@ -106,6 +106,7 @@
     <string name="user_image">Изображение пользователя</string>
     <string name="keyboard">Клавиатура</string>
     <string name="hint_ruble">р</string>
+    <string name="hint_progress">Данные обновляюся,  подождите...</string>
 
     <!--Calendar-->
     <array name="calendar_days_array">

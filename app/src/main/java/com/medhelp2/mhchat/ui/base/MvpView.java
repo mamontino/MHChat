@@ -3,13 +3,13 @@ package com.medhelp2.mhchat.ui.base;
 
 import android.support.annotation.StringRes;
 
-// TODO: Базовый интерфейс для View в MVP (Model View Presenter)
-
 public interface MvpView
 {
     void showLoading();
 
     void hideLoading();
+
+    boolean isLoading();
 
     void openActivityLogin();
 

@@ -116,11 +116,6 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V>
         }
     }
 
-    @Override
-    public void setUserAsLoggedOut()
-    {
-    }
-
     public static class MvpViewNotAttachedException extends RuntimeException
     {
         public MvpViewNotAttachedException()

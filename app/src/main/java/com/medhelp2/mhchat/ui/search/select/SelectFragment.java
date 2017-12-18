@@ -1,7 +1,8 @@
-package com.medhelp2.mhchat.ui.doctor.details;
+package com.medhelp2.mhchat.ui.search.select;
 
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -19,16 +20,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
-public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelper
+public class SelectFragment extends BaseDialog implements SelectViewHelper
 {
     public static final String TAG = "SelectFragment";
 
     @Inject
-    DocDetailsPresenterHelper<DocDetailsViewHelper> presenter;
+    SelectPresenterHelper<SelectViewHelper> presenter;
 
+    @SuppressWarnings("unused")
     @BindView(R.id.doc_info_image)
     ImageView docInfoImage;
 
@@ -61,19 +62,18 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
 
     private static int id;
 
-    public static DocDetailsFragment newInstance(int idDoctor)
+    public static SelectFragment newInstance(int idService)
     {
-        Timber.d("SelectFragment newInstance for id " + idDoctor);
         Bundle args = new Bundle();
-        DocDetailsFragment fragment = new DocDetailsFragment();
-        id = idDoctor;
+        SelectFragment fragment = new SelectFragment();
+        id = idService;
         fragment.setArguments(args);
         return fragment;
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_doctor_details, container, false);
@@ -83,21 +83,9 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
             component.inject(this);
             setUnBinder(ButterKnife.bind(this, view));
             presenter.onAttach(this);
-            presenter.loadDocInfo(id);
+            presenter.loadDocList(id);
         }
         return view;
-    }
-
-    @OnClick(R.id.doc_info_btn_schedule)
-    void onScheduleClick()
-    {
-        presenter.onScheduleClicked();
-    }
-
-    @OnClick(R.id.doc_info_btn_record)
-    void onRecordClick()
-    {
-        presenter.onRecordClicked();
     }
 
     @Override
@@ -125,7 +113,7 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
     }
 
     @Override
-    public void updateDocInfo(DoctorInfo doctorInfo)
+    public void updateDocList(DoctorInfo doctorInfo)
     {
         if (doctorInfo != null)
         {

@@ -53,6 +53,12 @@ public abstract class BaseFragmentList extends ListFragment implements MvpView
     }
 
     @Override
+    public boolean isLoading()
+    {
+        return dialog != null && dialog.isShowing();
+    }
+
+    @Override
     public void hideLoading()
     {
         if (dialog != null && dialog.isShowing())

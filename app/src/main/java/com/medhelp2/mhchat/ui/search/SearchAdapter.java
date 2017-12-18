@@ -17,16 +17,13 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>
 {
     @Inject
     SearchPresenter presenter;
 
-    private static final int VIEW_TYPE_EMPTY = 10;
     private static final int VIEW_TYPE_NORMAL = 11;
-
     private List<ServiceResponse> response;
 
     public SearchAdapter(List<ServiceResponse> response)
@@ -46,10 +43,7 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>
         switch (viewType)
         {
             case VIEW_TYPE_NORMAL:
-                Timber.d("VIEW_TYPE_NORMAL");
                 return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_search, parent, false));
-            case VIEW_TYPE_EMPTY:
-                return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_download, parent, false));
             default:
                 return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_download, parent, false));
         }
@@ -61,23 +55,14 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>
         if (response != null && response.size() > 0)
         {
             return VIEW_TYPE_NORMAL;
-        } else
-        {
-            return VIEW_TYPE_EMPTY;
         }
+            return 0;
     }
 
     @Override
     public int getItemCount()
     {
-        if (response != null && response.size() > 0)
-        {
-            Timber.d("response != null");
             return response.size();
-        } else
-        {
-            return 0;
-        }
     }
 
     void addItems(List<ServiceResponse> repoList)

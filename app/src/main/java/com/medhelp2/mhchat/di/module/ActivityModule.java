@@ -43,6 +43,9 @@ import com.medhelp2.mhchat.ui.search.SearchAdapter;
 import com.medhelp2.mhchat.ui.search.SearchPresenter;
 import com.medhelp2.mhchat.ui.search.SearchPresenterHelper;
 import com.medhelp2.mhchat.ui.search.SearchViewHelper;
+import com.medhelp2.mhchat.ui.search.select.SelectPresenter;
+import com.medhelp2.mhchat.ui.search.select.SelectPresenterHelper;
+import com.medhelp2.mhchat.ui.search.select.SelectViewHelper;
 import com.medhelp2.mhchat.ui.splash.SplashPresenter;
 import com.medhelp2.mhchat.ui.splash.SplashPresenterHelper;
 import com.medhelp2.mhchat.ui.splash.SplashViewHelper;
@@ -152,6 +155,12 @@ public class ActivityModule
 
     @Provides
     RatePresenterHelper<RateViewHelper> provideRatePresenter(RatePresenter<RateViewHelper> presenter)
+    {
+        return presenter;
+    }
+
+    @Provides
+    SelectPresenterHelper<SelectViewHelper> provideSelectPresenter(SelectPresenter<SelectViewHelper> presenter)
     {
         return presenter;
     }

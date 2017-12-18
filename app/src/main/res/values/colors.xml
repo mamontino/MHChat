@@ -9,6 +9,7 @@
     <color name="light_gray">#e0e0e0</color>
     <color name="semi_gray">#9e9e9e</color>
     <color name="dark_gray">#616161</color>
+    <color name="black_bg">#FF424242</color>
     <color name="black_effective">#212121</color>
     <color name="black">#000000</color>
 

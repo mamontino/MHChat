@@ -13,6 +13,7 @@ import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
+import com.medhelp2.mhchat.ui.search.select.SelectFragment;
 import com.medhelp2.mhchat.ui.splash.SplashActivity;
 
 import dagger.Component;
@@ -36,6 +37,8 @@ public interface ActivityComponent
     void inject(ChatListFragment fragment);
 
     void inject(DocDetailsFragment fragment);
+
+    void inject(SelectFragment fragment);
 
     void inject(RateFragment fragment);
 

@@ -55,8 +55,6 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
             Timber.e(e.getMessage());
         }
 
-        // TODO: Если remoteMessage содержит данные (data message)
-
         if (remoteMessage.getData().size() > 0)
         {
             Timber.d("Полученные данные: " + remoteMessage.getData());
@@ -109,8 +107,6 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
                 }
             }
         }
-
-        // TODO: Исли remoteMessage содержит Notification
 
         if (remoteMessage.getNotification() != null)
         {

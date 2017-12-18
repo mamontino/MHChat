@@ -7,6 +7,8 @@ import com.medhelp2.mhchat.data.model.ScheduleList;
 import com.medhelp2.mhchat.ui.base.BasePresenter;
 import com.medhelp2.mhchat.utils.rx.SchedulerProvider;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -31,7 +33,6 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
     @Override
     public void getCenterInfo()
     {
-        Timber.d("Получение информации о центре из локального хранилища");
         getCompositeDisposable().add(getDataHelper().getRealmCenter()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
@@ -39,20 +40,19 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                 {
                     try
                     {
-                        Timber.d("Данные успешно загружены из локального хранилища");
-                        Timber.d(centerResponse.getTitle() + " " + (centerResponse.getPhone()));
                         getMvpView().updateHeader(centerResponse);
                     } catch (Exception e)
                     {
-                        e.printStackTrace();
+                        Timber.e("Данные из локального хранилища " +
+                                "загружены с ошибкой: " + e.getMessage());
                     }
-                }, throwable -> Timber.d("Данные из локального хранилища загружены с ошибкой")));
+                }, throwable -> Timber.e("Данные из локального хранилища " +
+                        "загружены с ошибкой: " + throwable.getMessage())));
     }
 
     @Override
     public void getDateFromServer(int idDoctor, int adm)
     {
-        Timber.d("getData");
         getMvpView().showLoading();
         getCompositeDisposable().add(getDataHelper()
                 .getCurrentDate()
@@ -67,7 +67,6 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
 
                     if (!response.isError())
                     {
-                        Timber.d("getDateFromServer: загрузка прошла успешно");
                         DateResponse date = response.getResponse();
 
                         if (!response.isError())
@@ -84,7 +83,6 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                     }
                 }, throwable ->
                 {
-                    Timber.d("getSchedule: загрузка прошла с ошибкой: " + throwable.getMessage());
                     if (!isViewAttached())
                     {
                         return;
@@ -97,8 +95,17 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
     public void getCalendarData(int idDoctor, DateResponse date, int adm)
     {
         getMvpView().showLoading();
+
+        String monday = date.getLastMonday();
+
+        if (monday.equals("1"))
+        {
+            monday = date.getToday();
+        }
+
         getCompositeDisposable().add(getDataHelper()
-                .getScheduleByDoctor(idDoctor, date.getLastMonday(), adm)
+                .getScheduleByDoctor(idDoctor, monday, adm)
+                .delay(1000, TimeUnit.MILLISECONDS)
                 .subscribeOn(getSchedulerProvider().io())
                 .map(ScheduleList::getResponse)
                 .observeOn(getSchedulerProvider().ui())
@@ -106,13 +113,14 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                 {
                     if (response != null && response.size() > 0)
                     {
-                        Timber.d("getSchedule: загрузка прошла успешно");
+                        getMvpView().hideLoading();
+                        getMvpView().setupCalendar(date, response);
                     }
-                    getMvpView().hideLoading();
-                    getMvpView().setupCalendar(date, response);
+
                 }, throwable ->
                 {
-                    Timber.d("getSchedule: загрузка прошла с ошибкой: " + throwable.getMessage());
+                    Timber.d("getSchedule: загрузка прошла с ошибкой: "
+                            + throwable.getMessage());
                     if (!isViewAttached())
                     {
                         return;
@@ -128,6 +136,7 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
         getMvpView().showLoading();
         getCompositeDisposable().add(getDataHelper()
                 .getScheduleByDoctor(idDoctor, date, adm)
+                .delay(1000, TimeUnit.MILLISECONDS)
                 .subscribeOn(getSchedulerProvider().io())
                 .map(ScheduleList::getResponse)
                 .observeOn(getSchedulerProvider().ui())
@@ -141,12 +150,25 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                     getMvpView().updateCalendar(date, response);
                 }, throwable ->
                 {
-                    Timber.d("getSchedule: загрузка прошла с ошибкой: " + throwable.getMessage());
+                    Timber.d("getSchedule: загрузка прошла с ошибкой: "
+                            + throwable.getMessage());
+
                     if (!isViewAttached())
                     {
                         return;
                     }
                     getMvpView().hideLoading();
                 }));
+    }
+
+    @Override
+    public void unSubscribe()
+    {
+        if (!getCompositeDisposable().isDisposed())
+        {
+            return;
+        }
+        getCompositeDisposable().clear();
+        getMvpView().hideLoading();
     }
 }

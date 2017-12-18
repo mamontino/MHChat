@@ -20,6 +20,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -87,12 +88,17 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @BindView(R.id.err_schedule)
     TextView errorSchedule;
 
+    @BindView(R.id.empty_schedule)
+    TextView emptySchedule;
+
     private TextView headerTitle;
+    private ImageView headerLogo;
+
     private String todayString;
-    private String lastModayString;
-    //    private ImageView headerLogo;
+    private String lastMondayString;
+
     private List<ScheduleResponse> timeList = new ArrayList<>();
-    List<String> listSelectedTime = new ArrayList<>();
+    private List<String> listSelectedTime = new ArrayList<>();
 
     public static Intent getStartIntent(Context context)
     {
@@ -139,13 +145,13 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     public void updateHeader(CenterResponse response)
     {
         View headerLayout = navView.getHeaderView(0);
-//        headerLogo = headerLayout.findViewById(R.id.header_logo);
+        headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
         Timber.d("updateHeader: " + response.getTitle());
-//        if (response.getLogo() != null)
-//        {
-        //       headerLogo.setImageBitmap(response.getLogo());
-//        }
+        if (response.getLogo() != null)
+        {
+            headerLogo.setImageResource(R.mipmap.ic_launcher);
+        }
         headerTitle.setText(response.getTitle());
     }
 
@@ -175,34 +181,38 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     public void setupCalendar(DateResponse today, List<ScheduleResponse> response)
     {
         todayString = today.getToday();
-        lastModayString = today.getLastMonday();
+        lastMondayString = today.getLastMonday();
 
         CalendarDay min = CalendarDay.from(TimesUtils.getDateSchedule(todayString));
+
         Calendar max = Calendar.getInstance();
+        max.setTime(TimesUtils.getDateSchedule(todayString));
         max.add(Calendar.DAY_OF_MONTH, 28);
 
         calendarView.state().edit()
                 .setMinimumDate(min)
                 .setMaximumDate(max)
                 .commit();
+
         calendarView.setVisibility(View.VISIBLE);
-        calendarView.setSelectedDate(min);
         calendarView.addDecorators(new SelectDecorator(this));
         calendarView.setOnDateChangedListener(this);
         calendarView.setOnMonthChangedListener(this);
-        updateCalendar(lastModayString, response);
+        updateCalendar(lastMondayString, response);
     }
 
     @Override
     public void updateCalendar(String day, List<ScheduleResponse> response)
     {
+        recyclerView.setVisibility(View.GONE);
+        errorSchedule.setVisibility(View.GONE);
+        emptySchedule.setVisibility(View.VISIBLE);
+
         timeList.clear();
         timeList.addAll(response);
 
-        Date nextDate = TimesUtils.getDateSchedule(day);
-        CalendarDay nextDay = CalendarDay.from(nextDate);
-
         Calendar calendar = Calendar.getInstance();
+        calendar.setTime(TimesUtils.getDateSchedule(todayString));
         calendar.add(Calendar.MONTH, 0);
 
         ArrayList<CalendarDay> calendarDays = new ArrayList<>();
@@ -236,21 +246,18 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
                 calendar.add(Calendar.DATE, 1);
             }
         }
-
-        if (nextDay != null)
-        {
-            if (nextDay.equals(CalendarDay.from(TimesUtils.getDateSchedule(lastModayString))))
-            {
-                onDateSelected(calendarView, CalendarDay.from(TimesUtils.getDateSchedule(todayString)), true);
-            }
-        }
     }
 
     @Override
     public void onMonthChanged(MaterialCalendarView widget, CalendarDay date)
     {
-        Date d = date.getDate();
-        String nextDate = TimesUtils.getDateSchedule(d);
+        calendarView.clearSelection();
+        emptySchedule.setVisibility(View.VISIBLE);
+        errorSchedule.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.GONE);
+
+        Date selectedDate = date.getDate();
+        String nextDate = TimesUtils.getDateSchedule(selectedDate);
         presenter.getCalendarData(3, nextDate, 30);
     }
 
@@ -258,12 +265,11 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date,
             boolean selected)
     {
+        emptySchedule.setVisibility(View.GONE);
         for (ScheduleResponse dateResponse : timeList)
         {
             Date selectedDate = TimesUtils.getDateSchedule(dateResponse.getAdmDay());
             CalendarDay selectedDay = CalendarDay.from(selectedDate);
-
-            Timber.d(date + " " + selectedDay);
 
             if (selectedDay != null && selectedDay.equals(date))
             {
@@ -279,7 +285,8 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
                 }
             }
         }
-        recyclerView.setAdapter(new ItemAdapter(this, listSelectedTime));
+        recyclerView.setVisibility(View.VISIBLE);
+        recyclerView.setAdapter(new ItemAdapter(listSelectedTime));
     }
 
     private int dpToPx()
@@ -462,16 +469,16 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         if (drawer.isDrawerOpen(GravityCompat.START))
         {
             drawer.closeDrawer(GravityCompat.START);
-        } else
-        {
-            super.onBackPressed();
         }
+
+        super.onBackPressed();
     }
+
 
     private void setupNavMenu()
     {
         View headerLayout = navView.getHeaderView(0);
-//        headerLogo = headerLayout.findViewById(R.id.header_logo);
+        headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
         navView.setNavigationItemSelectedListener(this);
     }

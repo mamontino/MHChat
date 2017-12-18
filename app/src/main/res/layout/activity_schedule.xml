@@ -63,6 +63,15 @@
                     android:text="К сожалению, данный день уже расписан. Пожалуйста, выберите другую дату."
                     android:visibility="gone"/>
 
+                <TextView
+                    android:id="@+id/empty_schedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="Выберите дату, на которую планируете записаться"
+                    android:visibility="gone"/>
+
             </LinearLayout>
 
         </ScrollView>

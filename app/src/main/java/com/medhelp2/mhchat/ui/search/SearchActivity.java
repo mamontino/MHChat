@@ -40,7 +40,10 @@ import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
+import com.medhelp2.mhchat.ui.search.select.SelectFragment;
 import com.medhelp2.mhchat.utils.view.ItemListDecorator;
+import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
+import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -76,8 +79,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     NavigationView navView;
 
     private ActionBarDrawerToggle drawerToggle;
-//    private SwipeRefreshLayout refreshLayout;
-
     private TextView headerTitle;
     private ImageView headerLogo;
 
@@ -97,12 +98,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         getActivityComponent().inject(this);
-//        refreshLayout = findViewById(R.id.swipe_search);
-//        refreshLayout.setOnRefreshListener(this);
-//        refreshLayout.setColorSchemeResources(android.R.color.holo_blue_bright,
-//                android.R.color.holo_green_light,
-//                android.R.color.holo_orange_light,
-//                android.R.color.holo_red_light);
         setUp();
     }
 
@@ -231,12 +226,27 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
 
             }
         });
+
+        recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
+        {
+            @Override
+            public void onClick(View view, int position)
+            {
+                int idService = serviceCash.get(position).getIdService();
+                SelectFragment.newInstance(idService);
+            }
+
+            @Override
+            public void onLongClick(View view, int position)
+            {
+
+            }
+        }));
     }
 
     @Override
     protected void onDestroy()
     {
-        Timber.d("onDestroy");
         presenter.onDetach();
         super.onDestroy();
     }
@@ -259,23 +269,24 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     @Override
     public void lockDrawer()
     {
-        Timber.d("lockDrawer");
         if (drawer != null)
+        {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
     }
 
     @Override
     public void unlockDrawer()
     {
-        Timber.d("unlockDrawer");
         if (drawer != null)
+        {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        }
     }
 
     @Override
     public void closeNavigationDrawer()
     {
-        Timber.d("closeNavigationDrawer");
         if (drawer != null)
         {
             drawer.closeDrawer(Gravity.START);
@@ -291,10 +302,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
             case R.id.nav_item_chat:
                 showContactsActivity();
                 return true;
-
-//            case R.id.nav_item_feedback:
-//                showAboutFragment();
-//                return true;
 
             case R.id.nav_item_logout:
                 showLoginActivity();
@@ -314,13 +321,9 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
                 showScheduleActivity();
                 return true;
 
-                case R.id.nav_item_sale:
+            case R.id.nav_item_sale:
                 showSaleActivity();
                 return true;
-
-//            case R.id.nav_item_settings:
-//                showSettingsActivity();
-//                return true;
 
             case R.id.nav_item_rate:
                 showRateFragment();
@@ -369,7 +372,9 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     {
         super.onResume();
         if (drawer != null)
+        {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        }
     }
 
     private void setupDrawer()

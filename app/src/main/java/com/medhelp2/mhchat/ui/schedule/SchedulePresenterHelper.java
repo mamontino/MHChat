@@ -17,4 +17,6 @@ public interface SchedulePresenterHelper<V extends ScheduleViewHelper> extends M
     void getCalendarData(int idDoctor, String day, int adm);
 
     void removePassword();
+
+    void unSubscribe();
 }

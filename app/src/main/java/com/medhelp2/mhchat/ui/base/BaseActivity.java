@@ -75,6 +75,12 @@ public abstract class BaseActivity extends AppCompatActivity
     }
 
     @Override
+    public boolean isLoading()
+    {
+        return dialog != null && dialog.isShowing();
+    }
+
+    @Override
     public void hideLoading()
     {
         if (dialog != null && dialog.isShowing())
