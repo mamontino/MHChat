@@ -122,7 +122,7 @@ public class SyncService extends Service
         Timber.d("UserId: " + dataManager.getCurrentUserId());
         if (dataManager.getCurrentUserId() != 0 && dataManager.getFireBaseToken() != null && !dataManager.getFireBaseToken().trim().equals(""))
         {
-            new CompositeDisposable().add(dataManager.sendTokenToServer(token)
+            new CompositeDisposable().add(dataManager.sendTokenToServerApiCall(token)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response ->

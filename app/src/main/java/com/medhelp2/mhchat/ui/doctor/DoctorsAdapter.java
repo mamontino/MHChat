@@ -1,4 +1,4 @@
-package com.medhelp2.mhchat.ui.schedule;
+package com.medhelp2.mhchat.ui.doctor;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -7,8 +7,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
-import com.medhelp2.mhchat.data.model.ServiceResponse;
+import com.medhelp2.mhchat.data.model.Doctor;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
+import com.medhelp2.mhchat.ui.search.SearchPresenter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,18 +18,16 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
-public class ScheduleAdapter extends RecyclerView.Adapter<BaseViewHolder>
+public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
 {
     @Inject
-    SchedulePresenter presenter;
+    SearchPresenter presenter;
 
     private static final int VIEW_TYPE_NORMAL = 11;
+    private List<Doctor> response;
 
-    private List<ServiceResponse> response;
-
-    public ScheduleAdapter(List<ServiceResponse> response)
+    public DoctorsAdapter(List<Doctor> response)
     {
         this.response = response;
     }
@@ -46,7 +45,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<BaseViewHolder>
         {
             case VIEW_TYPE_NORMAL:
                 return new ViewHolder(LayoutInflater.from(parent.getContext())
-                        .inflate(R.layout.item_search, parent, false));
+                        .inflate(R.layout.item_doctor, parent, false));
             default:
                 return new EmptyViewHolder(LayoutInflater.from(parent.getContext())
                         .inflate(R.layout.item_error_download, parent, false));
@@ -59,10 +58,8 @@ public class ScheduleAdapter extends RecyclerView.Adapter<BaseViewHolder>
         if (response != null && response.size() > 0)
         {
             return VIEW_TYPE_NORMAL;
-        } else
-        {
-            return 0;
         }
+        return 0;
     }
 
     @Override
@@ -70,7 +67,6 @@ public class ScheduleAdapter extends RecyclerView.Adapter<BaseViewHolder>
     {
         if (response != null && response.size() > 0)
         {
-            Timber.d("response != null");
             return response.size();
         } else
         {
@@ -78,7 +74,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<BaseViewHolder>
         }
     }
 
-    void addItems(List<ServiceResponse> repoList)
+    void addItems(List<Doctor> repoList)
     {
         response.clear();
         response.addAll(repoList);
@@ -87,11 +83,11 @@ public class ScheduleAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
     class ViewHolder extends BaseViewHolder
     {
-        @BindView(R.id.tv_search_item_name)
-        TextView tvTitle;
+        @BindView(R.id.doc_name_tv)
+        TextView docName;
 
-        @BindView(R.id.tv_search_item_data)
-        TextView tvPrice;
+        @BindView(R.id.doc_spec_tv)
+        TextView docSpec;
 
 
         ViewHolder(View itemView)
@@ -102,30 +98,24 @@ public class ScheduleAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
         protected void clear()
         {
-            tvTitle.setText("");
-            tvPrice.setText("");
+            docName.setText("");
+            docSpec.setText("");
         }
 
         public void onBind(int position)
         {
             super.onBind(position);
-            final ServiceResponse repo = response.get(position);
+            final Doctor repo = response.get(position);
             if (repo != null)
             {
-                tvTitle.setText(repo.getTitle());
-                tvPrice.setText(repo.getValue());
+                docName.setText(repo.getFullName());
+                docSpec.setText(repo.getSpecialty());
             }
         }
     }
 
     class EmptyViewHolder extends BaseViewHolder
     {
-//        @BindView(R.id.empty_image_add_contact)
-//        ImageButton btnAddContact;
-//
-//        @BindView(R.id.empty_tv_add_contact)
-//        TextView tvInfoMessage;
-
         EmptyViewHolder(View itemView)
         {
             super(itemView);
@@ -138,7 +128,7 @@ public class ScheduleAdapter extends RecyclerView.Adapter<BaseViewHolder>
         }
     }
 
-    public void setFilter(List<ServiceResponse> filterService)
+    void setFilter(List<Doctor> filterService)
     {
         response = new ArrayList<>();
         response.addAll(filterService);

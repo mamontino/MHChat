@@ -22,6 +22,7 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
                 <action android:name="android.intent.action.VIEW"/>
+
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
@@ -40,14 +41,14 @@
 
         <activity
             android:name=".ui.sale.SaleActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_sale">
+            android:label="@string/app_sale"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity
             android:name=".ui.contacts.ContactsActivity"
-            android:screenOrientation="portrait"
-            android:label="@string/app_chat">
+            android:label="@string/app_chat"
+            android:screenOrientation="portrait">
         </activity>
 
         <activity
@@ -71,6 +72,17 @@
             android:name=".ui.profile.ProfileActivity"
             android:label="@string/app_profile"
             android:screenOrientation="portrait">
+        </activity>
+
+        <activity
+            android:name=".ui.select.SelectActivity"
+            android:label="@string/app_select"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity android:name=".ui.doctor.service.ServiceActivity"
+                  android:label="@string/app_select"
+                  android:screenOrientation="portrait">
         </activity>
 
         <service
@@ -108,6 +120,9 @@
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/color_primary"/>
 
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="f14b81911819a146b18065e733ebe79ed0a09504" />
     </application>
 
 </manifest>

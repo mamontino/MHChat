@@ -8,13 +8,20 @@ import com.medhelp2.mhchat.ui.base.MvpPresenter;
 @PerActivity
 public interface SchedulePresenterHelper<V extends ScheduleViewHelper> extends MvpPresenter<V>
 {
-    void getCenterInfo();
+    void getDateFromService(int idService, int adm);
 
-    void getDateFromServer(int idDoctor, int adm);
+    void getDateFromDoctor(int idDoctor, int idService, int adm);
 
-    void getCalendarData(int idDoctor, DateResponse today, int adm);
 
-    void getCalendarData(int idDoctor, String day, int adm);
+    void getScheduleByService(int idService, DateResponse today, int adm);
+
+    void getScheduleByService(int idService, String day, int adm);
+
+
+    void getScheduleByDoctor(int idDoctor, DateResponse today, int adm);
+
+    void getScheduleByDoctor(int idDoctor, String day, int adm);
+
 
     void removePassword();
 

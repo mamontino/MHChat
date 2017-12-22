@@ -6,16 +6,18 @@ import android.os.Bundle;
 
 import com.androidnetworking.AndroidNetworking;
 import com.androidnetworking.interceptors.HttpLoggingInterceptor;
+import com.crashlytics.android.Crashlytics;
 import com.medhelp2.mhchat.di.component.AppComponent;
 import com.medhelp2.mhchat.di.component.DaggerAppComponent;
 import com.medhelp2.mhchat.di.module.AppModule;
 import com.medhelp2.mhchat.ui.chat.ChatActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 
+import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
 import timber.log.Timber;
 
-public class MainApp extends Application  implements Application.ActivityLifecycleCallbacks
+public class MainApp extends Application implements Application.ActivityLifecycleCallbacks
 {
     private AppComponent appComponent;
     private int activityCount = 0;
@@ -26,6 +28,7 @@ public class MainApp extends Application  implements Application.ActivityLifecyc
     public void onCreate()
     {
         super.onCreate();
+        Fabric.with(this, new Crashlytics());
 
         registerActivityLifecycleCallbacks(this);
 
@@ -54,53 +57,64 @@ public class MainApp extends Application  implements Application.ActivityLifecyc
         this.appComponent = appComponent;
     }
 
-    public boolean isAppForeground() {
+    public boolean isAppForeground()
+    {
         return activityCount > 0;
     }
 
     @Override
-    public void onActivityStopped(Activity activity) {
+    public void onActivityStopped(Activity activity)
+    {
 
     }
 
     @Override
-    public void onActivityStarted(Activity activity) {
+    public void onActivityStarted(Activity activity)
+    {
 
     }
 
     @Override
-    public void onActivitySaveInstanceState(Activity activity, Bundle outState) {
+    public void onActivitySaveInstanceState(Activity activity, Bundle outState)
+    {
 
     }
 
     @Override
-    public void onActivityResumed(Activity activity) {
+    public void onActivityResumed(Activity activity)
+    {
         activityCount++;
-        if (activity instanceof ChatActivity) {
+        if (activity instanceof ChatActivity)
+        {
             isChatActivityStarted = true;
         }
     }
 
     @Override
-    public void onActivityPaused(Activity activity) {
+    public void onActivityPaused(Activity activity)
+    {
         activityCount--;
 
-        if (activity instanceof ChatActivity) {
+        if (activity instanceof ChatActivity)
+        {
             isChatActivityStarted = false;
         }
 
-        if (activity instanceof ContactsActivity) {
+        if (activity instanceof ContactsActivity)
+        {
             isContactsActivityStarted = false;
         }
     }
 
     @Override
-    public void onActivityDestroyed(Activity activity) {
+    public void onActivityDestroyed(Activity activity)
+    {
 
     }
 
     @Override
-    public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+    public void onActivityCreated(Activity activity, Bundle savedInstanceState)
+    {
 
     }
 }

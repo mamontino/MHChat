@@ -19,7 +19,7 @@ public class ScheduleList
 
     @SerializedName("response")
     @Expose
-    private List<ScheduleResponse> response = new ArrayList<ScheduleResponse>();
+    private List<ScheduleResponse> response = new ArrayList<>();
 
     public boolean isError()
     {

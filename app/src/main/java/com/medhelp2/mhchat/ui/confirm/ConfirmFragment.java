@@ -1,6 +1,7 @@
-package com.medhelp2.mhchat.ui.search.select;
+package com.medhelp2.mhchat.ui.confirm;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -15,21 +16,22 @@ import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.di.component.ActivityComponent;
 import com.medhelp2.mhchat.ui.base.BaseDialog;
+import com.medhelp2.mhchat.ui.doctor.service.ServiceActivity;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
+import butterknife.OnClick;
 
-public class SelectFragment extends BaseDialog implements SelectViewHelper
+public class ConfirmFragment extends BaseDialog implements ConfirmViewHelper
 {
-    public static final String TAG = "SelectFragment";
+    public static final String TAG = "ConfirmFragment";
+    public static final String EXTRA_ID = "EXTRA_ID";
 
     @Inject
-    SelectPresenterHelper<SelectViewHelper> presenter;
+    ConfirmPresenterHelper<ConfirmViewHelper> presenter;
 
-    @SuppressWarnings("unused")
     @BindView(R.id.doc_info_image)
     ImageView docInfoImage;
 
@@ -60,13 +62,13 @@ public class SelectFragment extends BaseDialog implements SelectViewHelper
     @BindView(R.id.doc_info_hint_spec)
     TextView docInfoHintSpec;
 
-    private static int id;
+    private int idDoctor;
 
-    public static SelectFragment newInstance(int idService)
+    public static ConfirmFragment newInstance(int idDoctor)
     {
         Bundle args = new Bundle();
-        SelectFragment fragment = new SelectFragment();
-        id = idService;
+        ConfirmFragment fragment = new ConfirmFragment();
+        args.putInt(EXTRA_ID, idDoctor);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,15 +85,43 @@ public class SelectFragment extends BaseDialog implements SelectViewHelper
             component.inject(this);
             setUnBinder(ButterKnife.bind(this, view));
             presenter.onAttach(this);
-            presenter.loadDocList(id);
+            presenter.loadDocInfo(idDoctor);
         }
         return view;
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
+    {
+        super.onCreate(savedInstanceState);
+        idDoctor = getArguments().getInt(EXTRA_ID, 0);
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.doc_info_btn_close)
+    void onCloseDialog()
+    {
+        dismissDialog();
+    }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.doc_info_btn_record)
+    void onRecordClick()
+    {
+        showServiceActivity(idDoctor);
+    }
+
+    public void showServiceActivity(int idDoctor)
+    {
+        Intent intent = ServiceActivity.getStartIntent(getContext());
+        intent.putExtra(ServiceActivity.EXTRA_DATA_ID_DOCTOR, idDoctor);
+        startActivity(intent);
+        dismissDialog();
+    }
+
+    @Override
     protected void setUp(View view)
     {
-        view.setOnClickListener(v -> super.dismissDialog(TAG));
     }
 
     public void show(FragmentManager fragmentManager)
@@ -113,12 +143,10 @@ public class SelectFragment extends BaseDialog implements SelectViewHelper
     }
 
     @Override
-    public void updateDocList(DoctorInfo doctorInfo)
+    public void updateDocInfo(DoctorInfo doctorInfo)
     {
         if (doctorInfo != null)
         {
-            Timber.d("updateDocList");
-
             if (doctorInfo.getInfo() != null && !doctorInfo.getInfo().trim().isEmpty())
             {
                 docInfoInfo.setText(doctorInfo.getInfo());

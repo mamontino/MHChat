@@ -45,7 +45,7 @@ public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresent
     public void updateUserList()
     {
         getMvpView().showLoading();
-        getCompositeDisposable().add(getDataHelper().getRoomList()
+        getCompositeDisposable().add(getDataHelper().getRoomListApiCall()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
@@ -82,7 +82,7 @@ public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresent
 //    @Override
 //    public void updateUnread()
 //    {
-//        getCompositeDisposable().add(getDataHelper().getUnreadCount()
+//        getCompositeDisposable().add(getDataHelper().getUnreadCountApiCall()
 //                .subscribeOn(getSchedulerProvider().io())
 //                .observeOn(getSchedulerProvider().ui())
 //                .subscribe(response ->
@@ -109,7 +109,7 @@ public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresent
 //    public void loadUserInfo(int id)
 //    {
 //        getMvpView().showLoading();
-//        getCompositeDisposable().add(getDataHelper().getRoomList()
+//        getCompositeDisposable().add(getDataHelper().getRoomListApiCall()
 //                .subscribeOn(getSchedulerProvider().computation())
 //                .observeOn(getSchedulerProvider().ui())
 //                .subscribe(response ->

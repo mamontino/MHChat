@@ -75,7 +75,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     NavigationView navView;
 
     @Inject
-    DocListAdapter adapter;
+    DoctorsAdapter adapter;
 
     @Inject
     LinearLayoutManager layoutManager;
@@ -136,7 +136,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     @Override
     public void updateView(List<Doctor> response)
     {
-        adapter = new DocListAdapter(cashList);
+        adapter = new DoctorsAdapter(cashList);
         recyclerView.addItemDecoration(new ItemListDecorator(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
@@ -188,6 +188,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
             public void onClick(View view, int position)
             {
                 int idDoctor = cashList.get(position).getIdDoctor();
+                Timber.e("cashList.get(position).getIdDoctor(): " + idDoctor);
                 showDocDetailsFragment(idDoctor);
             }
 
@@ -239,7 +240,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
 
     }
 
-
     private List<Doctor> filterDoctor(List<Doctor> models, String query)
     {
         query = query.toLowerCase();
@@ -258,6 +258,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
         return filteredModelList;
     }
 
+    @SuppressWarnings("unused")
     private void setupToolbar()
     {
         Timber.d("setupToolbar");
@@ -402,10 +403,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
                 showContactsActivity();
                 return true;
 
-//            case R.id.nav_item_feedback:
-//                showAboutFragment();
-//                return true;
-
             case R.id.nav_item_sale:
                 showSaleActivity();
                 return true;
@@ -426,14 +423,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
                 showSearchActivity();
                 return true;
 
-            case R.id.nav_item_schedule:
-                showScheduleActivity();
-                return true;
-
-//            case R.id.nav_item_settings:
-//                showSettingsActivity();
-//                return true;
-
             case R.id.nav_item_rate:
                 showRateFragment();
                 return true;
@@ -447,9 +436,10 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     }
 
     @Override
-    public void showScheduleActivity()
+    public void showScheduleActivity(Doctor doctor)
     {
         Intent intent = ScheduleActivity.getStartIntent(this);
+        intent.putExtra(ScheduleActivity.EXTRA_DATA_ID_DOCTOR, doctor);
         startActivity(intent);
     }
 
@@ -463,7 +453,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     @Override
     public void showDocDetailsFragment(int idDoctor)
     {
-        Timber.d("showDocDetailsFragment with idDoctor: " + idDoctor);
         DocDetailsFragment.newInstance(idDoctor).show(getSupportFragmentManager());
     }
 

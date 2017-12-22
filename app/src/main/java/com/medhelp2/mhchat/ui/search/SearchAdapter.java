@@ -1,14 +1,17 @@
 package com.medhelp2.mhchat.ui.search;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.ServiceResponse;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
+import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +20,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>
 {
@@ -56,13 +60,13 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>
         {
             return VIEW_TYPE_NORMAL;
         }
-            return 0;
+        return 1;
     }
 
     @Override
     public int getItemCount()
     {
-            return response.size();
+        return response.size();
     }
 
     void addItems(List<ServiceResponse> repoList)
@@ -80,11 +84,24 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>
         @BindView(R.id.tv_search_item_data)
         TextView tvPrice;
 
+        @BindView(R.id.btn_search_record)
+        Button recordButton;
+
 
         ViewHolder(View itemView)
         {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemView.setOnClickListener(view ->
+            {
+                if (recordButton.getVisibility() == View.VISIBLE)
+                {
+                    recordButton.setVisibility(View.GONE);
+                } else
+                {
+                    recordButton.setVisibility(View.VISIBLE);
+                }
+            });
         }
 
         protected void clear()
@@ -102,16 +119,24 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>
                 tvTitle.setText(repo.getTitle());
                 tvPrice.setText(repo.getValue());
             }
+            recordButton.setOnClickListener(view ->
+                    {
+                        assert repo != null;
+                        Timber.e("Start Schedule: " + repo.getIdService());
+                        Intent intent = ScheduleActivity.getStartIntent(recordButton.getContext());
+                        intent.putExtra(ScheduleActivity.EXTRA_DATA_ID_SERVICE, repo.getIdService());
+                        intent.putExtra(ScheduleActivity.EXTRA_DATA_ADM, repo.getAdmission());
+                        Timber.e("Start Schedule: " + repo.getIdService());
+                        recordButton.getContext().startActivity(intent);
+                    }
+            );
         }
     }
 
     class EmptyViewHolder extends BaseViewHolder
     {
-//        @BindView(R.id.e)
-//        ImageButton btnAddContact;
-//
-//        @BindView(R.id.empty_tv_add_contact)
-//        TextView tvInfoMessage;
+        @BindView(R.id.err_tv_message)
+        TextView errMessage;
 
         EmptyViewHolder(View itemView)
         {
@@ -125,7 +150,8 @@ public class SearchAdapter extends RecyclerView.Adapter<BaseViewHolder>
         }
     }
 
-    public void setFilter(List<ServiceResponse> filterService) {
+    void setFilter(List<ServiceResponse> filterService)
+    {
         response = new ArrayList<>();
         response.addAll(filterService);
         notifyDataSetChanged();

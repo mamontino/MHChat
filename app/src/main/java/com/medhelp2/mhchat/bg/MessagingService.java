@@ -136,7 +136,7 @@ public final class MessagingService extends Service
             int room = body.getIdChatRoom();
             String mess = body.getMessage();
 
-            new CompositeDisposable().add(dataManager.sendMessage(room, mess)
+            new CompositeDisposable().add(dataManager.sendMessageApiCall(room, mess)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response ->

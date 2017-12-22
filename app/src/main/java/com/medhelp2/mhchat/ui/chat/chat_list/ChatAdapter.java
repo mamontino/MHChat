@@ -214,8 +214,8 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
     class ErrorViewHolder extends BaseViewHolder
     {
-        @BindView(R.id.err_btn_retry)
-        TextView tvErrorChatMessage;
+        @BindView(R.id.err_tv_message)
+        TextView errMessage;
 
         ErrorViewHolder(View itemView)
         {

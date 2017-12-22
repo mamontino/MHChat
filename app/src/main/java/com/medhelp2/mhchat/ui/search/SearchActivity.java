@@ -40,10 +40,7 @@ import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
-import com.medhelp2.mhchat.ui.search.select.SelectFragment;
 import com.medhelp2.mhchat.utils.view.ItemListDecorator;
-import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
-import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -129,6 +126,7 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
         recyclerView.setLayoutManager(layoutManager);
     }
 
+    @SuppressWarnings("unused")
     private void setupToolbar()
     {
         setSupportActionBar(toolbar);
@@ -226,22 +224,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
 
             }
         });
-
-        recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
-        {
-            @Override
-            public void onClick(View view, int position)
-            {
-                int idService = serviceCash.get(position).getIdService();
-                SelectFragment.newInstance(idService);
-            }
-
-            @Override
-            public void onLongClick(View view, int position)
-            {
-
-            }
-        }));
     }
 
     @Override
@@ -315,10 +297,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
                 return true;
 
             case R.id.nav_item_record:
-                return true;
-
-            case R.id.nav_item_schedule:
-                showScheduleActivity();
                 return true;
 
             case R.id.nav_item_sale:
@@ -420,9 +398,10 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     }
 
     @Override
-    public void showScheduleActivity()
+    public void showScheduleActivity(ServiceResponse response)
     {
         Intent intent = ScheduleActivity.getStartIntent(this);
+        intent.putExtra(ScheduleActivity.EXTRA_DATA_ID_SERVICE, response);
         startActivity(intent);
     }
 

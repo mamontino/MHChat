@@ -168,7 +168,6 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
     @OnClick(R.id.btn_send_message)
     public void sendMessageToServer()
     {
-        Timber.d("sendMessageToServer");
         String message = etSend.getText().toString().trim();
         if (!message.equals(""))
         {
@@ -180,7 +179,7 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
 
     private void sendMessage(int idChat, int idUser, String message)
     {
-        Timber.d("sendMessage");
+        Timber.d("sendMessageApiCall");
         Intent startOutgoingService = MessagingService.getStartIntent(getContext());
         startOutgoingService.putExtra(MessagingService.SERVICE_MESSAGE, message);
         startOutgoingService.putExtra(MessagingService.SERVICE_CHAT_ROOM, idChat);
@@ -188,17 +187,10 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
         getContext().startService(startOutgoingService);
     }
 
-//    @OnClick(R.id.btn_hide_keyboard)
-//    public void hideKeyClick()
-//    {
-//        hideKeyboard();
-//    }
-
     @Override
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-//        setRetainInstance(true);
         idChat = getArguments().getInt(AppConstants.ID_ROOM);
     }
 
@@ -220,19 +212,13 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
     @Override
     public void onDestroyView()
     {
-        Timber.d("onDestroyView");
         presenter.onDetach();
 
         if (incomingMessageReceiver != null)
-        {
             getActivity().unregisterReceiver(incomingMessageReceiver);
-        }
-        super.onPause();
 
         if (outgoingMessageReceiver != null)
-        {
             getActivity().unregisterReceiver(outgoingMessageReceiver);
-        }
 
         super.onDestroyView();
     }
@@ -240,7 +226,6 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
     @Override
     public void updateMessageList(List<MessageResponse> response)
     {
-        Timber.d("updateMessageList");
         adapter = new ChatAdapter(response, idUser);
         recyclerView.setAdapter(adapter);
         recyclerView.scrollToPosition(adapter.getItemCount() - 1);

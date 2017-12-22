@@ -17,17 +17,20 @@ public class SelectDecorator implements DayViewDecorator
 {
     private final Drawable drawable;
 
-    public SelectDecorator(Activity context) {
+    public SelectDecorator(Activity context)
+    {
         drawable = context.getResources().getDrawable(R.drawable.date_selector);
     }
 
     @Override
-    public boolean shouldDecorate(CalendarDay day) {
+    public boolean shouldDecorate(CalendarDay day)
+    {
         return true;
     }
 
     @Override
-    public void decorate(DayViewFacade view) {
+    public void decorate(DayViewFacade view)
+    {
         view.setSelectionDrawable(drawable);
     }
 }

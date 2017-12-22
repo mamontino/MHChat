@@ -1,13 +1,16 @@
 package com.medhelp2.mhchat.data.model;
 
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-public class Doctor extends RealmObject
+public class Doctor extends RealmObject implements Parcelable
 {
     @PrimaryKey
     @SerializedName("id_doctor")
@@ -74,4 +77,42 @@ public class Doctor extends RealmObject
     public Doctor()
     {
     }
+
+    @Override
+    public int describeContents()
+    {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags)
+    {
+        dest.writeInt(this.idDoctor);
+        dest.writeString(this.fullName);
+        dest.writeInt(this.idSpec);
+        dest.writeString(this.specialty);
+    }
+
+    protected Doctor(Parcel in)
+    {
+        this.idDoctor = in.readInt();
+        this.fullName = in.readString();
+        this.idSpec = in.readInt();
+        this.specialty = in.readString();
+    }
+
+    public static final Parcelable.Creator<Doctor> CREATOR = new Parcelable.Creator<Doctor>()
+    {
+        @Override
+        public Doctor createFromParcel(Parcel source)
+        {
+            return new Doctor(source);
+        }
+
+        @Override
+        public Doctor[] newArray(int size)
+        {
+            return new Doctor[size];
+        }
+    };
 }

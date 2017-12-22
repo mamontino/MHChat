@@ -309,10 +309,6 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
             case R.id.nav_item_chat:
                 return true;
 
-//            case R.id.nav_item_feedback:
-//                showAboutFragment();
-//                return true;
-
             case R.id.nav_item_logout:
                 showLoginActivity();
                 return true;
@@ -332,14 +328,6 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
             case R.id.nav_item_record:
                 showSearchActivity();
                 return true;
-
-            case R.id.nav_item_schedule:
-                showScheduleActivity();
-                return true;
-
-//            case R.id.nav_item_settings:
-//                showSettingsActivity();
-//                return true;
 
             case R.id.nav_item_rate:
                 showRateFragment();

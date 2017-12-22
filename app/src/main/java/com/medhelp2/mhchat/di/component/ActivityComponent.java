@@ -7,13 +7,15 @@ import com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.doctor.details.DocDetailsFragment;
+import com.medhelp2.mhchat.ui.doctor.service.ServiceActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
+import com.medhelp2.mhchat.ui.confirm.ConfirmFragment;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
-import com.medhelp2.mhchat.ui.search.select.SelectFragment;
+import com.medhelp2.mhchat.ui.select.SelectActivity;
 import com.medhelp2.mhchat.ui.splash.SplashActivity;
 
 import dagger.Component;
@@ -38,7 +40,7 @@ public interface ActivityComponent
 
     void inject(DocDetailsFragment fragment);
 
-    void inject(SelectFragment fragment);
+    void inject(SelectActivity fragment);
 
     void inject(RateFragment fragment);
 
@@ -49,4 +51,8 @@ public interface ActivityComponent
     void inject(DoctorsActivity activity);
 
     void inject(SaleActivity saleActivity);
+
+    void inject(ServiceActivity serviceActivity);
+
+    void inject(ConfirmFragment confirmFragment);
 }

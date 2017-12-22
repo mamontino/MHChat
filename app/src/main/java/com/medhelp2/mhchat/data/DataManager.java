@@ -9,7 +9,6 @@ import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterList;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.DateList;
-import com.medhelp2.mhchat.data.model.ScheduleList;
 import com.medhelp2.mhchat.data.model.Doctor;
 import com.medhelp2.mhchat.data.model.DoctorInfoList;
 import com.medhelp2.mhchat.data.model.DoctorList;
@@ -18,6 +17,7 @@ import com.medhelp2.mhchat.data.model.MessageResponse;
 import com.medhelp2.mhchat.data.model.RequestResponse;
 import com.medhelp2.mhchat.data.model.RoomResponse;
 import com.medhelp2.mhchat.data.model.SaleList;
+import com.medhelp2.mhchat.data.model.ScheduleList;
 import com.medhelp2.mhchat.data.model.ServiceList;
 import com.medhelp2.mhchat.data.model.ServiceResponse;
 import com.medhelp2.mhchat.data.model.UserList;
@@ -56,45 +56,51 @@ public class DataManager implements DataHelper
     }
 
     @Override
-    public Observable<UserList> doLogin(String username, String password)
+    public Observable<UserList> doLoginApiCall(String username, String password)
     {
-        return networkHelper.doLogin(username, password);
+        return networkHelper.doLoginApiCall(username, password);
     }
 
     @Override
-    public Observable<List<RoomResponse>> getRoomList()
+    public Observable<List<RoomResponse>> getRoomListApiCall()
     {
-        return networkHelper.getRoomList();
+        return networkHelper.getRoomListApiCall();
     }
 
     @Override
-    public Observable<RoomResponse> getRoomById(int id)
+    public Observable<RoomResponse> getRoomByIdApiCall(int id)
     {
-        return networkHelper.getRoomById(id);
+        return networkHelper.getRoomByIdApiCall(id);
     }
 
     @Override
-    public Observable<MessageList> getMessageList(int idChat)
+    public Observable<MessageList> getMessageListApiCall(int idChat)
     {
-        return networkHelper.getMessageList(idChat);
+        return networkHelper.getMessageListApiCall(idChat);
     }
 
     @Override
-    public Observable<RequestResponse> sendMessage(int idRoom, String message)
+    public Observable<RequestResponse> sendMessageApiCall(int idRoom, String message)
     {
-        return networkHelper.sendMessage(idRoom, message);
+        return networkHelper.sendMessageApiCall(idRoom, message);
     }
 
     @Override
-    public Observable<RequestResponse> sendTokenToServer(String token)
+    public Observable<RequestResponse> sendTokenToServerApiCall(String token)
     {
-        return networkHelper.sendTokenToServer(token);
+        return networkHelper.sendTokenToServerApiCall(token);
     }
 
     @Override
-    public Observable<List<RoomResponse>> getUnreadCount()
+    public Observable<List<RoomResponse>> getUnreadCountApiCall()
     {
-        return networkHelper.getUnreadCount();
+        return networkHelper.getUnreadCountApiCall();
+    }
+
+    @Override
+    public Observable<ServiceList> getPriceApiCall(int idDoctor)
+    {
+        return networkHelper.getPriceApiCall(idDoctor);
     }
 
     @Override
@@ -110,6 +116,12 @@ public class DataManager implements DataHelper
     }
 
     @Override
+    public Observable<CategoryList> getCategoryApiCall(int idDoctor)
+    {
+        return networkHelper.getCategoryApiCall(idDoctor);
+    }
+
+    @Override
     public Observable<CenterList> getCenterApiCall()
     {
         return networkHelper.getCenterApiCall();
@@ -119,6 +131,12 @@ public class DataManager implements DataHelper
     public Observable<DoctorList> getStaffApiCall()
     {
         return networkHelper.getStaffApiCall();
+    }
+
+    @Override
+    public Observable<DoctorList> getStaffApiCall(int idService)
+    {
+        return networkHelper.getStaffApiCall(idService);
     }
 
     @Override
@@ -146,21 +164,27 @@ public class DataManager implements DataHelper
     }
 
     @Override
-    public Observable<ScheduleList> getScheduleByDoctor(int idDoctor, String date, int adm)
+    public Observable<ScheduleList> getScheduleByDoctorApiCall(int idDoctor, String date, int adm)
     {
-        return networkHelper.getScheduleByDoctor(idDoctor, date, adm);
+        return networkHelper.getScheduleByDoctorApiCall(idDoctor, date, adm);
     }
 
     @Override
-    public Observable<DateList> getCurrentDate()
+    public Observable<ScheduleList> getScheduleByServiceApiCall(int idService, String date, int adm)
     {
-        return networkHelper.getCurrentDate();
+        return networkHelper.getScheduleByServiceApiCall(idService, date, adm);
     }
 
     @Override
-    public Observable<RequestResponse> readMessages(int idRoom)
+    public Observable<DateList> getCurrentDateApiCall()
     {
-        return networkHelper.readMessages(idRoom);
+        return networkHelper.getCurrentDateApiCall();
+    }
+
+    @Override
+    public Observable<RequestResponse> readMessagesApiCall(int idRoom)
+    {
+        return networkHelper.readMessagesApiCall(idRoom);
     }
 
     @Override

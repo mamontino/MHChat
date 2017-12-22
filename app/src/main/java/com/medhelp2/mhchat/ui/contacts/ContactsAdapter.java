@@ -19,7 +19,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
 {
@@ -55,8 +54,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         {
             case VIEW_TYPE_NORMAL:
                 return new ViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_contact, parent, false));
-            case VIEW_TYPE_EMPTY:
-                return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_download, parent, false));
             default:
                 return new EmptyViewHolder(LayoutInflater.from(parent.getContext()).inflate(R.layout.item_error_download, parent, false));
         }
@@ -82,7 +79,7 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
             return response.size();
         } else
         {
-            return 0;
+            return 1;
         }
     }
 
@@ -150,19 +147,19 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
                     tvUsername.setText(repo.getFullName());
                 }
 
-//                if (repo.getUnreadCount() > 0 && repo.getUnreadCount() < 99)
+//                if (repo.getUnreadCountApiCall() > 0 && repo.getUnreadCountApiCall() < 99)
 //                {
-//                    Timber.d("repo.getUnreadCount() = " + repo.getUnreadCount());
+//                    Timber.d("repo.getUnreadCountApiCall() = " + repo.getUnreadCountApiCall());
 //                    try
 //                    {
-//                        String count = String.valueOf(repo.getUnreadCount());
+//                        String count = String.valueOf(repo.getUnreadCountApiCall());
 //                        tvUnread.setText(count);
 //                        tvUnread.setVisibility(View.VISIBLE);
 //                    } catch (Exception e)
 //                    {
 //                        Timber.e("Ошибка установки count: " + e.getMessage());
 //                    }
-//                } else if (repo.getUnreadCount() > 99)
+//                } else if (repo.getUnreadCountApiCall() > 99)
 //                {
 //                    tvUnread.setText("∞");
 //                    tvUnread.setVisibility(View.VISIBLE);
@@ -206,11 +203,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         {
         }
 
-        @OnClick(R.id.err_btn_retry)
-        void onClickAddContact()
-        {
-            if (callback != null)
-                callback.onEmptyViewAddContactClick();
-        }
+//        @OnClick(R.id.err_btn_retry)
+//        void onClickAddContact()
+//        {
+//            if (callback != null)
+//                callback.onEmptyViewAddContactClick();
+//        }
     }
 }

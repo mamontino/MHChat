@@ -18,7 +18,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import timber.log.Timber;
 
 public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
@@ -154,11 +153,11 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
         {
         }
 
-        @OnClick(R.id.err_btn_retry)
-        void onClickAddContact()
-        {
-            if (callback != null)
-                callback.onEmptyViewAddContactClick();
-        }
+//        @OnClick(R.id.err_btn_retry)
+//        void onClickAddContact()
+//        {
+//            if (callback != null)
+//                callback.onEmptyViewAddContactClick();
+//        }
     }
 }

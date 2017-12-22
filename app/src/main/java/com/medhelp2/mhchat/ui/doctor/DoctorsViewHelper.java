@@ -17,7 +17,7 @@ public interface DoctorsViewHelper extends MvpView
 
     void showDocDetailsFragment(int idDoctor);
 
-    void showScheduleActivity();
+    void showScheduleActivity(Doctor doctor);
 
     void showProfileActivity();
 

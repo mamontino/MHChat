@@ -8,18 +8,10 @@
               android:orientation="vertical">
 
     <TextView
-        android:id="@+id/tv_message"
+        android:id="@+id/err_tv_message"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/empty_screen"
         android:textColor="@color/dark_gray"/>
-
-    <Button
-        android:id="@+id/err_btn_retry"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/activity_horizontal_margin"
-        android:text="@string/action_retry"
-        android:textSize="@dimen/text_size_16sp"/>
 </LinearLayout>

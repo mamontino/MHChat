@@ -8,6 +8,7 @@
     <string name="app_doctors">Специалисты</string>
     <string name="app_search">Поиск услуг</string>
     <string name="app_sale">Акции</string>
+    <string name="app_select">Выбор услуги</string>
 
     <!--hint message-->
     <string name="hint_name">Введите имя</string>
@@ -76,6 +77,17 @@
     <string name="btn_send">Отправить</string>
     <string name="btn_confirm">Подтвердить</string>
     <string name="btn_cancel">Отменить</string>
+    <string name="btn_continue">Продолжить</string>
+    <string name="btn_record">Записаться</string>
+    <string name="btn_close">Закрыть</string>
+
+    <!--hint-->
+    <string name="hint_ruble">р</string>
+    <string name="hint_progress">Данные обновляюся, подождите…</string>
+    <string name="hint_select_doctor">Выберите специалиста</string>
+    <string name="hint_select_spec">Выберите специльность</string>
+    <string name="hint_select_service">Выберите услугу</string>
+    <string name="hint_chat_edit_text">Введите сообщение …</string>
 
     <!--action-->
     <string name="action_login">Войти</string>
@@ -89,7 +101,7 @@
     <string name="action_retry">Повторить</string>
     <string name="action_add_contact">Добавить пользователя</string>
     <string name="action_settings">Настройки</string>
-    <string name="chat_edit_text_hint">Введите сообщение …</string>
+
     <string name="action_send">Отправить</string>
     <string name="action_chat_send">Отправить</string>
     <string name="action_info">Информация</string>
@@ -100,13 +112,19 @@
     <string name="action_save">Сохранить</string>
     <string name="about">О нас</string>
 
+    <!--data load message-->
+    <string name="data_load_network_ok">Данные успешно загружены из сети</string>
+    <string name="data_load_network_err">Ошибка загрузки данных из сети: </string>
+    <string name="data_load_db_ok">Данные успешно загружены из сети из локального хранилища</string>
+    <string name="data_load_db_err">Ошибка загрузки данных из локального хранилища: </string>
+    <string name="data_load_pref_ok">Данные успешно загружены из Shared Preference </string>
+    <string name="data_load_pref_err">Ошибка загрузки данных из Shared Preference: </string>
+
     <!--image description-->
     <string name="company_logo">Логотип компании</string>
     <string name="photo_doctor">Фотография специалиста</string>
     <string name="user_image">Изображение пользователя</string>
     <string name="keyboard">Клавиатура</string>
-    <string name="hint_ruble">р</string>
-    <string name="hint_progress">Данные обновляюся,  подождите...</string>
 
     <!--Calendar-->
     <array name="calendar_days_array">

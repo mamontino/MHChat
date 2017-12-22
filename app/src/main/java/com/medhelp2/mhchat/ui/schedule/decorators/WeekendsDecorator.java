@@ -20,19 +20,22 @@ public class WeekendsDecorator implements DayViewDecorator
     private final Drawable highlightDrawable;
     private static final int color = Color.parseColor("#228BC34A");
 
-    public WeekendsDecorator() {
+    public WeekendsDecorator()
+    {
         highlightDrawable = new ColorDrawable(color);
     }
 
     @Override
-    public boolean shouldDecorate(CalendarDay day) {
+    public boolean shouldDecorate(CalendarDay day)
+    {
         day.copyTo(calendar);
         int weekDay = calendar.get(Calendar.DAY_OF_WEEK);
         return weekDay == Calendar.SATURDAY || weekDay == Calendar.SUNDAY;
     }
 
     @Override
-    public void decorate(DayViewFacade view) {
+    public void decorate(DayViewFacade view)
+    {
         view.setBackgroundDrawable(highlightDrawable);
     }
 }

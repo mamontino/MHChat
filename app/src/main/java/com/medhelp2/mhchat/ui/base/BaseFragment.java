@@ -106,11 +106,7 @@ public abstract class BaseFragment extends Fragment implements MvpView
     @Override
     public boolean isNetworkConnected()
     {
-        if (activity != null)
-        {
-            return activity.isNetworkConnected();
-        }
-        return false;
+        return activity != null && activity.isNetworkConnected();
     }
 
     @Override
@@ -170,7 +166,6 @@ public abstract class BaseFragment extends Fragment implements MvpView
 
     public interface Callback
     {
-
         void onFragmentAttached();
 
         void onFragmentDetached(String tag);

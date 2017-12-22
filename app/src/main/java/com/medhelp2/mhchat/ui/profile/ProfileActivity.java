@@ -33,7 +33,6 @@ import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
-import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
@@ -111,6 +110,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         }
     }
 
+    @SuppressWarnings("unused")
     private void setupToolbar()
     {
         Timber.d("setupToolbar");
@@ -135,7 +135,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @Override
     public void showContactsActivity()
     {
-        Timber.d("showContactsActivity");
         Intent intent = new Intent(this, ContactsActivity.class);
         startActivity(intent);
     }
@@ -143,7 +142,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @Override
     public void showSearchActivity()
     {
-        Timber.d("showSearchActivity");
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
     }
@@ -169,14 +167,16 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @Override
     public void updateData(List<VisitResponse> response)
     {
-        Timber.d("updateData");
         parentModels = new ArrayList<>();
+
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+
         recyclerView.setLayoutManager(layoutManager);
+
         if (response != null && response.size() > 0)
         {
-            Timber.d("updateData response != null");
             List<VisitResponse> actualReceptions = new ArrayList<>();
+
             List<VisitResponse> latestReceptions = new ArrayList<>();
 
             for (VisitResponse visit : response)
@@ -199,9 +199,12 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
             {
                 parentModels.add(new ProfileParentModel("Прошедшие", latestReceptions));
             }
+
             adapter = new ProfileAdapter(this, parentModels);
+
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
+
             adapter.onGroupClick(0);
 
             recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
@@ -226,13 +229,12 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
 
     private void setErrorScreen()
     {
-        Timber.d("setErrorScreen");
+        Timber.e("setErrorScreen");
     }
 
     @Override
     public void runSendRegistrationService(String token, int userId)
     {
-        Timber.d("runSendRegistrationService");
         Intent intent = SyncService.getStartIntent(this);
         intent.putExtra(SyncService.USER_REGISTRATION_ID, userId);
         startService(intent);
@@ -241,23 +243,24 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @Override
     public void lockDrawer()
     {
-        Timber.d("lockDrawer");
         if (drawer != null)
+        {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        }
     }
 
     @Override
     public void unlockDrawer()
     {
-        Timber.d("unlockDrawer");
         if (drawer != null)
+        {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        }
     }
 
     @Override
     public void closeNavigationDrawer()
     {
-        Timber.d("closeNavigationDrawer");
         if (drawer != null)
         {
             drawer.closeDrawer(Gravity.START);
@@ -273,10 +276,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
             case R.id.nav_item_chat:
                 showContactsActivity();
                 return true;
-
-//            case R.id.nav_item_feedback:
-//                showAboutFragment();
-//                return true;
 
             case R.id.nav_item_logout:
                 showLoginActivity();
@@ -297,14 +296,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
                 showSaleActivity();
                 return true;
 
-            case R.id.nav_item_schedule:
-                showScheduleActivity();
-                return true;
-
-//            case R.id.nav_item_settings:
-//                showSettingsActivity();
-//                return true;
-
             case R.id.nav_item_rate:
                 showRateFragment();
                 return true;
@@ -322,12 +313,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     public void showSaleActivity()
     {
         Intent intent = SaleActivity.getStartIntent(this);
-        startActivity(intent);
-    }
-
-    private void showScheduleActivity()
-    {
-        Intent intent = ScheduleActivity.getStartIntent(this);
         startActivity(intent);
     }
 
@@ -366,7 +351,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
 
     private void setupDrawer()
     {
-        Timber.d("setupDrawer");
         drawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawer,

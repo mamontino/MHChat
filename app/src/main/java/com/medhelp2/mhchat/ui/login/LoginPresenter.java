@@ -52,7 +52,7 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
     {
         Timber.d("Верификация пользователя на сервере");
         getMvpView().showLoading();
-        getCompositeDisposable().add(getDataHelper().doLogin(username, password)
+        getCompositeDisposable().add(getDataHelper().doLoginApiCall(username, password)
                 .subscribeOn(getSchedulerProvider().io())
                 .map((response) ->
                 {

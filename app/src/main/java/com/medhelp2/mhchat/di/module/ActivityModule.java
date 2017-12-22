@@ -11,17 +11,23 @@ import com.medhelp2.mhchat.ui.chat.ChatViewHelper;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListPresenter;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListPresenterHelper;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListViewHelper;
+import com.medhelp2.mhchat.ui.confirm.ConfirmPresenter;
+import com.medhelp2.mhchat.ui.confirm.ConfirmPresenterHelper;
+import com.medhelp2.mhchat.ui.confirm.ConfirmViewHelper;
 import com.medhelp2.mhchat.ui.contacts.ContactsAdapter;
 import com.medhelp2.mhchat.ui.contacts.ContactsPresenter;
 import com.medhelp2.mhchat.ui.contacts.ContactsPresenterHelper;
 import com.medhelp2.mhchat.ui.contacts.ContactsViewHelper;
-import com.medhelp2.mhchat.ui.doctor.DocListAdapter;
+import com.medhelp2.mhchat.ui.doctor.DoctorsAdapter;
 import com.medhelp2.mhchat.ui.doctor.DoctorsPresenter;
 import com.medhelp2.mhchat.ui.doctor.DoctorsPresenterHelper;
 import com.medhelp2.mhchat.ui.doctor.DoctorsViewHelper;
 import com.medhelp2.mhchat.ui.doctor.details.DocDetailsPresenter;
 import com.medhelp2.mhchat.ui.doctor.details.DocDetailsPresenterHelper;
 import com.medhelp2.mhchat.ui.doctor.details.DocDetailsViewHelper;
+import com.medhelp2.mhchat.ui.doctor.service.ServicePresenter;
+import com.medhelp2.mhchat.ui.doctor.service.ServicePresenterHelper;
+import com.medhelp2.mhchat.ui.doctor.service.ServiceViewHelper;
 import com.medhelp2.mhchat.ui.login.LoginPresenter;
 import com.medhelp2.mhchat.ui.login.LoginPresenterHelper;
 import com.medhelp2.mhchat.ui.login.LoginViewHelper;
@@ -35,7 +41,6 @@ import com.medhelp2.mhchat.ui.sale.SaleAdapter;
 import com.medhelp2.mhchat.ui.sale.SalePresenter;
 import com.medhelp2.mhchat.ui.sale.SalePresenterHelper;
 import com.medhelp2.mhchat.ui.sale.SaleViewHelper;
-import com.medhelp2.mhchat.ui.schedule.ScheduleAdapter;
 import com.medhelp2.mhchat.ui.schedule.SchedulePresenter;
 import com.medhelp2.mhchat.ui.schedule.SchedulePresenterHelper;
 import com.medhelp2.mhchat.ui.schedule.ScheduleViewHelper;
@@ -43,9 +48,9 @@ import com.medhelp2.mhchat.ui.search.SearchAdapter;
 import com.medhelp2.mhchat.ui.search.SearchPresenter;
 import com.medhelp2.mhchat.ui.search.SearchPresenterHelper;
 import com.medhelp2.mhchat.ui.search.SearchViewHelper;
-import com.medhelp2.mhchat.ui.search.select.SelectPresenter;
-import com.medhelp2.mhchat.ui.search.select.SelectPresenterHelper;
-import com.medhelp2.mhchat.ui.search.select.SelectViewHelper;
+import com.medhelp2.mhchat.ui.select.SelectPresenter;
+import com.medhelp2.mhchat.ui.select.SelectPresenterHelper;
+import com.medhelp2.mhchat.ui.select.SelectViewHelper;
 import com.medhelp2.mhchat.ui.splash.SplashPresenter;
 import com.medhelp2.mhchat.ui.splash.SplashPresenterHelper;
 import com.medhelp2.mhchat.ui.splash.SplashViewHelper;
@@ -154,6 +159,12 @@ public class ActivityModule
     }
 
     @Provides
+    ConfirmPresenterHelper<ConfirmViewHelper> provideConfirmPresenter(ConfirmPresenter<ConfirmViewHelper> presenter)
+    {
+        return presenter;
+    }
+
+    @Provides
     RatePresenterHelper<RateViewHelper> provideRatePresenter(RatePresenter<RateViewHelper> presenter)
     {
         return presenter;
@@ -186,6 +197,13 @@ public class ActivityModule
         return presenter;
     }
 
+    @PerActivity
+    @Provides
+    ServicePresenterHelper<ServiceViewHelper> provideServicePresenter(ServicePresenter<ServiceViewHelper> presenter)
+    {
+        return presenter;
+    }
+
     @Provides
     LinearLayoutManager provideLinearLayoutManager(AppCompatActivity activity)
     {
@@ -208,17 +226,17 @@ public class ActivityModule
 
     @PerActivity
     @Provides
-    DocListAdapter provideDoctorsAdapter()
+    DoctorsAdapter provideDoctorsAdapter()
     {
-        return new DocListAdapter(new ArrayList<>());
+        return new DoctorsAdapter(new ArrayList<>());
     }
 
-    @PerActivity
-    @Provides
-    ScheduleAdapter provideScheduleAdapter()
-    {
-        return new ScheduleAdapter(new ArrayList<>());
-    }
+//    @PerActivity
+//    @Provides
+//    ScheduleAdapter provideScheduleAdapter()
+//    {
+//        return new ScheduleAdapter(new ArrayList<>());
+//    }
 
     @PerActivity
     @Provides

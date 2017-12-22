@@ -20,29 +20,35 @@ import io.reactivex.Observable;
 
 public interface NetworkHelper
 {
-    Observable<UserList> doLogin(String username, String password);
+    Observable<UserList> doLoginApiCall(String username, String password);
 
-    Observable<RequestResponse> sendTokenToServer(String token);
+    Observable<RequestResponse> sendTokenToServerApiCall(String token);
 
-    Observable<List<RoomResponse>> getRoomList();
+    Observable<List<RoomResponse>> getRoomListApiCall();
 
-    Observable<RoomResponse> getRoomById(int id);
+    Observable<RoomResponse> getRoomByIdApiCall(int id);
 
-    Observable<MessageList> getMessageList(int idChat);
+    Observable<MessageList> getMessageListApiCall(int idChat);
 
-    Observable<RequestResponse> sendMessage(int idRoom, String message);
+    Observable<RequestResponse> sendMessageApiCall(int idRoom, String message);
 
-    Observable<RequestResponse> readMessages(int idRoom);
+    Observable<RequestResponse> readMessagesApiCall(int idRoom);
 
-    Observable<List<RoomResponse>> getUnreadCount();
+    Observable<List<RoomResponse>> getUnreadCountApiCall();
+
+    Observable<ServiceList> getPriceApiCall(int idDoctor);
 
     Observable<ServiceList> getPriceApiCall();
 
     Observable<CategoryList> getCategoryApiCall();
 
+    Observable<CategoryList> getCategoryApiCall(int idDoctor);
+
     Observable<CenterList> getCenterApiCall();
 
     Observable<DoctorList> getStaffApiCall();
+
+    Observable<DoctorList> getStaffApiCall(int idService);
 
     Observable<SaleList> getSaleApiCall();
 
@@ -52,7 +58,9 @@ public interface NetworkHelper
 
     Observable<VisitList> getActualReceptionApiCall();
 
-    Observable<ScheduleList> getScheduleByDoctor(int idDoctor, String date,  int adm);
+    Observable<ScheduleList> getScheduleByDoctorApiCall(int idDoctor, String date,  int adm);
 
-    Observable<DateList> getCurrentDate();
+    Observable<ScheduleList> getScheduleByServiceApiCall(int idService, String date,  int adm);
+
+    Observable<DateList> getCurrentDateApiCall();
 }

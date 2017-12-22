@@ -9,7 +9,8 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-public class SplashPresenter<V extends SplashViewHelper> extends BasePresenter<V> implements SplashPresenterHelper<V>
+public class SplashPresenter<V extends SplashViewHelper> extends BasePresenter<V>
+        implements SplashPresenterHelper<V>
 {
     @Inject
     SplashPresenter(DataHelper dataHelper, SchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable)
@@ -20,8 +21,8 @@ public class SplashPresenter<V extends SplashViewHelper> extends BasePresenter<V
     @Override
     public void onAttach(V mvpView)
     {
-        super.onAttach(mvpView);
         Timber.d("onAttachPresenter");
+        super.onAttach(mvpView);
         openNextActivity();
     }
 

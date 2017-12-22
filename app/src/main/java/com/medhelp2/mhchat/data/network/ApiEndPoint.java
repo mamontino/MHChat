@@ -33,13 +33,19 @@ interface ApiEndPoint
 
     String DOCTOR_BY_ID = BASE_URL + "doctors/{id_center}/{id_doctor}";
 
+    String DOCTORS_BY_SERVICE = BASE_URL + "doctors/{id_center}/{id_service}";
+
     //    GET CATEGORY FROM CENTER
 
     String CATEGORY = BASE_URL + "category/{id_center}";
 
+    String CATEGORY_BY_ID_DOCTOR = BASE_URL + "category/doctor/{id_center}/{id_doctor}";
+
     //    GET PRICE FROM CENTER
 
     String PRICE = BASE_URL + "services/{id_center}";
+
+    String PRICE_BY_DOCTOR = BASE_URL + "services/doctor/{id_center}/{id_doctor}";
 
     //    GET CENTER INFO
 
@@ -55,7 +61,9 @@ interface ApiEndPoint
 
     //    GET SALE BY CENTER
 
-    String SCHEDULE = BASE_URL + "schedule/{id_doctor}/{date}/{adm}";
+    String SCHEDULE_DOCTOR = BASE_URL + "schedule/doctor/{id_center}/{id_doctor}/{date}/{adm}";
+
+    String SCHEDULE_SERVICE = BASE_URL + "schedule/service/{id_center}/{id_service}/{date}/{adm}";
 
     String CURRENT_DATE = BASE_URL + "date";
 }

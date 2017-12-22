@@ -14,8 +14,6 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 
 import java.util.List;
 
-import timber.log.Timber;
-
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<ProfileTitleViewHolder, ProfileVisitViewHolder>
@@ -35,34 +33,43 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
     public ProfileTitleViewHolder onCreateGroupViewHolder(ViewGroup parent, int viewType)
     {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
+
         View view = null;
+
         if (inflater != null)
         {
             view = inflater.inflate(R.layout.item_groupe, parent, false);
         }
+
         return new ProfileTitleViewHolder(view);
     }
 
     @Override
     public ProfileVisitViewHolder onCreateChildViewHolder(ViewGroup parent, final int viewType)
     {
-        Timber.d("ProfileVisitViewHolder");
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
         switch (viewType)
         {
             case BUTTON_MODE:
+
                 View viewBtn = null;
+
                 if (inflater != null)
                 {
                     viewBtn = inflater.inflate(R.layout.item_profile_btn, parent, false);
                 }
+
                 return new ProfileVisitViewHolder(viewBtn);
+
             case NO_BUTTON_MODE:
+
                 View viewNoBtn = null;
+
                 if (inflater != null)
                 {
                     viewNoBtn = inflater.inflate(R.layout.item_profile_no_btn, parent, false);
                 }
+
                 return new ProfileVisitViewHolder(viewNoBtn);
             default:
                 throw new IllegalArgumentException("Invalid viewType");
@@ -96,15 +103,12 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
     {
         if (group.getTitle().equals("Прошедшие"))
         {
-            Timber.d("ViewType NO_BUTTON_MODE");
             return NO_BUTTON_MODE;
         } else if (group.getTitle().equals("Предстоящие"))
         {
-            Timber.d("ViewType BUTTON_MODE");
             return BUTTON_MODE;
         } else
         {
-            Timber.d("ViewType ERROR_MODE");
             return ERROR_MODE;
         }
     }

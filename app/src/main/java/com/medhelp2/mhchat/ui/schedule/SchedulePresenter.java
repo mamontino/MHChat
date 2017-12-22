@@ -31,31 +31,11 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
     }
 
     @Override
-    public void getCenterInfo()
-    {
-        getCompositeDisposable().add(getDataHelper().getRealmCenter()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
-                .subscribe(centerResponse ->
-                {
-                    try
-                    {
-                        getMvpView().updateHeader(centerResponse);
-                    } catch (Exception e)
-                    {
-                        Timber.e("Данные из локального хранилища " +
-                                "загружены с ошибкой: " + e.getMessage());
-                    }
-                }, throwable -> Timber.e("Данные из локального хранилища " +
-                        "загружены с ошибкой: " + throwable.getMessage())));
-    }
-
-    @Override
-    public void getDateFromServer(int idDoctor, int adm)
+    public void getDateFromService(int idService, int adm)
     {
         getMvpView().showLoading();
         getCompositeDisposable().add(getDataHelper()
-                .getCurrentDate()
+                .getCurrentDateApiCall()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
@@ -65,22 +45,9 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                         return;
                     }
 
-                    if (!response.isError())
-                    {
-                        DateResponse date = response.getResponse();
-
-                        if (!response.isError())
-                        {
-                            getMvpView().hideLoading();
-                            getCalendarData(idDoctor, date, adm);
-                        } else
-                        {
-                            getMvpView().hideLoading();
-                        }
-                    } else
-                    {
-                        getMvpView().hideLoading();
-                    }
+                    DateResponse date = response.getResponse();
+                    getMvpView().hideLoading();
+                    getScheduleByService(idService, date, adm);
                 }, throwable ->
                 {
                     if (!isViewAttached())
@@ -92,7 +59,33 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
     }
 
     @Override
-    public void getCalendarData(int idDoctor, DateResponse date, int adm)
+    public void getDateFromDoctor(int idDoctor, int idService, int adm)
+    {
+        getMvpView().showLoading();
+        getCompositeDisposable().add(getDataHelper()
+                .getCurrentDateApiCall()
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(response ->
+                {
+                    if (!isViewAttached())
+                    {
+                        return;
+                    }
+                    DateResponse date = response.getResponse();
+                    getScheduleByDoctor(idDoctor, date, adm);
+                }, throwable ->
+                {
+                    if (!isViewAttached())
+                    {
+                        return;
+                    }
+                    getMvpView().hideLoading();
+                }));
+    }
+
+    @Override
+    public void getScheduleByDoctor(int idDoctor, DateResponse date, int adm)
     {
         getMvpView().showLoading();
 
@@ -104,18 +97,49 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
         }
 
         getCompositeDisposable().add(getDataHelper()
-                .getScheduleByDoctor(idDoctor, monday, adm)
+                .getScheduleByDoctorApiCall(idDoctor, monday, adm)
                 .delay(1000, TimeUnit.MILLISECONDS)
                 .subscribeOn(getSchedulerProvider().io())
                 .map(ScheduleList::getResponse)
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
                 {
-                    if (response != null && response.size() > 0)
+                    getMvpView().hideLoading();
+                    getMvpView().setupCalendar(date, response);
+                }, throwable ->
+                {
+                    Timber.e("getSchedule: загрузка прошла с ошибкой: "
+                            + throwable.getMessage());
+                    if (!isViewAttached())
                     {
-                        getMvpView().hideLoading();
-                        getMvpView().setupCalendar(date, response);
+                        return;
                     }
+                    getMvpView().hideLoading();
+                }));
+    }
+
+    @Override
+    public void getScheduleByService(int idService, DateResponse date, int adm)
+    {
+        getMvpView().showLoading();
+
+        String monday = date.getLastMonday();
+
+        if (monday.equals("1"))
+        {
+            monday = date.getToday();
+        }
+
+        getCompositeDisposable().add(getDataHelper()
+                .getScheduleByServiceApiCall(idService, monday, adm)
+                .delay(1000, TimeUnit.MILLISECONDS)
+                .subscribeOn(getSchedulerProvider().io())
+                .map(ScheduleList::getResponse)
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(response ->
+                {
+                    getMvpView().hideLoading();
+                    getMvpView().setupCalendar(date, response);
 
                 }, throwable ->
                 {
@@ -130,22 +154,45 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
     }
 
     @Override
-    public void getCalendarData(int idDoctor, String date, int adm)
+    public void getScheduleByService(int idService, String date, int adm)
     {
-        Timber.d("getCalendarData");
+        Timber.d("getScheduleByService");
         getMvpView().showLoading();
         getCompositeDisposable().add(getDataHelper()
-                .getScheduleByDoctor(idDoctor, date, adm)
+                .getScheduleByServiceApiCall(idService, date, adm)
                 .delay(1000, TimeUnit.MILLISECONDS)
                 .subscribeOn(getSchedulerProvider().io())
                 .map(ScheduleList::getResponse)
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
                 {
-                    if (response != null && response.size() > 0)
+                    getMvpView().hideLoading();
+                    getMvpView().updateCalendar(date, response);
+                }, throwable ->
+                {
+                    Timber.e("getSchedule: загрузка прошла с ошибкой: "
+                            + throwable.getMessage());
+
+                    if (!isViewAttached())
                     {
-                        Timber.d("getSchedule: загрузка прошла успешно");
+                        return;
                     }
+                    getMvpView().hideLoading();
+                }));
+    }
+
+    @Override
+    public void getScheduleByDoctor(int idDoctor, String date, int adm)
+    {
+        getMvpView().showLoading();
+        getCompositeDisposable().add(getDataHelper()
+                .getScheduleByDoctorApiCall(idDoctor, date, adm)
+                .delay(1000, TimeUnit.MILLISECONDS)
+                .subscribeOn(getSchedulerProvider().io())
+                .map(ScheduleList::getResponse)
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(response ->
+                {
                     getMvpView().hideLoading();
                     getMvpView().updateCalendar(date, response);
                 }, throwable ->

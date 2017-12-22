@@ -102,11 +102,7 @@ public abstract class BaseDialog extends DialogFragment implements DialogMvpView
     @Override
     public boolean isNetworkConnected()
     {
-        if (activity != null)
-        {
-            return activity.isNetworkConnected();
-        }
-        return false;
+        return activity != null && activity.isNetworkConnected();
     }
 
     @Override
@@ -180,7 +176,7 @@ public abstract class BaseDialog extends DialogFragment implements DialogMvpView
     }
 
     @Override
-    public void onViewCreated(View view, @Nullable Bundle savedInstanceState)
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState)
     {
         super.onViewCreated(view, savedInstanceState);
         setUp(view);

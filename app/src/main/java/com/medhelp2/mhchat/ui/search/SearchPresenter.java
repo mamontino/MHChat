@@ -13,10 +13,14 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-public class SearchPresenter<V extends SearchViewHelper> extends BasePresenter<V> implements SearchPresenterHelper<V>
+public class SearchPresenter<V extends SearchViewHelper> extends BasePresenter<V>
+        implements SearchPresenterHelper<V>
 {
     @Inject
-    public SearchPresenter(DataHelper dataHelper, SchedulerProvider schedulerProvider, CompositeDisposable compositeDisposable)
+    public SearchPresenter(
+            DataHelper dataHelper,
+            SchedulerProvider schedulerProvider,
+            CompositeDisposable compositeDisposable)
     {
         super(dataHelper, schedulerProvider, compositeDisposable);
     }
@@ -33,7 +37,8 @@ public class SearchPresenter<V extends SearchViewHelper> extends BasePresenter<V
                 {
                     if (response.getServices() != null)
                     {
-                        Timber.d("getPrice загрузка прошла успешно: " + "categoryResponse: " + categoryResponse.size() + " " + response.getServices().size());
+                        Timber.d("getPrice загрузка прошла успешно: " + "categoryResponse: "
+                                + categoryResponse.size() + " " + response.getServices().size());
                         getMvpView().updateView(categoryResponse, response.getServices());
                     }
                     Timber.d("getPrice response == null or response.getServices() == null");

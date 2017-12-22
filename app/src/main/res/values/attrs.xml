@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <declare-styleable name="UserInfoBehavior">
         <attr name="behavior_min_height" format="dimension"/>
     </declare-styleable>
@@ -6,4 +8,23 @@
     <declare-styleable name="AspectRatioImageView">
         <attr name="aspect_ratio" format="float"/>
     </declare-styleable>
+
+    <declare-styleable name="ExpandableGridView">
+        <attr name="horizontalSpacing" format="dimension" />
+        <attr name="verticalSpacing" format="dimension" />
+        <attr name="stretchMode">
+            <enum name="none" value="0"/>
+            <enum name="spacingWidth" value="1" />
+            <enum name="columnWidth" value="2" />
+            <enum name="spacingWidthUniform" value="3" />
+        </attr>
+        <attr name="columnWidth" format="dimension" />
+        <attr name="numColumns" format="integer" min="0">
+            <enum name="auto_fit" value="-1" />
+        </attr>
+    </declare-styleable>
+
 </resources>
+
+
+

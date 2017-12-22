@@ -277,10 +277,6 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
                 showContactsActivity();
                 return true;
 
-//            case R.id.nav_item_feedback:
-//                showAboutFragment();
-//                return true;
-
             case R.id.nav_item_logout:
                 showLoginActivity();
                 return true;
@@ -296,14 +292,6 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
             case R.id.nav_item_record:
                 showSearchActivity();
                 return true;
-
-            case R.id.nav_item_schedule:
-                showScheduleActivity();
-                return true;
-
-//            case R.id.nav_item_settings:
-//                showSettingsActivity();
-//                return true;
 
             case R.id.nav_item_rate:
                 showRateFragment();

@@ -18,17 +18,20 @@ public class OneDayDecorator implements DayViewDecorator
 {
     private CalendarDay date;
 
-    public OneDayDecorator() {
+    public OneDayDecorator()
+    {
         date = CalendarDay.today();
     }
 
     @Override
-    public boolean shouldDecorate(CalendarDay day) {
+    public boolean shouldDecorate(CalendarDay day)
+    {
         return date != null && day.equals(date);
     }
 
     @Override
-    public void decorate(DayViewFacade view) {
+    public void decorate(DayViewFacade view)
+    {
         view.addSpan(new StyleSpan(Typeface.BOLD));
         view.addSpan(new RelativeSizeSpan(1.4f));
     }
@@ -36,7 +39,8 @@ public class OneDayDecorator implements DayViewDecorator
     /**
      * We're changing the internals, so make sure to call {@linkplain MaterialCalendarView#invalidateDecorators()}
      */
-    public void setDate(Date date) {
+    public void setDate(Date date)
+    {
         this.date = CalendarDay.from(date);
     }
 }

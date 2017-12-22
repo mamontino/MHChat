@@ -2,46 +2,26 @@ package com.medhelp2.mhchat.ui.schedule;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
-import android.support.design.widget.NavigationView;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.TypedValue;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.medhelp2.mhchat.R;
-import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.DateResponse;
 import com.medhelp2.mhchat.data.model.ScheduleResponse;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
-import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
-import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
-import com.medhelp2.mhchat.ui.login.LoginActivity;
-import com.medhelp2.mhchat.ui.profile.ProfileActivity;
-import com.medhelp2.mhchat.ui.rating.RateFragment;
-import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.decorators.DayDecorator;
 import com.medhelp2.mhchat.ui.schedule.decorators.SelectDecorator;
-import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.utils.main.TimesUtils;
-import com.medhelp2.mhchat.utils.view.GridDecorator;
-import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
-import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -59,11 +39,18 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
+import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
+import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
 import timber.log.Timber;
 
 public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper,
-        NavigationView.OnNavigationItemSelectedListener, OnDateSelectedListener, OnMonthChangedListener
+        OnDateSelectedListener, OnMonthChangedListener
 {
+    public static final String EXTRA_DATA_ID_DOCTOR = "EXTRA_DATA_ID_DOCTOR";
+    public static final String EXTRA_DATA_ID_SERVICE = "EXTRA_DATA_ID_SERVICE";
+    public static final String EXTRA_DATA_ADM = "EXTRA_DATA_ADM";
+
     @Inject
     SchedulePresenter<ScheduleViewHelper> presenter;
 
@@ -76,12 +63,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @BindView(R.id.collapsing_toolbar_schedule)
     CollapsingToolbarLayout toolbarLayout;
 
-    @BindView(R.id.drawer_schedule)
-    DrawerLayout drawer;
-
-    @BindView(R.id.nav_view_schedule)
-    NavigationView navView;
-
     @BindView(R.id.calendar_schedule)
     MaterialCalendarView calendarView;
 
@@ -91,14 +72,15 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @BindView(R.id.empty_schedule)
     TextView emptySchedule;
 
-    private TextView headerTitle;
-    private ImageView headerLogo;
-
     private String todayString;
-    private String lastMondayString;
 
+    private SectionedRecyclerViewAdapter sectionAdapter;
     private List<ScheduleResponse> timeList = new ArrayList<>();
-    private List<String> listSelectedTime = new ArrayList<>();
+    private List<DateState> listSelected = new ArrayList<>();
+
+    private int idDoctor;
+    private int idService;
+    private int adm;
 
     public static Intent getStartIntent(Context context)
     {
@@ -108,9 +90,15 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Timber.d("onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_schedule);
+
+        listSelected = new ArrayList<>();
+
+        idDoctor = getIntent().getIntExtra(EXTRA_DATA_ID_DOCTOR, 0);
+        idService = getIntent().getIntExtra(EXTRA_DATA_ID_SERVICE, 0);
+        adm = getIntent().getIntExtra(EXTRA_DATA_ADM, 0);
+
         getActivityComponent().inject(this);
         setUp();
     }
@@ -122,12 +110,21 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         setupCalendarView();
 
         presenter.onAttach(this);
-        presenter.getCenterInfo();
-        presenter.getDateFromServer(3, 30);
 
+        if (idDoctor != 0)
+        {
+            presenter.getDateFromDoctor(idDoctor, idService, adm);
+        } else
+        {
+            presenter.getDateFromService(idService, adm);
+        }
         setupToolbar();
-        setupDrawer();
-        setupRecyclerView();
+    }
+
+    @Override
+    protected void onStart()
+    {
+        super.onStart();
     }
 
     private void setupCalendarView()
@@ -141,47 +138,41 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         calendarView.setVisibility(View.GONE);
     }
 
-    @Override
-    public void updateHeader(CenterResponse response)
+    public void updateRecyclerView(List<DateState> responses)
     {
-        View headerLayout = navView.getHeaderView(0);
-        headerLogo = headerLayout.findViewById(R.id.header_logo);
-        headerTitle = headerLayout.findViewById(R.id.header_tv_title);
-        Timber.d("updateHeader: " + response.getTitle());
-        if (response.getLogo() != null)
+        sectionAdapter = new SectionedRecyclerViewAdapter();
+
+        for (DateState state : responses)
         {
-            headerLogo.setImageResource(R.mipmap.ic_launcher);
+            sectionAdapter.addSection(new TimeSection(state.getName(), state.getCategory()));
         }
-        headerTitle.setText(response.getTitle());
-    }
 
-    public void setupRecyclerView()
-    {
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this, 4);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.addItemDecoration(new GridDecorator(4, dpToPx(), true));
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-        recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
+        GridLayoutManager glm = new GridLayoutManager(this, 4);
+
+        glm.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup()
         {
             @Override
-            public void onClick(View view, int position)
+            public int getSpanSize(int position)
             {
-                Toast.makeText(ScheduleActivity.this, "Item Click", Toast.LENGTH_SHORT).show();
+                switch (sectionAdapter.getSectionItemViewType(position))
+                {
+                    case SectionedRecyclerViewAdapter.VIEW_TYPE_HEADER:
+                        return 4;
+                    default:
+                        return 1;
+                }
             }
-
-            @Override
-            public void onLongClick(View view, int position)
-            {
-                Toast.makeText(ScheduleActivity.this, "Item Click LONG", Toast.LENGTH_SHORT).show();
-            }
-        }));
+        });
+        recyclerView.setLayoutManager(glm);
+        recyclerView.setItemAnimator(new DefaultItemAnimator());
+        recyclerView.setAdapter(sectionAdapter);
     }
 
     @Override
     public void setupCalendar(DateResponse today, List<ScheduleResponse> response)
     {
         todayString = today.getToday();
-        lastMondayString = today.getLastMonday();
+        String lastMondayString = today.getLastMonday();
 
         CalendarDay min = CalendarDay.from(TimesUtils.getDateSchedule(todayString));
 
@@ -204,6 +195,8 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @Override
     public void updateCalendar(String day, List<ScheduleResponse> response)
     {
+        Timber.e("updateCalendar(String day, List<ScheduleResponse> response");
+
         recyclerView.setVisibility(View.GONE);
         errorSchedule.setVisibility(View.GONE);
         emptySchedule.setVisibility(View.VISIBLE);
@@ -215,15 +208,11 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         calendar.setTime(TimesUtils.getDateSchedule(todayString));
         calendar.add(Calendar.MONTH, 0);
 
-        ArrayList<CalendarDay> calendarDays = new ArrayList<>();
-
         for (ScheduleResponse scheduleResponse : response)
         {
             String currentDay = scheduleResponse.getAdmDay();
             Date date = TimesUtils.getDateSchedule(currentDay);
             CalendarDay calendarDay = CalendarDay.from(date);
-
-            calendarDays.add(calendarDay);
 
             if (scheduleResponse.isWork())
             {
@@ -251,6 +240,8 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @Override
     public void onMonthChanged(MaterialCalendarView widget, CalendarDay date)
     {
+        Timber.e("onMonthChanged");
+
         calendarView.clearSelection();
         emptySchedule.setVisibility(View.VISIBLE);
         errorSchedule.setVisibility(View.GONE);
@@ -258,14 +249,28 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
 
         Date selectedDate = date.getDate();
         String nextDate = TimesUtils.getDateSchedule(selectedDate);
-        presenter.getCalendarData(3, nextDate, 30);
+
+        if (idDoctor != 0)
+        {
+            presenter.getScheduleByDoctor(idDoctor, nextDate, adm);
+        } else
+        {
+            presenter.getScheduleByService(idService, nextDate, adm);
+
+        }
     }
 
     @Override
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date,
             boolean selected)
     {
+        Timber.e("onDateSelected: " + date);
+
         emptySchedule.setVisibility(View.GONE);
+
+        listSelected = new ArrayList<>();
+
+
         for (ScheduleResponse dateResponse : timeList)
         {
             Date selectedDate = TimesUtils.getDateSchedule(dateResponse.getAdmDay());
@@ -273,12 +278,15 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
 
             if (selectedDay != null && selectedDay.equals(date))
             {
-                listSelectedTime.clear();
                 if (dateResponse.getAdmTime() != null
                         && dateResponse.getAdmTime().size() > 0)
                 {
                     errorSchedule.setVisibility(View.INVISIBLE);
-                    listSelectedTime.addAll(dateResponse.getAdmTime());
+
+                    List<String> listTime = new ArrayList<>();
+                    listTime.addAll(dateResponse.getAdmTime());
+                    DateState dateState = new DateState(dateResponse.getFullName(), listTime);
+                    listSelected.add(dateState);
                 } else
                 {
                     errorSchedule.setVisibility(View.VISIBLE);
@@ -286,15 +294,11 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
             }
         }
         recyclerView.setVisibility(View.VISIBLE);
-        recyclerView.setAdapter(new ItemAdapter(listSelectedTime));
+
+        updateRecyclerView(listSelected);
     }
 
-    private int dpToPx()
-    {
-        Resources r = getResources();
-        return Math.round(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, r.getDisplayMetrics()));
-    }
-
+    @SuppressWarnings("unused")
     private void setupToolbar()
     {
         setSupportActionBar(toolbar);
@@ -302,10 +306,22 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         AppBarLayout.LayoutParams appBarParams = (AppBarLayout.LayoutParams) toolbarLayout.getLayoutParams();
         if (actionBar != null)
         {
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back_white_24dp);
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -315,186 +331,134 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         super.onDestroy();
     }
 
-    @Override
-    public void lockDrawer()
+    private class TimeSection extends StatelessSection
     {
-        if (drawer != null)
+        boolean expanded = true;
+        String title;
+        List<String> list;
+
+        TimeSection(String title, List<String> list)
         {
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+            super(new SectionParameters.Builder(R.layout.item_date)
+                    .headerResourceId(R.layout.item_groupe)
+                    .build());
+
+            this.title = title;
+            this.list = list;
         }
-    }
 
-    @Override
-    public void unlockDrawer()
-    {
-        if (drawer != null)
-        {
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        @Override
+        public int getContentItemsTotal() {
+            return expanded? list.size() : 0;
         }
-    }
 
-    @Override
-    public void closeNavigationDrawer()
-    {
-        if (drawer != null)
+        @Override
+        public RecyclerView.ViewHolder getItemViewHolder(View view)
         {
-            drawer.closeDrawer(Gravity.START);
+            return new ItemViewHolder(view);
         }
-    }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem item)
-    {
-        drawer.closeDrawer(GravityCompat.START);
-        switch (item.getItemId())
+        @Override
+        public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position)
         {
-            case R.id.nav_item_chat:
-                showContactsActivity();
-                return true;
+            Timber.e("onBindItemViewHolder");
 
-            case R.id.nav_item_logout:
-                showLoginActivity();
-                return true;
+            final ItemViewHolder itemHolder = (ItemViewHolder) holder;
 
-            case R.id.nav_item_sale:
-                showSaleActivity();
-                return true;
+            String name = title;
+            String category = list.get(position);
 
-            case R.id.nav_item_main:
-                showProfileActivity();
-                return true;
+            itemHolder.tvItem.setText(name);
+            itemHolder.tvItem.setText(category);
 
-            case R.id.nav_item_price:
-                showSearchActivity();
-                return true;
-
-            case R.id.nav_item_record:
-                showSearchActivity();
-                return true;
-
-            case R.id.nav_item_schedule:
-                return true;
-
-            case R.id.nav_item_rate:
-                showRateFragment();
-                return true;
-
-            case R.id.nav_item_staff:
-                showDoctorsActivity();
-                return true;
-
-            default:
-                return false;
-        }
-    }
-
-    @Override
-    public void showSearchActivity()
-    {
-        Intent intent = SearchActivity.getStartIntent(this);
-        startActivity(intent);
-    }
-
-    @Override
-    public void showSaleActivity()
-    {
-        Intent intent = SaleActivity.getStartIntent(this);
-        startActivity(intent);
-    }
-
-    @Override
-    public void showLoginActivity()
-    {
-        Intent intent = LoginActivity.getStartIntent(this);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        presenter.removePassword();
-        startActivity(intent);
-    }
-
-    @Override
-    public void showRateFragment()
-    {
-        RateFragment.newInstance().show(getSupportFragmentManager());
-    }
-
-    @Override
-    public void showDoctorsActivity()
-    {
-        Intent intent = DoctorsActivity.getStartIntent(this);
-        startActivity(intent);
-    }
-
-    @Override
-    protected void onResume()
-    {
-        super.onResume();
-        if (drawer != null)
-        {
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        }
-    }
-
-    private void setupDrawer()
-    {
-        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
-                this,
-                drawer,
-                toolbar,
-                R.string.open_drawer,
-                R.string.close_drawer)
-        {
-            @Override
-            public void onDrawerOpened(View drawerView)
+            itemHolder.rootView.setOnClickListener(v ->
             {
-                super.onDrawerOpened(drawerView);
-                hideKeyboard();
-            }
 
-            @Override
-            public void onDrawerClosed(View drawerView)
-            {
-                super.onDrawerClosed(drawerView);
-            }
-        };
-        drawer.addDrawerListener(drawerToggle);
-        drawerToggle.syncState();
-        setupNavMenu();
-    }
-
-    @Override
-    public void onBackPressed()
-    {
-        DrawerLayout drawer = findViewById(R.id.drawer_schedule);
-
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
-            drawer.closeDrawer(GravityCompat.START);
+            });
         }
 
-        super.onBackPressed();
+        @Override
+        public RecyclerView.ViewHolder getHeaderViewHolder(View view)
+        {
+            return new HeaderViewHolder(view);
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder)
+        {
+            Timber.e("onBindHeaderViewHolder");
+
+            HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
+
+            headerHolder.tvTitle.setText(title);
+
+            headerHolder.rootView.setOnClickListener(v ->
+            {
+                expanded = !expanded;
+                headerHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds
+                        (0, 0, expanded ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down, 0);
+                sectionAdapter.notifyDataSetChanged();
+            });
+        }
     }
 
-
-    private void setupNavMenu()
+    private class HeaderViewHolder extends RecyclerView.ViewHolder
     {
-        View headerLayout = navView.getHeaderView(0);
-        headerLogo = headerLayout.findViewById(R.id.header_logo);
-        headerTitle = headerLayout.findViewById(R.id.header_tv_title);
-        navView.setNavigationItemSelectedListener(this);
+        private final View rootView;
+        private final TextView tvTitle;
+
+        HeaderViewHolder(View view)
+        {
+            super(view);
+            rootView = view;
+            tvTitle = view.findViewById(R.id.tv_profile_item_title);
+        }
     }
 
-    @Override
-    public void showProfileActivity()
+    private class ItemViewHolder extends RecyclerView.ViewHolder
     {
-        Intent intent = ProfileActivity.getStartIntent(this);
-        startActivity(intent);
+        private final View rootView;
+        private final TextView tvItem;
+
+        ItemViewHolder(View view)
+        {
+            super(view);
+
+            rootView = view;
+            tvItem = view.findViewById(R.id.tv_date_item_row);
+        }
     }
 
-    @Override
-    public void showContactsActivity()
+    private class DateState
     {
-        Intent intent = ContactsActivity.getStartIntent(this);
-        startActivity(intent);
+        String name;
+        List<String> category;
+
+        DateState(String name, List<String> category)
+        {
+            this.name = name;
+            this.category = category;
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+
+        public void setName(String name)
+        {
+            this.name = name;
+        }
+
+        public List<String> getCategory()
+        {
+            return category;
+        }
+
+        public void setCategory(List<String> category)
+        {
+            this.category = category;
+        }
     }
 }
 

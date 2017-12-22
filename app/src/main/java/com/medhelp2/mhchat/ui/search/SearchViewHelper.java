@@ -18,7 +18,7 @@ public interface SearchViewHelper extends MvpView
 
     void showProfileActivity();
 
-    void showScheduleActivity();
+    void showScheduleActivity(ServiceResponse response);
 
     void showContactsActivity();
 

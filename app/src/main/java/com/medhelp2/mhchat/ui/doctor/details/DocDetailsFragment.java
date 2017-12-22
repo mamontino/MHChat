@@ -1,7 +1,9 @@
 package com.medhelp2.mhchat.ui.doctor.details;
 
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.view.LayoutInflater;
@@ -14,6 +16,7 @@ import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.di.component.ActivityComponent;
 import com.medhelp2.mhchat.ui.base.BaseDialog;
+import com.medhelp2.mhchat.ui.doctor.service.ServiceActivity;
 
 import javax.inject.Inject;
 
@@ -24,7 +27,8 @@ import timber.log.Timber;
 
 public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelper
 {
-    public static final String TAG = "SelectFragment";
+    public static final String TAG = "SelectActivity";
+    public static final String EXTRA_ID = "EXTRA_ID";
 
     @Inject
     DocDetailsPresenterHelper<DocDetailsViewHelper> presenter;
@@ -59,23 +63,23 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
     @BindView(R.id.doc_info_hint_spec)
     TextView docInfoHintSpec;
 
-    private static int id;
+    private int idDoctor;
 
     public static DocDetailsFragment newInstance(int idDoctor)
     {
-        Timber.d("SelectFragment newInstance for id " + idDoctor);
         Bundle args = new Bundle();
         DocDetailsFragment fragment = new DocDetailsFragment();
-        id = idDoctor;
+        args.putInt(EXTRA_ID, idDoctor);
         fragment.setArguments(args);
         return fragment;
     }
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
+        Timber.e("onCreateView");
         View view = inflater.inflate(R.layout.fragment_doctor_details, container, false);
         ActivityComponent component = getActivityComponent();
         if (component != null)
@@ -83,27 +87,48 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
             component.inject(this);
             setUnBinder(ButterKnife.bind(this, view));
             presenter.onAttach(this);
-            presenter.loadDocInfo(id);
+            presenter.loadDocInfo(idDoctor);
         }
         return view;
     }
 
-    @OnClick(R.id.doc_info_btn_schedule)
-    void onScheduleClick()
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState)
     {
-        presenter.onScheduleClicked();
+        super.onCreate(savedInstanceState);
+        idDoctor = getArguments().getInt(EXTRA_ID, 0);
     }
 
+    @SuppressWarnings("unused")
+    @OnClick(R.id.doc_info_btn_close)
+    void onCloseDialog()
+    {
+        dismissDialog();
+    }
+
+    @SuppressWarnings("unused")
     @OnClick(R.id.doc_info_btn_record)
     void onRecordClick()
     {
-        presenter.onRecordClicked();
+        showServiceActivity(idDoctor);
+    }
+
+    public void showServiceActivity(int idDoctor)
+    {
+        if (idDoctor != 0)
+        {
+            Intent intent = ServiceActivity.getStartIntent(getContext());
+            intent.putExtra(ServiceActivity.EXTRA_DATA_ID_DOCTOR, idDoctor);
+            Timber.e("showServiceActivity(int idDoctor): " + idDoctor);
+            startActivity(intent);
+            dismissDialog();
+        }
+        Timber.e("showServiceActivity(int idDoctor): " + idDoctor);
     }
 
     @Override
     protected void setUp(View view)
     {
-        view.setOnClickListener(v -> super.dismissDialog(TAG));
     }
 
     public void show(FragmentManager fragmentManager)
@@ -114,6 +139,7 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
     @Override
     public void onDestroyView()
     {
+        presenter.dispose();
         presenter.onDetach();
         super.onDestroyView();
     }
@@ -129,8 +155,6 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
     {
         if (doctorInfo != null)
         {
-            Timber.d("updateDocList");
-
             if (doctorInfo.getInfo() != null && !doctorInfo.getInfo().trim().isEmpty())
             {
                 docInfoInfo.setText(doctorInfo.getInfo());

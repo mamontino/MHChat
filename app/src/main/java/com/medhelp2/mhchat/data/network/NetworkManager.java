@@ -34,6 +34,7 @@ public class NetworkManager implements NetworkHelper
     private static final String ID_CENTER = "id_center";
     private static final String ID_CLIENT = "id_client";
     private static final String ID_DOCTOR = "id_doctor";
+    private static final String ID_SERVICE = "id_service";
     private static final String ID_USER = "id_user";
     private static final String ID_ROOM = "id_room";
     private static final String USERNAME = "username";
@@ -53,7 +54,7 @@ public class NetworkManager implements NetworkHelper
 
 
     @Override
-    public Observable<UserList> doLogin(String username, String password)
+    public Observable<UserList> doLoginApiCall(String username, String password)
     {
         return Rx2AndroidNetworking.post(ApiEndPoint.LOGIN)
                 .addHeaders(AUTH, AppConstants.API_KEY)
@@ -61,12 +62,10 @@ public class NetworkManager implements NetworkHelper
                 .addBodyParameter(PASSWORD, password)
                 .build()
                 .getObjectObservable(UserList.class);
-
-
     }
 
     @Override
-    public Observable<List<RoomResponse>> getRoomList()
+    public Observable<List<RoomResponse>> getRoomListApiCall()
     {
         return Rx2AndroidNetworking.get(ApiEndPoint.ROOM_LIST)
                 .addHeaders(AUTH, prefManager.getAccessToken())
@@ -77,7 +76,7 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<RoomResponse> getRoomById(int id)
+    public Observable<RoomResponse> getRoomByIdApiCall(int id)
     {
         return Rx2AndroidNetworking.get(ApiEndPoint.ROOM_BY_ID)
                 .addHeaders(AUTH, prefManager.getAccessToken())
@@ -87,7 +86,7 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<MessageList> getMessageList(int idRoom)
+    public Observable<MessageList> getMessageListApiCall(int idRoom)
     {
         return Rx2AndroidNetworking.get(ApiEndPoint.MESSAGE_LIST)
                 .addHeaders(AUTH, prefManager.getAccessToken())
@@ -97,7 +96,7 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<RequestResponse> sendMessage(int idRoom, String message)
+    public Observable<RequestResponse> sendMessageApiCall(int idRoom, String message)
     {
         return Rx2AndroidNetworking.post(ApiEndPoint.SEND_MESSAGE)
                 .addHeaders(AUTH, prefManager.getAccessToken())
@@ -109,7 +108,7 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<RequestResponse> readMessages(int idRoom)
+    public Observable<RequestResponse> readMessagesApiCall(int idRoom)
     {
         return Rx2AndroidNetworking.get(ApiEndPoint.READ_MESSAGE)
                 .addHeaders(AUTH, prefManager.getAccessToken())
@@ -120,7 +119,7 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<RequestResponse> sendTokenToServer(String token)
+    public Observable<RequestResponse> sendTokenToServerApiCall(String token)
     {
         return Rx2AndroidNetworking.post(ApiEndPoint.SEND_TOKEN)
                 .addHeaders(AUTH, prefManager.getAccessToken())
@@ -131,7 +130,7 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<List<RoomResponse>> getUnreadCount()
+    public Observable<List<RoomResponse>> getUnreadCountApiCall()
     {
         return Rx2AndroidNetworking.get(ApiEndPoint.UNREAD_API)
                 .addHeaders(AUTH, prefManager.getAccessToken())
@@ -139,6 +138,17 @@ public class NetworkManager implements NetworkHelper
                 .build()
                 .getObjectObservable(RoomList.class)
                 .map(roomList -> (List<RoomResponse>) new ArrayList<>(roomList.getResponses()));
+    }
+
+    @Override
+    public Observable<ServiceList> getPriceApiCall(int idDoctor)
+    {
+        return Rx2AndroidNetworking.get(ApiEndPoint.PRICE_BY_DOCTOR)
+                .addHeaders(AUTH, prefManager.getAccessToken())
+                .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
+                .addPathParameter(ID_DOCTOR, String.valueOf(idDoctor))
+                .build()
+                .getObjectObservable(ServiceList.class);
     }
 
     @Override
@@ -162,6 +172,17 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
+    public Observable<CategoryList> getCategoryApiCall(int idDoctor)
+    {
+        return Rx2AndroidNetworking.get(ApiEndPoint.CATEGORY_BY_ID_DOCTOR)
+                .addHeaders(AUTH, prefManager.getAccessToken())
+                .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
+                .addPathParameter(ID_DOCTOR, String.valueOf(idDoctor))
+                .build()
+                .getObjectObservable(CategoryList.class);
+    }
+
+    @Override
     public Observable<CenterList> getCenterApiCall()
     {
         return Rx2AndroidNetworking.get(ApiEndPoint.CENTER)
@@ -177,6 +198,17 @@ public class NetworkManager implements NetworkHelper
         return Rx2AndroidNetworking.get(ApiEndPoint.DOCTORS)
                 .addHeaders(AUTH, prefManager.getAccessToken())
                 .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
+                .build()
+                .getObjectObservable(DoctorList.class);
+    }
+
+    @Override
+    public Observable<DoctorList> getStaffApiCall(int idService)
+    {
+        return Rx2AndroidNetworking.get(ApiEndPoint.DOCTORS_BY_SERVICE)
+                .addHeaders(AUTH, prefManager.getAccessToken())
+                .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
+                .addPathParameter(ID_SERVICE, String.valueOf(idService))
                 .build()
                 .getObjectObservable(DoctorList.class);
     }
@@ -225,10 +257,11 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<ScheduleList> getScheduleByDoctor(int idDoctor, String date,  int adm)
+    public Observable<ScheduleList> getScheduleByDoctorApiCall(int idDoctor, String date,  int adm)
     {
-        return Rx2AndroidNetworking.get(ApiEndPoint.SCHEDULE)
+        return Rx2AndroidNetworking.get(ApiEndPoint.SCHEDULE_DOCTOR)
                 .addHeaders(AUTH, prefManager.getAccessToken())
+                .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
                 .addPathParameter(ID_DOCTOR, String.valueOf(idDoctor))
                 .addPathParameter(ADM_DATE, date)
                 .addPathParameter(ADM_TIME, String.valueOf(adm))
@@ -237,7 +270,20 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<DateList> getCurrentDate()
+    public Observable<ScheduleList> getScheduleByServiceApiCall(int idService, String date, int adm)
+    {
+        return Rx2AndroidNetworking.get(ApiEndPoint.SCHEDULE_SERVICE)
+                .addHeaders(AUTH, prefManager.getAccessToken())
+                .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
+                .addPathParameter(ID_SERVICE, String.valueOf(idService))
+                .addPathParameter(ADM_DATE, date)
+                .addPathParameter(ADM_TIME, String.valueOf(adm))
+                .build()
+                .getObjectObservable(ScheduleList.class);
+    }
+
+    @Override
+    public Observable<DateList> getCurrentDateApiCall()
     {
         return Rx2AndroidNetworking.get(ApiEndPoint.CURRENT_DATE)
                 .addHeaders(AUTH, prefManager.getAccessToken())

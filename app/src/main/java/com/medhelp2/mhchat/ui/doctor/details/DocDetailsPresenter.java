@@ -10,6 +10,8 @@ import com.medhelp2.mhchat.utils.rx.SchedulerProvider;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.observers.DisposableObserver;
 import timber.log.Timber;
 
 public class DocDetailsPresenter<V extends DocDetailsViewHelper> extends BasePresenter<V>
@@ -23,9 +25,19 @@ public class DocDetailsPresenter<V extends DocDetailsViewHelper> extends BasePre
         super(dataHelper, schedulerProvider, compositeDisposable);
     }
 
+    private Disposable disposable;
+
+    @Override
+    public void dispose()
+    {
+        disposable.dispose();
+    }
+
     @Override
     public void loadDocInfo(int idDoctor)
     {
+        getMvpView().showLoading();
+
         if (idDoctor == 0)
         {
             getMvpView().showError(R.string.connection_error);
@@ -35,23 +47,37 @@ public class DocDetailsPresenter<V extends DocDetailsViewHelper> extends BasePre
             {
                 Timber.d("Получение информации о докторе из сети: \n" +
                         "idDoctor: " + idDoctor);
-                getCompositeDisposable().add(getDataHelper().getDoctorApiCall(idDoctor)
+
+                disposable = getDataHelper().getDoctorApiCall(idDoctor)
                         .subscribeOn(getSchedulerProvider().io())
-                        .map(DoctorInfoList::getResponse)
                         .observeOn(getSchedulerProvider().ui())
-                        .subscribe(response ->
+                        .subscribeWith(new DisposableObserver<DoctorInfoList>()
                         {
-                            try
+                            @Override
+                            public void onNext(DoctorInfoList doctors)
                             {
-                                Timber.d("Данные успешно загружены из сети");
-                                getMvpView().updateDocInfo(response.get(0));
-                            } catch (Exception e)
-                            {
-                                e.printStackTrace();
+                                Timber.e("Новый элемент: " + doctors.getMessage());
+                                Timber.e("Размер: " + doctors.getResponse().size());
+                                getMvpView().updateDocInfo(doctors.getResponse().get(0));
                             }
-                        }, throwable -> Timber.d("Данные из сети загружены с ошибкой: " + throwable.getMessage())));
+
+                            @Override
+                            public void onError(Throwable e)
+                            {
+                                Timber.e("Данные из сети загружены с ошибкой: " + e.getMessage());
+                            }
+
+                            @Override
+                            public void onComplete()
+                            {
+                                Timber.e("onComplete");
+                            }
+                        });
+                getMvpView().hideLoading();
+
             } else
             {
+                getMvpView().hideLoading();
                 getMvpView().showError(R.string.connection_error);
             }
         }

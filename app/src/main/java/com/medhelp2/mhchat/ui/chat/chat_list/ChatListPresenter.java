@@ -87,7 +87,7 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
     {
         Timber.d("Загрузка сообщений из сети");
         getMvpView().showLoading();
-        getCompositeDisposable().add(getDataHelper().getMessageList(idRoom)
+        getCompositeDisposable().add(getDataHelper().getMessageListApiCall(idRoom)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
@@ -132,7 +132,7 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
     {
         Timber.d("Отправка сообщения");
         getMvpView().showLoading();
-        getCompositeDisposable().add(getDataHelper().sendMessage(idRoom, message)
+        getCompositeDisposable().add(getDataHelper().sendMessageApiCall(idRoom, message)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe((response) ->
@@ -157,7 +157,7 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
     @Override
     public void readMessages(int idRoom)
     {
-        getCompositeDisposable().add(getDataHelper().readMessages(idRoom)
+        getCompositeDisposable().add(getDataHelper().readMessagesApiCall(idRoom)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
