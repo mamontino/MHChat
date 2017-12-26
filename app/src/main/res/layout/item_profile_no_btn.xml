@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-                                    xmlns:app="http://schemas.android.com/apk/res-auto"
                                     style="@style/ProfileCardViewStyle"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content">
@@ -14,8 +13,7 @@
             android:id="@+id/image_doc_item_no"
             android:layout_width="@dimen/ic_size_big"
             android:layout_height="@dimen/ic_size_big"
-            android:layout_marginTop="@dimen/base_element_margin"
-            app:srcCompat="@drawable/holder_doctor"/>
+            android:layout_marginTop="@dimen/base_element_margin"/>
 
         <TextView
             android:id="@+id/tv_price_name_item_no"

@@ -14,8 +14,7 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginEnd="@dimen/base_element_margin"
-        android:layout_marginRight="@dimen/base_element_margin"
-        app:srcCompat="@drawable/holder_doctor"/>
+        android:layout_marginRight="@dimen/base_element_margin"/>
 
     <TextView
         android:id="@+id/doc_name_tv"

@@ -16,4 +16,6 @@ public interface RateViewHelper extends DialogMvpView
     void disableRatingStars();
 
     void dismissDialog();
+
+    void sendReview(String message, float rating);
 }

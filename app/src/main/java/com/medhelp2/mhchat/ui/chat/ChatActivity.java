@@ -52,9 +52,8 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper
 
         ButterKnife.bind(this);
 
-        Intent intent = getIntent();
-        chatRoomId = intent.getIntExtra(AppConstants.ID_ROOM, 0);
-        title = intent.getStringExtra(AppConstants.ROOM_NAME);
+        chatRoomId = getIntent().getIntExtra(AppConstants.ID_ROOM, 0);
+        title = getIntent().getStringExtra(AppConstants.ROOM_NAME);
 
         if (chatRoomId == 0)
         {
@@ -110,21 +109,18 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper
     private void setupToolbar()
     {
         Timber.d("setupToolbar");
-        if (toolbar != null)
+        toolbar.setTitle("");
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null)
         {
-            toolbar.setTitle("");
-            setSupportActionBar(toolbar);
-            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back_white_24dp);
 
-            if (actionBar != null)
+            if (title != null)
             {
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setHomeAsUpIndicator(R.drawable.ic_back_white_24dp);
-
-                if (title != null)
-                {
-                    actionBar.setTitle(title);
-                }
+                actionBar.setTitle(title);
             }
         }
     }

@@ -24,17 +24,6 @@
         android:paddingLeft="@dimen/base_element_margin"
         android:paddingRight="@dimen/base_element_margin">
 
-        <!--<ImageButton-->
-            <!--android:id="@+id/btn_hide_keyboard"-->
-            <!--android:layout_width="@dimen/base_size_24dp"-->
-            <!--android:layout_height="@dimen/base_size_24dp"-->
-            <!--android:layout_gravity="top"-->
-            <!--android:layout_marginEnd="@dimen/base_element_margin"-->
-            <!--android:layout_marginRight="@dimen/base_element_margin"-->
-            <!--android:background="@color/transparent"-->
-            <!--android:contentDescription="@string/keyboard"-->
-            <!--app:srcCompat="@drawable/ic_keyboard_gray_24dp"/>-->
-
         <EditText
             android:id="@+id/et_send_message"
             android:layout_width="0dp"

@@ -24,6 +24,8 @@ public class SyncService extends Service
 {
     public static final String REGISTRATION_TOKEN = "REGISTRATION_TOKEN";
     public static final String USER_REGISTRATION_ID = "USER_REGISTRATION_ID";
+    public static final String REVIEW_MESSAGE = "REVIEW_MESSAGE";
+    public static final String REVIEW_RATING = "REVIEW_RATING";
 
     private IBinder binder = new SyncService.SyncServiceBinder();
     private BroadcastReceiver isCon;
@@ -53,16 +55,27 @@ public class SyncService extends Service
         assert intent != null;
         String token = intent.getStringExtra(REGISTRATION_TOKEN);
         int userId = intent.getIntExtra(USER_REGISTRATION_ID, 0);
+
         if (token != null && !token.trim().equals(""))
         {
             Timber.d("Сохранение токена");
             saveToken(token);
         }
+
         if (userId != 0)
         {
             Timber.d("Отправка токена на сервер для пользователя: " + userId);
             sendToken();
         }
+
+        String message = intent.getStringExtra(REVIEW_MESSAGE);
+        int rating = intent.getIntExtra(REVIEW_RATING, 0);
+
+        if (message != null && rating != 0)
+        {
+            sendReview(message, rating);
+        }
+
         return START_REDELIVER_INTENT;
     }
 
@@ -148,6 +161,33 @@ public class SyncService extends Service
         {
             Timber.e("Пустое значение идентификатора пользователя");
         }
+    }
+
+    public void sendReview(String message, int rating)
+    {
+        Timber.e("Отправка отзыва на сервер");
+        new CompositeDisposable().add(dataManager.sendReviewToServerApiCall(message, rating)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(response ->
+                        {
+                            Timber.d("Отзыв успешно отправлен на сервер: " + response.getResponse());
+                            stopSelf();
+                        }
+                        , throwable ->
+                        {
+                            Timber.d("Отзыв не отправлен на сервер: " + throwable.getMessage());
+
+                            if (!dataManager.checkNetwork())
+                            {
+                                noConnectionSend();
+                            } else
+                            {
+                                Timber.e("Непредвиденная ошибка отправки отзыва на сервер");
+                                stopSelf();
+                            }
+                        }
+                ));
     }
 
     private void noConnectionSend()

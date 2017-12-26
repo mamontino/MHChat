@@ -60,7 +60,7 @@ public class DayDecorator implements DayViewDecorator
             view.setBackgroundDrawable(bgDrawableRed);
         } else if (dayMode == DAY_MODE_NOT)
         {
-            view.setDaysDisabled(true);
+//            view.setDaysDisabled(true);
         }
     }
 }

@@ -17,18 +17,4 @@
         android:textStyle="bold"
         android:textSize="@dimen/text_size_16sp"/>
 
-    <!--<TextView-->
-        <!--android:id="@+id/doc_spec_tv"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:maxLines="1"-->
-        <!--android:textColor="#444444"-->
-        <!--android:textSize="@dimen/text_size_16sp"-->
-        <!--android:layout_below="@+id/doc_name_tv"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_alignParentEnd="true"-->
-        <!--android:layout_alignLeft="@+id/doc_name_tv"-->
-        <!--android:layout_alignStart="@+id/doc_name_tv"/>-->
-
 </RelativeLayout>

@@ -20,8 +20,6 @@ public interface SaleViewHelper extends MvpView {
 
     void showSearchActivity();
 
-    void showScheduleActivity();
-
     void showContactsActivity();
 
     void showRateFragment();

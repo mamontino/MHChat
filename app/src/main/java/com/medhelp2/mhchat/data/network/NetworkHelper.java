@@ -24,6 +24,8 @@ public interface NetworkHelper
 
     Observable<RequestResponse> sendTokenToServerApiCall(String token);
 
+    Observable<RequestResponse> sendReviewToServerApiCall(String message, int star);
+
     Observable<List<RoomResponse>> getRoomListApiCall();
 
     Observable<RoomResponse> getRoomByIdApiCall(int id);

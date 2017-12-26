@@ -18,7 +18,6 @@
             android:layout_width="@dimen/ic_size_big"
             android:layout_height="@dimen/ic_size_big"
             android:layout_marginTop="@dimen/base_element_margin"
-            app:srcCompat="@drawable/holder_doctor"
             android:contentDescription="@string/photo_doctor"/>
 
         <TextView

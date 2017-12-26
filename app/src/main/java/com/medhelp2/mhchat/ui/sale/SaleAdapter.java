@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.SaleResponse;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
+import com.medhelp2.mhchat.utils.view.ImageConverter;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -18,6 +19,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Maybe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
@@ -120,11 +125,26 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
             final SaleResponse repo = response.get(position);
             if (repo != null)
             {
-                Picasso.with(itemView.getContext())
-                        .load(repo.getIdSale())
-                        .error(R.drawable.holder_sale)
-                        .placeholder(R.drawable.holder_sale)
-                        .into(saleImage);
+                if (repo.getSaleImage() != null)
+                {
+                    Maybe<String> flowable = Maybe.just(repo.getSaleImage());
+
+                    CompositeDisposable disposable = new CompositeDisposable();
+                    disposable.add(flowable
+                            .subscribeOn(Schedulers.computation())
+                            .map(ImageConverter::convertBase64StringToBitmap)
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(bitmap ->
+                                            saleImage.setImageBitmap(bitmap)
+                                    , throwable ->
+                                    {
+                                        Picasso.with(saleImage.getContext())
+                                                .load(R.drawable.holder_sale)
+                                                .into(saleImage);
+                                        Timber.e("Ошибка загрузки изображения: " + throwable.getMessage());
+                                    }
+                            ));
+                }
 
                 if (repo.getSaleDescription() != null)
                 {

@@ -72,15 +72,17 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @BindView(R.id.empty_schedule)
     TextView emptySchedule;
 
+    @BindView(R.id.hol_schedule)
+    TextView holSchedule;
+
     private String todayString;
+    private int idDoctor;
+    private int idService;
+    private int adm;
 
     private SectionedRecyclerViewAdapter sectionAdapter;
     private List<ScheduleResponse> timeList = new ArrayList<>();
     private List<DateState> listSelected = new ArrayList<>();
-
-    private int idDoctor;
-    private int idService;
-    private int adm;
 
     public static Intent getStartIntent(Context context)
     {
@@ -107,6 +109,8 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     protected void setUp()
     {
         setUnBinder(ButterKnife.bind(this));
+
+        setupToolbar();
         setupCalendarView();
 
         presenter.onAttach(this);
@@ -118,7 +122,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         {
             presenter.getDateFromService(idService, adm);
         }
-        setupToolbar();
     }
 
     @Override
@@ -195,8 +198,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @Override
     public void updateCalendar(String day, List<ScheduleResponse> response)
     {
-        Timber.e("updateCalendar(String day, List<ScheduleResponse> response");
-
         recyclerView.setVisibility(View.GONE);
         errorSchedule.setVisibility(View.GONE);
         emptySchedule.setVisibility(View.VISIBLE);
@@ -240,11 +241,10 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @Override
     public void onMonthChanged(MaterialCalendarView widget, CalendarDay date)
     {
-        Timber.e("onMonthChanged");
-
         calendarView.clearSelection();
         emptySchedule.setVisibility(View.VISIBLE);
         errorSchedule.setVisibility(View.GONE);
+        holSchedule.setVisibility(View.GONE);
         recyclerView.setVisibility(View.GONE);
 
         Date selectedDate = date.getDate();
@@ -256,7 +256,6 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         } else
         {
             presenter.getScheduleByService(idService, nextDate, adm);
-
         }
     }
 
@@ -264,12 +263,11 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     public void onDateSelected(@NonNull MaterialCalendarView widget, @NonNull CalendarDay date,
             boolean selected)
     {
-        Timber.e("onDateSelected: " + date);
-
         emptySchedule.setVisibility(View.GONE);
+        errorSchedule.setVisibility(View.GONE);
+        holSchedule.setVisibility(View.GONE);
 
         listSelected = new ArrayList<>();
-
 
         for (ScheduleResponse dateResponse : timeList)
         {
@@ -278,187 +276,200 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
 
             if (selectedDay != null && selectedDay.equals(date))
             {
-                if (dateResponse.getAdmTime() != null
-                        && dateResponse.getAdmTime().size() > 0)
+                if (dateResponse.isWork())
                 {
-                    errorSchedule.setVisibility(View.INVISIBLE);
+                    if (dateResponse.getAdmTime() != null
+                            && dateResponse.getAdmTime().size() > 0)
+                    {
+                        errorSchedule.setVisibility(View.GONE);
+                        emptySchedule.setVisibility(View.GONE);
+                        holSchedule.setVisibility(View.GONE);
 
-                    List<String> listTime = new ArrayList<>();
-                    listTime.addAll(dateResponse.getAdmTime());
-                    DateState dateState = new DateState(dateResponse.getFullName(), listTime);
-                    listSelected.add(dateState);
+                        List<String> listTime = new ArrayList<>();
+                        listTime.addAll(dateResponse.getAdmTime());
+                        DateState dateState = new DateState(dateResponse.getFullName(), listTime);
+                        listSelected.add(dateState);
+                    } else
+                    {
+                        errorSchedule.setVisibility(View.VISIBLE);
+                        emptySchedule.setVisibility(View.GONE);
+                        holSchedule.setVisibility(View.GONE);
+                    }
                 } else
                 {
-                    errorSchedule.setVisibility(View.VISIBLE);
+                    errorSchedule.setVisibility(View.GONE);
+                    emptySchedule.setVisibility(View.GONE);
+                    holSchedule.setVisibility(View.VISIBLE);
                 }
             }
-        }
-        recyclerView.setVisibility(View.VISIBLE);
 
-        updateRecyclerView(listSelected);
-    }
-
-    @SuppressWarnings("unused")
-    private void setupToolbar()
-    {
-        setSupportActionBar(toolbar);
-        ActionBar actionBar = getSupportActionBar();
-        AppBarLayout.LayoutParams appBarParams = (AppBarLayout.LayoutParams) toolbarLayout.getLayoutParams();
-        if (actionBar != null)
-        {
-            actionBar.setHomeAsUpIndicator(R.drawable.ic_back_white_24dp);
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setDisplayShowHomeEnabled(true);
+            recyclerView.setVisibility(View.VISIBLE);
+            updateRecyclerView(listSelected);
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        switch (item.getItemId())
+        @SuppressWarnings("unused")
+        private void setupToolbar ()
         {
-            case android.R.id.home:
-                super.onBackPressed();
-                return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    protected void onDestroy()
-    {
-        presenter.onDetach();
-        super.onDestroy();
-    }
-
-    private class TimeSection extends StatelessSection
-    {
-        boolean expanded = true;
-        String title;
-        List<String> list;
-
-        TimeSection(String title, List<String> list)
-        {
-            super(new SectionParameters.Builder(R.layout.item_date)
-                    .headerResourceId(R.layout.item_groupe)
-                    .build());
-
-            this.title = title;
-            this.list = list;
-        }
-
-        @Override
-        public int getContentItemsTotal() {
-            return expanded? list.size() : 0;
-        }
-
-        @Override
-        public RecyclerView.ViewHolder getItemViewHolder(View view)
-        {
-            return new ItemViewHolder(view);
-        }
-
-        @Override
-        public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position)
-        {
-            Timber.e("onBindItemViewHolder");
-
-            final ItemViewHolder itemHolder = (ItemViewHolder) holder;
-
-            String name = title;
-            String category = list.get(position);
-
-            itemHolder.tvItem.setText(name);
-            itemHolder.tvItem.setText(category);
-
-            itemHolder.rootView.setOnClickListener(v ->
+            setSupportActionBar(toolbar);
+            ActionBar actionBar = getSupportActionBar();
+            AppBarLayout.LayoutParams appBarParams = (AppBarLayout.LayoutParams) toolbarLayout.getLayoutParams();
+            if (actionBar != null)
             {
-
-            });
+                actionBar.setHomeAsUpIndicator(R.drawable.ic_back_white_24dp);
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setDisplayShowHomeEnabled(true);
+            }
         }
 
         @Override
-        public RecyclerView.ViewHolder getHeaderViewHolder(View view)
+        public boolean onOptionsItemSelected (MenuItem item)
         {
-            return new HeaderViewHolder(view);
-        }
-
-        @Override
-        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder)
-        {
-            Timber.e("onBindHeaderViewHolder");
-
-            HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
-
-            headerHolder.tvTitle.setText(title);
-
-            headerHolder.rootView.setOnClickListener(v ->
+            switch (item.getItemId())
             {
-                expanded = !expanded;
-                headerHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds
-                        (0, 0, expanded ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down, 0);
-                sectionAdapter.notifyDataSetChanged();
-            });
+                case android.R.id.home:
+                    super.onBackPressed();
+                    return true;
+            }
+            return super.onOptionsItemSelected(item);
+        }
+
+        @Override
+        protected void onDestroy ()
+        {
+            presenter.onDetach();
+            super.onDestroy();
+        }
+
+        private class TimeSection extends StatelessSection
+        {
+            boolean expanded = true;
+            String title;
+            List<String> list;
+
+            TimeSection(String title, List<String> list)
+            {
+                super(new SectionParameters.Builder(R.layout.item_date)
+                        .headerResourceId(R.layout.item_groupe)
+                        .build());
+
+                this.title = title;
+                this.list = list;
+            }
+
+            @Override
+            public int getContentItemsTotal()
+            {
+                return expanded ? list.size() : 0;
+            }
+
+            @Override
+            public RecyclerView.ViewHolder getItemViewHolder(View view)
+            {
+                return new ItemViewHolder(view);
+            }
+
+            @Override
+            public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position)
+            {
+                Timber.e("onBindItemViewHolder");
+
+                final ItemViewHolder itemHolder = (ItemViewHolder) holder;
+
+                String name = title;
+                String category = list.get(position);
+
+                itemHolder.tvItem.setText(name);
+                itemHolder.tvItem.setText(category);
+
+                itemHolder.rootView.setOnClickListener(v ->
+                {
+
+                });
+            }
+
+            @Override
+            public RecyclerView.ViewHolder getHeaderViewHolder(View view)
+            {
+                return new HeaderViewHolder(view);
+            }
+
+            @Override
+            public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder)
+            {
+                Timber.e("onBindHeaderViewHolder");
+
+                HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
+
+                headerHolder.tvTitle.setText(title);
+
+                headerHolder.rootView.setOnClickListener(v ->
+                {
+                    expanded = !expanded;
+                    headerHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds
+                            (0, 0, expanded ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down, 0);
+                    sectionAdapter.notifyDataSetChanged();
+                });
+            }
+        }
+
+        private class HeaderViewHolder extends RecyclerView.ViewHolder
+        {
+            private final View rootView;
+            private final TextView tvTitle;
+
+            HeaderViewHolder(View view)
+            {
+                super(view);
+                rootView = view;
+                tvTitle = view.findViewById(R.id.tv_profile_item_title);
+            }
+        }
+
+        private class ItemViewHolder extends RecyclerView.ViewHolder
+        {
+            private final View rootView;
+            private final TextView tvItem;
+
+            ItemViewHolder(View view)
+            {
+                super(view);
+
+                rootView = view;
+                tvItem = view.findViewById(R.id.tv_date_item_row);
+            }
+        }
+
+        private class DateState
+        {
+            String name;
+            List<String> category;
+
+            DateState(String name, List<String> category)
+            {
+                this.name = name;
+                this.category = category;
+            }
+
+            public String getName()
+            {
+                return name;
+            }
+
+            public void setName(String name)
+            {
+                this.name = name;
+            }
+
+            public List<String> getCategory()
+            {
+                return category;
+            }
+
+            public void setCategory(List<String> category)
+            {
+                this.category = category;
+            }
         }
     }
-
-    private class HeaderViewHolder extends RecyclerView.ViewHolder
-    {
-        private final View rootView;
-        private final TextView tvTitle;
-
-        HeaderViewHolder(View view)
-        {
-            super(view);
-            rootView = view;
-            tvTitle = view.findViewById(R.id.tv_profile_item_title);
-        }
-    }
-
-    private class ItemViewHolder extends RecyclerView.ViewHolder
-    {
-        private final View rootView;
-        private final TextView tvItem;
-
-        ItemViewHolder(View view)
-        {
-            super(view);
-
-            rootView = view;
-            tvItem = view.findViewById(R.id.tv_date_item_row);
-        }
-    }
-
-    private class DateState
-    {
-        String name;
-        List<String> category;
-
-        DateState(String name, List<String> category)
-        {
-            this.name = name;
-            this.category = category;
-        }
-
-        public String getName()
-        {
-            return name;
-        }
-
-        public void setName(String name)
-        {
-            this.name = name;
-        }
-
-        public List<String> getCategory()
-        {
-            return category;
-        }
-
-        public void setCategory(List<String> category)
-        {
-            this.category = category;
-        }
-    }
-}
 

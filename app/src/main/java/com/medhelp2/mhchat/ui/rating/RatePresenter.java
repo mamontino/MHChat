@@ -1,6 +1,8 @@
 package com.medhelp2.mhchat.ui.rating;
 
 
+import android.content.Intent;
+
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.DataHelper;
 import com.medhelp2.mhchat.ui.base.BasePresenter;
@@ -46,19 +48,12 @@ public class RatePresenter<V extends RateViewHelper> extends BasePresenter<V> im
             isRatingSecondaryActionShown = true;
             return;
         }
-
-        getMvpView().showLoading();
-
-        getMvpView().hideLoading();
+        getMvpView().sendReview(message, rating);
         getMvpView().showMessage(R.string.rating_thanks);
         getMvpView().dismissDialog();
 
     }
 
-    private void sendRatingDataToServerInBackground(float rating)
-    {
-
-    }
 
     @Override
     public void onCancelClicked()
@@ -76,7 +71,6 @@ public class RatePresenter<V extends RateViewHelper> extends BasePresenter<V> im
     public void onPlayStoreRatingClicked()
     {
         getMvpView().openPlayStoreForRating();
-        sendRatingDataToServerInBackground(5);
         getMvpView().dismissDialog();
     }
 }

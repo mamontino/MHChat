@@ -34,8 +34,10 @@ import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.rating.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
+import com.medhelp2.mhchat.utils.view.ImageConverter;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,6 +46,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Maybe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
@@ -67,6 +73,9 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @BindView(R.id.tv_phone_profile)
     TextView centerPhone;
 
+    @BindView(R.id.tv_phone_hint_profile)
+    TextView centerPhoneHint;
+
     @BindView(R.id.rv_profile)
     RecyclerView recyclerView;
 
@@ -80,7 +89,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     NavigationView navView;
 
     private ActionBarDrawerToggle drawerToggle;
-
     private TextView headerTitle;
     private ImageView headerLogo;
 
@@ -95,7 +103,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState)
     {
-        Timber.d("onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
         getActivityComponent().inject(this);
@@ -113,7 +120,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @SuppressWarnings("unused")
     private void setupToolbar()
     {
-        Timber.d("setupToolbar");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         toolbarLayout.setTitleEnabled(false);
@@ -137,6 +143,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     {
         Intent intent = new Intent(this, ContactsActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -144,6 +151,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     {
         Intent intent = new Intent(this, SearchActivity.class);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -153,30 +161,53 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
 
-        Timber.d("updateHeader: " + response.getTitle());
-        if (response.getLogo() != null)
-        {
-            //       logoPrImageViewofile.setImageBitmap(response.getLogo());
-            //       headerLogo.setImageBitmap(response.getLogo());
-        }
         centerName.setText(response.getTitle());
-        centerPhone.setText(response.getPhone());
+
+        if (response.getPhone() != null)
+        {
+            centerPhoneHint.setVisibility(View.VISIBLE);
+            centerPhone.setText(response.getPhone());
+        }
+
         headerTitle.setText(response.getTitle());
+
+        Maybe<String> stringMaybe = Maybe.just(response.getLogo());
+
+        CompositeDisposable disposable = new CompositeDisposable();
+        disposable.add(stringMaybe
+                .subscribeOn(Schedulers.computation())
+                .map(ImageConverter::convertBase64StringToBitmap)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bitmap ->
+                        {
+                            logoProfile.setImageBitmap(bitmap);
+                            headerLogo.setImageBitmap(bitmap);
+                        }
+                        , throwable ->
+                        {
+                            Picasso.with(headerLogo.getContext())
+                                    .load(R.drawable.holder_center)
+                                    .into(logoProfile);
+
+                            Picasso.with(headerLogo.getContext())
+                                    .load(R.drawable.holder_center)
+                                    .into(headerLogo);
+
+                            Timber.e("Ошибка загрузки изображения: " + throwable.getMessage());
+                        }
+                ));
     }
 
     @Override
     public void updateData(List<VisitResponse> response)
     {
         parentModels = new ArrayList<>();
-
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-
         recyclerView.setLayoutManager(layoutManager);
 
         if (response != null && response.size() > 0)
         {
             List<VisitResponse> actualReceptions = new ArrayList<>();
-
             List<VisitResponse> latestReceptions = new ArrayList<>();
 
             for (VisitResponse visit : response)
@@ -201,12 +232,9 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
             }
 
             adapter = new ProfileAdapter(this, parentModels);
-
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
-
             adapter.onGroupClick(0);
-
             recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
             {
                 @Override
@@ -221,15 +249,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
 
                 }
             }));
-        } else
-        {
-            setErrorScreen();
         }
-    }
-
-    private void setErrorScreen()
-    {
-        Timber.e("setErrorScreen");
     }
 
     @Override
@@ -314,6 +334,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     {
         Intent intent = SaleActivity.getStartIntent(this);
         startActivity(intent);
+        finish();
     }
 
     private void showLoginActivity()
@@ -322,6 +343,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         presenter.removePassword();
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -329,6 +351,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     {
         Intent intent = DoctorsActivity.getStartIntent(this);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -343,7 +366,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @Override
     protected void setUp()
     {
-        Timber.d("setUp");
         setupToolbar();
         setupDrawer();
         fab.setOnClickListener(v -> showSearchActivity());

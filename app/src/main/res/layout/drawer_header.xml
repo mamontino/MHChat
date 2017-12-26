@@ -11,8 +11,7 @@
         android:layout_width="72dp"
         android:layout_height="72dp"
         android:layout_centerVertical="true"
-        android:scaleType="fitCenter"
-        android:src="@drawable/holder_center"/>
+        android:scaleType="fitCenter"/>
 
     <TextView
         android:id="@+id/header_tv_title"

@@ -37,9 +37,11 @@ import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.utils.main.AppConstants;
 import com.medhelp2.mhchat.utils.main.NotificationUtils;
+import com.medhelp2.mhchat.utils.view.ImageConverter;
 import com.medhelp2.mhchat.utils.view.ItemListDecorator;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +50,10 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.Maybe;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 import static com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment.BROADCAST_INCOMING_MESSAGE;
@@ -118,12 +124,27 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
 
-        Timber.d("updateHeader: " + response.getTitle());
-        if (response.getLogo() != null)
-        {
-            //       headerLogo.setImageBitmap(response.getLogo());
-        }
         headerTitle.setText(response.getTitle());
+
+        Maybe<String> stringMaybe = Maybe.just(response.getLogo());
+
+        CompositeDisposable disposable = new CompositeDisposable();
+        disposable.add(stringMaybe
+                .subscribeOn(Schedulers.computation())
+                .map(ImageConverter::convertBase64StringToBitmap)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(bitmap ->
+                                headerLogo.setImageBitmap(bitmap)
+
+                        , throwable ->
+                        {
+                            Picasso.with(headerLogo.getContext())
+                                    .load(R.drawable.holder_center)
+                                    .into(headerLogo);
+
+                            Timber.e("Ошибка загрузки изображения: " + throwable.getMessage());
+                        }
+                ));
     }
 
     private void setupToolbar()
@@ -268,6 +289,7 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
     {
         Intent intent = ProfileActivity.getStartIntent(this);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -275,6 +297,7 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
     {
         Intent intent = SearchActivity.getStartIntent(this);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -289,6 +312,7 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
     {
         Intent intent = DoctorsActivity.getStartIntent(this);
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -298,6 +322,7 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         presenter.removePassword();
         startActivity(intent);
+        finish();
     }
 
     @Override
@@ -347,6 +372,7 @@ public class ContactsActivity extends BaseActivity implements ContactsViewHelper
     {
         Intent intent = SaleActivity.getStartIntent(this);
         startActivity(intent);
+        finish();
     }
 
     @Override

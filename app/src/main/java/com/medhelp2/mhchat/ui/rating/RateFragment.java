@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.rating;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import android.widget.EditText;
 import android.widget.RatingBar;
 
 import com.medhelp2.mhchat.R;
+import com.medhelp2.mhchat.bg.SyncService;
 import com.medhelp2.mhchat.di.component.ActivityComponent;
 import com.medhelp2.mhchat.ui.base.BaseDialog;
 import com.medhelp2.mhchat.utils.main.PlayStoreUtils;
@@ -137,6 +139,15 @@ public class RateFragment extends BaseDialog implements RateViewHelper
     public void dismissDialog()
     {
         super.dismissDialog(TAG);
+    }
+
+    @Override
+    public void sendReview(String message, float rating)
+    {
+        Intent intent = new Intent(getContext(), SyncService.class);
+        intent.putExtra(SyncService.REVIEW_MESSAGE, message);
+        intent.putExtra(SyncService.REVIEW_RATING, (int) rating);
+        getActivity().startService(intent);
     }
 
     @Override

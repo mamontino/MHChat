@@ -19,7 +19,7 @@ public interface SearchPresenterHelper<V extends SearchViewHelper> extends MvpPr
 
     void getData();
 
-    public void getCenterInfo();
+    void getCenterInfo();
 
 //    void getLocalCategory();
 }

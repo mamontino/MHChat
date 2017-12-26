@@ -88,6 +88,9 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
         @BindView(R.id.doc_spec_tv)
         TextView docSpec;
+//
+//        @BindView(R.id.doc_image)
+//        ImageView docImage;
 
 
         ViewHolder(View itemView)
@@ -98,6 +101,7 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
         protected void clear()
         {
+//            docImage.setImageResource(0);
             docName.setText("");
             docSpec.setText("");
         }
@@ -108,6 +112,7 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
             final Doctor repo = response.get(position);
             if (repo != null)
             {
+//                docImage.setImageBitmap(ImageConverter.convertBase64StringToBitmap(repo.));
                 docName.setText(repo.getFullName());
                 docSpec.setText(repo.getSpecialty());
             }

@@ -41,9 +41,7 @@
                     app:title="Чаты"/>
 
             </android.support.design.widget.CollapsingToolbarLayout>
-
         </android.support.design.widget.AppBarLayout>
-
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
@@ -53,5 +51,4 @@
         app:menu="@menu/menu_drawer">
 
     </android.support.design.widget.NavigationView>
-
 </android.support.v4.widget.DrawerLayout>

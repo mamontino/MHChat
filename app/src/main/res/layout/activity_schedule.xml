@@ -14,6 +14,8 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
+                <include layout="@layout/schedule_description"/>
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/base_margin_32dp"
@@ -59,8 +61,16 @@
                     android:text="Выберите дату, на которую планируете записаться"
                     android:visibility="gone"/>
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/hol_schedule"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:padding="@dimen/activity_horizontal_margin"
+                    android:text="К сожалению, в данный день доктор не работает. Пожалуйста, выберите другую дату."
+                    android:visibility="gone"/>
 
+            </LinearLayout>
         </ScrollView>
 
         <android.support.design.widget.AppBarLayout
@@ -86,7 +96,5 @@
                     android:background="@color/transparent"/>
 
             </android.support.design.widget.CollapsingToolbarLayout>
-
         </android.support.design.widget.AppBarLayout>
-
     </android.support.design.widget.CoordinatorLayout>

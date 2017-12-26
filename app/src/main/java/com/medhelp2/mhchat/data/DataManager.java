@@ -92,6 +92,12 @@ public class DataManager implements DataHelper
     }
 
     @Override
+    public Observable<RequestResponse> sendReviewToServerApiCall(String message, int star)
+    {
+        return networkHelper.sendReviewToServerApiCall(message, star);
+    }
+
+    @Override
     public Observable<List<RoomResponse>> getUnreadCountApiCall()
     {
         return networkHelper.getUnreadCountApiCall();

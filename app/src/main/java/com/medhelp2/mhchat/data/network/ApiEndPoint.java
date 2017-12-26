@@ -3,7 +3,7 @@ package com.medhelp2.mhchat.data.network;
 
 interface ApiEndPoint
 {
-    String BASE_URL = "http://192.168.0.110/api/v1/";
+    String BASE_URL = "http://89.189.183.200:8648/api/v1/";
 
     //    POST AUTH
 
@@ -66,4 +66,8 @@ interface ApiEndPoint
     String SCHEDULE_SERVICE = BASE_URL + "schedule/service/{id_center}/{id_service}/{date}/{adm}";
 
     String CURRENT_DATE = BASE_URL + "date";
+
+    //      REVIEW
+
+    String SEND_REVIEW = BASE_URL + "send/review";
 }

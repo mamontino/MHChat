@@ -11,8 +11,8 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/chat_coordinator"
-        android:background="@color/bg_chat"
-        style="@style/MatchParent">
+        style="@style/MatchParent"
+        android:background="@color/bg_chat">
 
         <FrameLayout
             android:id="@+id/fr_chat"
@@ -22,24 +22,22 @@
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar_chat"
-            android:theme="@style/AppTheme.AppBarOverlay"
-            style="@style/MatchWidth">
+            style="@style/MatchWidth"
+            android:theme="@style/AppTheme.AppBarOverlay">
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar_chat"
-                app:layout_collapseMode="pin"
-                style="@style/ActionBarHeight"/>
+                style="@style/ActionBarHeight"
+                app:layout_collapseMode="pin"/>
 
         </android.support.design.widget.AppBarLayout>
-
     </android.support.design.widget.CoordinatorLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view_chat"
+        style="@style/NavigationViewStart"
         app:headerLayout="@layout/drawer_header"
-        app:menu="@menu/menu_drawer"
-        style="@style/NavigationViewStart">
+        app:menu="@menu/menu_drawer">
 
     </android.support.design.widget.NavigationView>
-
 </android.support.v4.widget.DrawerLayout>

@@ -4,6 +4,8 @@ import android.arch.lifecycle.LifecycleObserver;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.DataHelper;
+import com.medhelp2.mhchat.data.model.CenterList;
+import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.UserResponse;
 import com.medhelp2.mhchat.ui.base.BasePresenter;
 import com.medhelp2.mhchat.utils.rx.SchedulerProvider;
@@ -47,7 +49,6 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
     }
 
 
-
     private void verifyUser(String username, String password)
     {
         Timber.d("Верификация пользователя на сервере");
@@ -81,8 +82,7 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
                         cleanPassword();
                     }
                     getMvpView().hideLoading();
-                    getMvpView().closeActivity();
-                    getMvpView().openProfileActivity();
+                    getCenterInfo();
                 }, throwable ->
                 {
                     if (!isViewAttached())
@@ -138,5 +138,42 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
             Timber.e("Ошибка сохранения пользовательских данных в SharedPreference: " + e.getMessage());
             getMvpView().showError("Ошибка сохранения пользовательских данных в SharedPreference: " + e.getMessage());
         }
+    }
+
+    private void getCenterInfo()
+    {
+        getMvpView().showLoading();
+        getCompositeDisposable().add(getDataHelper()
+                .getCenterApiCall()
+                .map(CenterList::getResponse)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(response ->
+                                saveCenterInfo(response.get(0)), throwable ->
+                        {
+                            getMvpView().hideLoading();
+                            getMvpView().openProfileActivity();
+                            Timber.e("Данные центра загружены с ошибкой: " + throwable.getMessage());
+                        }
+                ));
+    }
+
+    private void saveCenterInfo(CenterResponse response)
+    {
+        getCompositeDisposable().add(getDataHelper().saveRealmCenter(response)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(() ->
+                        {
+                            getMvpView().hideLoading();
+                            getMvpView().openProfileActivity();
+                            getMvpView().closeActivity();
+                        },
+                        throwable ->
+                        {
+                            getMvpView().hideLoading();
+                            Timber.e("Ошибка сохранения CenterResponse " +
+                                    "в локальное хранилище: " + throwable.getMessage());
+                        }));
     }
 }

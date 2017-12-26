@@ -16,15 +16,14 @@ public class ImageConverter
         return bos.toByteArray();
     }
 
-    public static Bitmap getBitmapfromByteArray(byte[] bitmap)
+    public static Bitmap getBitmapFromByteArray(byte[] bitmap)
     {
         return BitmapFactory.decodeByteArray(bitmap, 0, bitmap.length);
     }
 
-
     public static Bitmap convertBase64StringToBitmap(String source)
     {
-        byte[] rawBitmap = Base64.decode(source.getBytes(), Base64.DEFAULT);
+        byte[] rawBitmap = Base64.decode(source.getBytes(), Base64.CRLF);
         return BitmapFactory.decodeByteArray(rawBitmap, 0, rawBitmap.length);
     }
 }

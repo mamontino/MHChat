@@ -43,8 +43,8 @@ public class NetworkManager implements NetworkHelper
     private static final String MESSAGE = "message";
     private static final String ADM_DATE = "date";
     private static final String ADM_TIME = "adm";
+    private static final String STAR = "star";
     private static final String AUTH = "Authorization";
-
 
     @Inject
     public NetworkManager(@PerApplication PreferencesManager preferencesManager)
@@ -125,6 +125,18 @@ public class NetworkManager implements NetworkHelper
                 .addHeaders(AUTH, prefManager.getAccessToken())
                 .addBodyParameter(ID_USER, String.valueOf(prefManager.getCurrentUserId()))
                 .addBodyParameter(FB_TOKEN, token)
+                .build()
+                .getObjectObservable(RequestResponse.class);
+    }
+
+    @Override
+    public Observable<RequestResponse> sendReviewToServerApiCall(String message, int star)
+    {
+        return Rx2AndroidNetworking.post(ApiEndPoint.SEND_REVIEW)
+                .addHeaders(AUTH, prefManager.getAccessToken())
+                .addBodyParameter(ID_USER, String.valueOf(prefManager.getCurrentUserId()))
+                .addBodyParameter(MESSAGE, message)
+                .addBodyParameter(STAR, String.valueOf(star))
                 .build()
                 .getObjectObservable(RequestResponse.class);
     }
