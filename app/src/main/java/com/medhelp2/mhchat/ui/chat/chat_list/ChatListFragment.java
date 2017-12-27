@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.bg.MessagingService;
 import com.medhelp2.mhchat.data.DataHelper;
@@ -23,6 +24,7 @@ import com.medhelp2.mhchat.di.component.ActivityComponent;
 import com.medhelp2.mhchat.ui.base.BaseFragment;
 import com.medhelp2.mhchat.utils.main.AppConstants;
 import com.medhelp2.mhchat.utils.main.NotificationUtils;
+import com.medhelp2.mhchat.utils.rx.RxEvents;
 
 import java.util.List;
 
@@ -31,6 +33,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class ChatListFragment extends BaseFragment implements ChatListViewHelper
@@ -48,6 +53,9 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
 
     @Inject
     ChatListPresenterHelper<ChatListViewHelper> presenter;
+
+    @Inject
+    CompositeDisposable disposables;
 
     @Inject
     DataHelper dataHelper;
@@ -87,6 +95,7 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         ActivityComponent component = getActivityComponent();
+
         if (component != null)
         {
             component.inject(this);
@@ -102,8 +111,8 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
                 presenter.readMessages(idChat);
             }
         }
+
         idUser = dataHelper.getCurrentUserId();
-        Timber.d("id user: " + idUser);
         return view;
     }
 
@@ -206,7 +215,7 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
     @Override
     protected void setUp(View view)
     {
-
+        setupRxBus();
     }
 
     @Override
@@ -223,6 +232,22 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
         super.onDestroyView();
     }
 
+    private void setupRxBus()
+    {
+        disposables.add(((MainApp) getActivity().getApplication())
+                .bus()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object ->
+                {
+                    if (object instanceof RxEvents.startChatRefreshing)
+                    {
+                        presenter.loadMessagesFromServer(idChat);
+                    }
+                }));
+    }
+
     @Override
     public void updateMessageList(List<MessageResponse> response)
     {
@@ -230,5 +255,13 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
         recyclerView.setAdapter(adapter);
         recyclerView.scrollToPosition(adapter.getItemCount() - 1);
         NotificationUtils.clearNotifications(getContext());
+    }
+
+    @Override
+    public void stopRefreshing()
+    {
+        ((MainApp) getActivity().getApplication())
+                .bus()
+                .send(new RxEvents.stopChatRefreshing());
     }
 }

@@ -11,6 +11,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -31,7 +32,7 @@ import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
-import com.medhelp2.mhchat.ui.rating.RateFragment;
+import com.medhelp2.mhchat.ui.rate_app.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
 import com.medhelp2.mhchat.utils.view.ImageConverter;
@@ -53,7 +54,7 @@ import io.reactivex.schedulers.Schedulers;
 import timber.log.Timber;
 
 public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
-        NavigationView.OnNavigationItemSelectedListener
+        NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener
 {
     @Inject
     ProfilePresenterHelper<ProfileViewHelper> presenter;
@@ -87,6 +88,9 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
 
     @BindView(R.id.nav_view_profile)
     NavigationView navView;
+
+    @BindView(R.id.swipe_profile)
+    SwipeRefreshLayout swipeProfile;
 
     private ActionBarDrawerToggle drawerToggle;
     private TextView headerTitle;
@@ -368,6 +372,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     {
         setupToolbar();
         setupDrawer();
+        setupRefresh();
         fab.setOnClickListener(v -> showSearchActivity());
     }
 
@@ -416,5 +421,26 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
         navView.setNavigationItemSelectedListener(this);
+    }
+
+    private void setupRefresh()
+    {
+        swipeProfile.setOnRefreshListener(this);
+        swipeProfile.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
+    @Override
+    public void swipeDismiss()
+    {
+        swipeProfile.setRefreshing(false);
+    }
+
+    @Override
+    public void onRefresh()
+    {
+        presenter.getVisits();
     }
 }

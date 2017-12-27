@@ -46,7 +46,31 @@ public class SalePresenter<V extends SaleViewHelper> extends BasePresenter<V> im
     public void updateSaleList()
     {
         getMvpView().showLoading();
-        getCompositeDisposable().add(getDataHelper().getSaleApiCall()
+        getCompositeDisposable().add(getDataHelper()
+                .getCurrentDateApiCall()
+                .map(dateList -> dateList.getResponse().getToday())
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(today ->
+                {
+                    if (!isViewAttached())
+                    {
+                        return;
+                    }
+                    getSalePastDate(today);
+                }, throwable ->
+                {
+                    if (!isViewAttached())
+                    {
+                        return;
+                    }
+                    getMvpView().hideLoading();
+                }));
+    }
+
+    private void getSalePastDate(String today)
+    {
+        getCompositeDisposable().add(getDataHelper().getSaleApiCall(today)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .map(SaleList::getResponse)
@@ -59,7 +83,6 @@ public class SalePresenter<V extends SaleViewHelper> extends BasePresenter<V> im
                     Timber.d("Данные успешно загружены в updateSaleList");
                     getMvpView().hideLoading();
                     getMvpView().updateSaleData(response);
-
                 }, throwable ->
                 {
                     if (!isViewAttached())

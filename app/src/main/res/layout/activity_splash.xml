@@ -10,6 +10,7 @@
                 android:paddingTop="@dimen/activity_vertical_margin">
 
     <ImageView
+        android:id="@+id/splash_img"
         android:layout_width="@dimen/image_size_big"
         android:layout_height="@dimen/image_size_big"
         android:layout_centerInParent="true"

@@ -146,9 +146,9 @@ public class DataManager implements DataHelper
     }
 
     @Override
-    public Observable<SaleList> getSaleApiCall()
+    public Observable<SaleList> getSaleApiCall(String date)
     {
-        return networkHelper.getSaleApiCall();
+        return networkHelper.getSaleApiCall(date);
     }
 
     @Override

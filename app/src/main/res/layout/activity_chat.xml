@@ -9,29 +9,36 @@
     android:layout_height="match_parent"
     tools:context=".ui.chat.ChatActivity">
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/chat_coordinator"
-        style="@style/MatchParent"
-        android:background="@color/bg_chat">
+    <android.support.v4.widget.SwipeRefreshLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/swipe_chat"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <FrameLayout
-            android:id="@+id/fr_chat"
-            android:name="com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment"
+        <android.support.design.widget.CoordinatorLayout
+            android:id="@+id/chat_coordinator"
             style="@style/MatchParent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            android:background="@color/bg_chat">
 
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/app_bar_chat"
-            style="@style/MatchWidth"
-            android:theme="@style/AppTheme.AppBarOverlay">
+            <FrameLayout
+                android:id="@+id/fr_chat"
+                android:name="com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment"
+                style="@style/MatchParent"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_chat"
-                style="@style/ActionBarHeight"
-                app:layout_collapseMode="pin"/>
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/app_bar_chat"
+                style="@style/MatchWidth"
+                android:theme="@style/AppTheme.AppBarOverlay">
 
-        </android.support.design.widget.AppBarLayout>
-    </android.support.design.widget.CoordinatorLayout>
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar_chat"
+                    style="@style/ActionBarHeight"
+                    app:layout_collapseMode="pin"/>
+
+            </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.CoordinatorLayout>
+    </android.support.v4.widget.SwipeRefreshLayout>
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view_chat"

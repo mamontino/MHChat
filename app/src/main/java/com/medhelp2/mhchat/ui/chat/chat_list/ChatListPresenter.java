@@ -98,6 +98,7 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
                         return;
                     }
                     saveMessages(response.getResponse(), idRoom);
+                    getMvpView().stopRefreshing();
                 }, throwable ->
                 {
                     Timber.d("Загрузка сообщений из сети произошла с ошибкой");
@@ -106,6 +107,7 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
                         return;
                     }
                     loadLocalMessages(idRoom);
+                    getMvpView().stopRefreshing();
                 }));
     }
 

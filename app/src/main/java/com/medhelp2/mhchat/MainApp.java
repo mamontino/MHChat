@@ -12,6 +12,7 @@ import com.medhelp2.mhchat.di.component.DaggerAppComponent;
 import com.medhelp2.mhchat.di.module.AppModule;
 import com.medhelp2.mhchat.ui.chat.ChatActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
+import com.medhelp2.mhchat.utils.rx.RxBus;
 
 import io.fabric.sdk.android.Fabric;
 import io.realm.Realm;
@@ -20,6 +21,7 @@ import timber.log.Timber;
 public class MainApp extends Application implements Application.ActivityLifecycleCallbacks
 {
     private AppComponent appComponent;
+    private  RxBus bus;
     private int activityCount = 0;
     public boolean isChatActivityStarted = false;
     public boolean isContactsActivityStarted = false;
@@ -33,6 +35,8 @@ public class MainApp extends Application implements Application.ActivityLifecycl
         registerActivityLifecycleCallbacks(this);
 
         Realm.init(this);
+
+        bus = new RxBus();
 
         appComponent = DaggerAppComponent.builder()
                 .appModule(new AppModule(this))
@@ -55,6 +59,11 @@ public class MainApp extends Application implements Application.ActivityLifecycl
     public void setComponent(AppComponent appComponent)
     {
         this.appComponent = appComponent;
+    }
+
+    public RxBus bus()
+    {
+        return bus;
     }
 
     public boolean isAppForeground()

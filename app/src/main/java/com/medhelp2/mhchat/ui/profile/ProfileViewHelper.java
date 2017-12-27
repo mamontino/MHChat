@@ -15,6 +15,10 @@ public interface ProfileViewHelper extends MvpView
 
     void closeNavigationDrawer();
 
+    void swipeDismiss();
+
+    void onRefresh();
+
     void showContactsActivity();
 
     void showSaleActivity();

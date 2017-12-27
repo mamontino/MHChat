@@ -42,6 +42,7 @@ public class ProfilePresenter<V extends ProfileViewHelper>
                         getMvpView().updateData(response.getResponse());
                     }
                     getMvpView().hideLoading();
+                    getMvpView().swipeDismiss();
                 }, throwable ->
                 {
                     Timber.e("Данные посещений загружены с ошибкой: "
@@ -52,6 +53,7 @@ public class ProfilePresenter<V extends ProfileViewHelper>
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().swipeDismiss();
                 }));
     }
 
@@ -81,33 +83,6 @@ public class ProfilePresenter<V extends ProfileViewHelper>
                     }
                     getMvpView().hideLoading();
                 }));
-
-//        getCompositeDisposable().add(getDataHelper()
-//                .getCenterApiCall()
-//                .map(CenterList::getResponse)
-//                .subscribeOn(getSchedulerProvider().io())
-//                .observeOn(getSchedulerProvider().ui())
-//                .subscribe(response ->
-//                {
-//                    if (!isViewAttached())
-//                    {
-//                        return;
-//                    }
-//                    if (response != null)
-//                    {
-//                        getMvpView().updateHeader(response.get(0));
-//                        saveCenterInfo(response.get(0));
-//                    }
-//                    getMvpView().hideLoading();
-//                }, throwable ->
-//                {
-//                    Timber.e("Данные центра загружены с ошибкой: " + throwable.getMessage());
-//                    if (!isViewAttached())
-//                    {
-//                        return;
-//                    }
-//                    getMvpView().hideLoading();
-//                }));
     }
 
     @Override

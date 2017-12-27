@@ -8,4 +8,6 @@ import java.util.List;
 public interface ChatListViewHelper extends MvpView
 {
     void updateMessageList(List<MessageResponse> response);
+
+    void stopRefreshing();
 }

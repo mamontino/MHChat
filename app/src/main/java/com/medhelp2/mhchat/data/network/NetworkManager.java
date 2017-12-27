@@ -226,11 +226,12 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<SaleList> getSaleApiCall()
+    public Observable<SaleList> getSaleApiCall(String date)
     {
         return Rx2AndroidNetworking.get(ApiEndPoint.SALE)
                 .addHeaders(AUTH, prefManager.getAccessToken())
                 .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
+                .addPathParameter(ADM_DATE, date)
                 .build()
                 .getObjectObservable(SaleList.class);
     }

@@ -1,4 +1,4 @@
-package com.medhelp2.mhchat.ui.rating;
+package com.medhelp2.mhchat.ui.rate_app;
 
 
 import com.medhelp2.mhchat.ui.base.DialogMvpView;

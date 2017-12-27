@@ -1,4 +1,4 @@
-package com.medhelp2.mhchat.ui.rating;
+package com.medhelp2.mhchat.ui.rate_doctor;
 
 import android.content.Intent;
 import android.graphics.PorterDuff;
@@ -25,12 +25,12 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class RateFragment extends BaseDialog implements RateViewHelper
+public class RateDoctorFragment extends BaseDialog implements RateDoctorViewHelper
 {
-    private static final String TAG = "RateFragment";
+    private static final String TAG = "RateDoctorFragment";
 
     @Inject
-    RatePresenterHelper<RateViewHelper> presenter;
+    RateDoctorPresenterHelper<RateDoctorViewHelper> presenter;
 
     @BindView(R.id.rating_bar_feedback)
     RatingBar ratingBar;
@@ -48,9 +48,9 @@ public class RateFragment extends BaseDialog implements RateViewHelper
     Button submitButton;
 
 
-    public static RateFragment newInstance()
+    public static RateDoctorFragment newInstance()
     {
-        RateFragment fragment = new RateFragment();
+        RateDoctorFragment fragment = new RateDoctorFragment();
         Bundle bundle = new Bundle();
         fragment.setArguments(bundle);
         return fragment;

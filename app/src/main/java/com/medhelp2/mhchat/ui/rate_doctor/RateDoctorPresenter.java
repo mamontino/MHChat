@@ -1,7 +1,5 @@
-package com.medhelp2.mhchat.ui.rating;
+package com.medhelp2.mhchat.ui.rate_doctor;
 
-
-import android.content.Intent;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.DataHelper;
@@ -12,12 +10,12 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 
-public class RatePresenter<V extends RateViewHelper> extends BasePresenter<V> implements RatePresenterHelper<V>
+public class RateDoctorPresenter<V extends RateDoctorViewHelper> extends BasePresenter<V> implements RateDoctorPresenterHelper<V>
 {
     private boolean isRatingSecondaryActionShown = false;
 
     @Inject
-    public RatePresenter(DataHelper dataHelper,
+    public RateDoctorPresenter(DataHelper dataHelper,
             SchedulerProvider schedulerProvider,
             CompositeDisposable compositeDisposable)
     {

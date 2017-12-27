@@ -52,7 +52,7 @@ public interface NetworkHelper
 
     Observable<DoctorList> getStaffApiCall(int idService);
 
-    Observable<SaleList> getSaleApiCall();
+    Observable<SaleList> getSaleApiCall(String date);
 
     Observable<DoctorInfoList> getDoctorApiCall(int idDoctor);
 

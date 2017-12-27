@@ -34,9 +34,12 @@ import com.medhelp2.mhchat.ui.login.LoginViewHelper;
 import com.medhelp2.mhchat.ui.profile.ProfilePresenter;
 import com.medhelp2.mhchat.ui.profile.ProfilePresenterHelper;
 import com.medhelp2.mhchat.ui.profile.ProfileViewHelper;
-import com.medhelp2.mhchat.ui.rating.RatePresenter;
-import com.medhelp2.mhchat.ui.rating.RatePresenterHelper;
-import com.medhelp2.mhchat.ui.rating.RateViewHelper;
+import com.medhelp2.mhchat.ui.rate_doctor.RateDoctorPresenter;
+import com.medhelp2.mhchat.ui.rate_doctor.RateDoctorPresenterHelper;
+import com.medhelp2.mhchat.ui.rate_doctor.RateDoctorViewHelper;
+import com.medhelp2.mhchat.ui.rate_app.RatePresenter;
+import com.medhelp2.mhchat.ui.rate_app.RatePresenterHelper;
+import com.medhelp2.mhchat.ui.rate_app.RateViewHelper;
 import com.medhelp2.mhchat.ui.sale.SaleAdapter;
 import com.medhelp2.mhchat.ui.sale.SalePresenter;
 import com.medhelp2.mhchat.ui.sale.SalePresenterHelper;
@@ -171,6 +174,12 @@ public class ActivityModule
     }
 
     @Provides
+    RateDoctorPresenterHelper<RateDoctorViewHelper> provideRateDoctorPresenter(RateDoctorPresenter<RateDoctorViewHelper> presenter)
+    {
+        return presenter;
+    }
+
+    @Provides
     SelectPresenterHelper<SelectViewHelper> provideSelectPresenter(SelectPresenter<SelectViewHelper> presenter)
     {
         return presenter;
@@ -230,13 +239,6 @@ public class ActivityModule
     {
         return new DoctorsAdapter(new ArrayList<>());
     }
-
-//    @PerActivity
-//    @Provides
-//    ScheduleAdapter provideScheduleAdapter()
-//    {
-//        return new ScheduleAdapter(new ArrayList<>());
-//    }
 
     @PerActivity
     @Provides

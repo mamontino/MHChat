@@ -66,6 +66,13 @@
     <string name="rating_not_provided_error">Сначала укажите количество звезд.</string>
     <string name="rating_thanks">Спасибо!</string>
 
+    <!--rating dialog doctor-->
+    <string name="rate_doctor_header">Оценить услугу</string>
+    <string name="rating_doctor_message">Вы можете оставить комментарий ниже</string>
+    <string name="rating_doctor_redirect_message">Потрясающе!\n Спасибо за 5 звезд.</string>
+    <string name="rating_doctor_not_provided_error">Сначала укажите количество звезд.</string>
+    <string name="rating_doctor_thanks">Спасибо!</string>
+
     <!--play store-->
     <string name="google_play_store_link">"https://play.google.com/store/apps/details?id="</string>
     <string name="google_market_link">"market://details?id="</string>
@@ -125,6 +132,7 @@
     <string name="photo_doctor">Фотография специалиста</string>
     <string name="user_image">Изображение пользователя</string>
     <string name="keyboard">Клавиатура</string>
+    <string name="btn_rate">Оценить</string>
 
     <!--Calendar-->
     <array name="calendar_days_array">

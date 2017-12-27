@@ -57,7 +57,7 @@ interface ApiEndPoint
 
     //    GET SALE BY CENTER
 
-    String SALE = BASE_URL + "sale/{id_center}";
+    String SALE = BASE_URL + "sale/{id_center}/{date}";
 
     //    GET SALE BY CENTER
 
