@@ -28,8 +28,10 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
+import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.Doctor;
+import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.details.DocDetailsFragment;
@@ -46,7 +48,6 @@ import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -89,7 +90,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     @BindView(R.id.rv_doctors)
     RecyclerView recyclerView;
 
-    private List<Doctor> cashList;
+    private List<DoctorInfo> cashList;
     private ActionBarDrawerToggle drawerToggle;
 
     private TextView headerTitle;
@@ -119,7 +120,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
         setupDrawer();
         cashList = new ArrayList<>();
         presenter.getCenterInfo();
-        presenter.getDoctorList();
+        presenter.getSpecialtyByCenter();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
     }
@@ -155,53 +156,13 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     }
 
     @Override
-    public void updateView(List<Doctor> response)
+    public void updateView(List<DoctorInfo> response)
     {
-        adapter = new DoctorsAdapter(cashList);
+        cashList.addAll(response);
+        adapter = new DoctorsAdapter(response);
         recyclerView.addItemDecoration(new ItemListDecorator(this));
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
-
-        List<String> spinnerList = new ArrayList<>();
-        HashSet<String> hashSet = new HashSet<>();
-        for (Doctor doc : response)
-        {
-            hashSet.add(doc.getSpecialty());
-        }
-
-        spinnerList.add(0, "Все");
-        spinnerList.addAll(hashSet);
-
-        DocSpinnerAdapter spinnerAdapter = new DocSpinnerAdapter(this, spinnerList);
-        spinner.setAdapter(spinnerAdapter);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
-        {
-            @Override
-            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
-            {
-                if (position == 0)
-                {
-                    adapter.addItems(response);
-                } else
-                {
-                    List<Doctor> sortList = new ArrayList<>();
-                    for (Doctor doctor : response)
-                    {
-                        if (doctor.getSpecialty().equals(spinnerList.get(position)))
-                        {
-                            sortList.add(doctor);
-                        }
-                    }
-                    adapter.addItems(sortList);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> adapterView)
-            {
-
-            }
-        });
 
         recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
         {
@@ -219,6 +180,27 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
 
             }
         }));
+    }
+
+    @Override
+    public void updateSpecialty(List<CategoryResponse> response)
+    {
+        DocSpinnerAdapter spinnerAdapter = new DocSpinnerAdapter(this, response);
+        spinner.setAdapter(spinnerAdapter);
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener()
+        {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id)
+            {
+                presenter.getDoctorList(response.get(position).getIdSpec());
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView)
+            {
+
+            }
+        });
     }
 
     @Override
@@ -241,7 +223,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
             public boolean onQueryTextChange(String newText)
             {
                 spinner.setSelection(0);
-                final List<Doctor> filteredModelList = filterDoctor(cashList, newText);
+                final List<DoctorInfo> filteredModelList = filterDoctor(cashList, newText);
                 adapter.setFilter(filteredModelList);
                 return true;
             }
@@ -261,11 +243,11 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
 
     }
 
-    private List<Doctor> filterDoctor(List<Doctor> models, String query)
+    private List<DoctorInfo> filterDoctor(List<DoctorInfo> models, String query)
     {
         query = query.toLowerCase();
-        final List<Doctor> filteredModelList = new ArrayList<>();
-        for (Doctor model : models)
+        final List<DoctorInfo> filteredModelList = new ArrayList<>();
+        for (DoctorInfo model : models)
         {
             if (model.getFullName() != null)
             {

@@ -3,7 +3,6 @@ package com.medhelp2.mhchat.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.annotations.PrimaryKey;
@@ -12,39 +11,30 @@ public class DoctorInfo implements Parcelable
 {
     @PrimaryKey
     @SerializedName("id_doctor")
-    @Expose
     private int idDoctor;
 
     @SerializedName("id_doctor_center")
-    @Expose
     private int idDoctorCenter;
 
     @SerializedName("id_center")
-    @Expose
     private int idCenter;
 
     @SerializedName("full_name")
-    @Expose
     private String fullName;
 
     @SerializedName("photo")
-    @Expose
     private String photo;
 
     @SerializedName("expr")
-    @Expose
     private int expr;
 
     @SerializedName("info")
-    @Expose
     private String info;
 
     @SerializedName("specialty")
-    @Expose
     private String specialty;
 
     @SerializedName("fb_key")
-    @Expose
     private String fbKey;
 
     public int getIdDoctor()

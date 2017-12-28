@@ -82,16 +82,4 @@ public class DocDetailsPresenter<V extends DocDetailsViewHelper> extends BasePre
             }
         }
     }
-
-    @Override
-    public void onScheduleClicked()
-    {
-        getMvpView().dismissDialog();
-    }
-
-    @Override
-    public void onRecordClicked()
-    {
-        getMvpView().dismissDialog();
-    }
 }

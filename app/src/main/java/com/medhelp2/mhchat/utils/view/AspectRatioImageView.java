@@ -10,14 +10,14 @@ import com.medhelp2.mhchat.R;
 public class AspectRatioImageView extends android.support.v7.widget.AppCompatImageView
 {
     private static final float DEFAULT_ASPECT_RATIO = 1.73f;
-    private final float mAspectRatio;
+    private final float aspectRatio;
 
     public AspectRatioImageView(Context context, AttributeSet attrs)
     {
         super(context, attrs);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.AspectRatioImageView);
-        mAspectRatio = a.getFloat(R.styleable.AspectRatioImageView_aspect_ratio, DEFAULT_ASPECT_RATIO);
+        aspectRatio = a.getFloat(R.styleable.AspectRatioImageView_aspect_ratio, DEFAULT_ASPECT_RATIO);
         a.recycle();
     }
 
@@ -29,7 +29,7 @@ public class AspectRatioImageView extends android.support.v7.widget.AppCompatIma
         int newHeight;
 
         newWidth = getMeasuredWidth();
-        newHeight = (int) (newWidth / mAspectRatio);
+        newHeight = (int) (newWidth / aspectRatio);
 
         setMeasuredDimension(newWidth, newHeight);
     }

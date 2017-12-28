@@ -8,7 +8,9 @@ public interface DoctorsPresenterHelper<V extends DoctorsViewHelper> extends Mvp
 {
     void getCenterInfo();
 
-    void getDoctorList();
+    void getDoctorList(int idSpec);
+
+    void getSpecialtyByCenter();
 
     void removePassword();
 }

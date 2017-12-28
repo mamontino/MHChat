@@ -55,7 +55,6 @@ public final class MainUtils
 
     public static String loadJsonFromAsset(Context context, String jsonFileName) throws IOException
     {
-
         AssetManager manager = context.getAssets();
         InputStream is = manager.open(jsonFileName);
 

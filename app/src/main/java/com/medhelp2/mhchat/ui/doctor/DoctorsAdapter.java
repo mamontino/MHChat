@@ -7,7 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
-import com.medhelp2.mhchat.data.model.Doctor;
+import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
 import com.medhelp2.mhchat.ui.search.SearchPresenter;
 
@@ -25,9 +25,9 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
     SearchPresenter presenter;
 
     private static final int VIEW_TYPE_NORMAL = 11;
-    private List<Doctor> response;
+    private List<DoctorInfo> response;
 
-    public DoctorsAdapter(List<Doctor> response)
+    public DoctorsAdapter(List<DoctorInfo> response)
     {
         this.response = response;
     }
@@ -74,7 +74,7 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         }
     }
 
-    void addItems(List<Doctor> repoList)
+    void addItems(List<DoctorInfo> repoList)
     {
         response.clear();
         response.addAll(repoList);
@@ -109,7 +109,7 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         public void onBind(int position)
         {
             super.onBind(position);
-            final Doctor repo = response.get(position);
+            final DoctorInfo repo = response.get(position);
             if (repo != null)
             {
 //                docImage.setImageBitmap(ImageConverter.convertBase64StringToBitmap(repo.));
@@ -133,7 +133,7 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         }
     }
 
-    void setFilter(List<Doctor> filterService)
+    void setFilter(List<DoctorInfo> filterService)
     {
         response = new ArrayList<>();
         response.addAll(filterService);

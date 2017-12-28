@@ -56,5 +56,4 @@ class ServiceSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
         txt.setTextColor(Color.parseColor("#FFFFFF"));
         return txt;
     }
-
 }

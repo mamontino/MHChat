@@ -37,7 +37,7 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
             return;
         }
 
-        if (getDataHelper().checkNetwork())
+        if (getDataHelper().hasNetwork())
         {
             Timber.d("Инернет соединение... Верификация пользователя");
             verifyUser(username, password);

@@ -1,6 +1,5 @@
 package com.medhelp2.mhchat.data;
 
-
 import android.content.Context;
 
 import com.medhelp2.mhchat.data.db.RealmHelper;
@@ -40,233 +39,233 @@ import io.reactivex.Single;
 public class DataManager implements DataHelper
 {
     private final Context context;
-    private final PreferencesHelper preferencesHelper;
-    private final NetworkHelper networkHelper;
-    private final RealmHelper realmHelper;
+    private final PreferencesHelper prefManager;
+    private final NetworkHelper networkManager;
+    private final RealmHelper realmManager;
 
     @Inject
     DataManager(@PerApplication Context context,
-            @PerApplication PreferencesHelper preferencesHelper,
-            @PerApplication NetworkHelper networkHelper, @PerApplication RealmHelper realmHelper)
+            @PerApplication PreferencesHelper prefManager,
+            @PerApplication NetworkHelper networkManager, @PerApplication RealmHelper realmManager)
     {
         this.context = context;
-        this.preferencesHelper = preferencesHelper;
-        this.networkHelper = networkHelper;
-        this.realmHelper = realmHelper;
+        this.prefManager = prefManager;
+        this.networkManager = networkManager;
+        this.realmManager = realmManager;
     }
 
     @Override
     public Observable<UserList> doLoginApiCall(String username, String password)
     {
-        return networkHelper.doLoginApiCall(username, password);
+        return networkManager.doLoginApiCall(username, password);
     }
 
     @Override
     public Observable<List<RoomResponse>> getRoomListApiCall()
     {
-        return networkHelper.getRoomListApiCall();
+        return networkManager.getRoomListApiCall();
     }
 
     @Override
     public Observable<RoomResponse> getRoomByIdApiCall(int id)
     {
-        return networkHelper.getRoomByIdApiCall(id);
+        return networkManager.getRoomByIdApiCall(id);
     }
 
     @Override
     public Observable<MessageList> getMessageListApiCall(int idChat)
     {
-        return networkHelper.getMessageListApiCall(idChat);
+        return networkManager.getMessageListApiCall(idChat);
     }
 
     @Override
     public Observable<RequestResponse> sendMessageApiCall(int idRoom, String message)
     {
-        return networkHelper.sendMessageApiCall(idRoom, message);
+        return networkManager.sendMessageApiCall(idRoom, message);
     }
 
     @Override
     public Observable<RequestResponse> sendTokenToServerApiCall(String token)
     {
-        return networkHelper.sendTokenToServerApiCall(token);
+        return networkManager.sendTokenToServerApiCall(token);
     }
 
     @Override
     public Observable<RequestResponse> sendReviewToServerApiCall(String message, int star)
     {
-        return networkHelper.sendReviewToServerApiCall(message, star);
+        return networkManager.sendReviewToServerApiCall(message, star);
     }
 
     @Override
     public Observable<List<RoomResponse>> getUnreadCountApiCall()
     {
-        return networkHelper.getUnreadCountApiCall();
+        return networkManager.getUnreadCountApiCall();
     }
 
     @Override
     public Observable<ServiceList> getPriceApiCall(int idDoctor)
     {
-        return networkHelper.getPriceApiCall(idDoctor);
+        return networkManager.getPriceApiCall(idDoctor);
     }
 
     @Override
     public Observable<ServiceList> getPriceApiCall()
     {
-        return networkHelper.getPriceApiCall();
+        return networkManager.getPriceApiCall();
     }
 
     @Override
     public Observable<CategoryList> getCategoryApiCall()
     {
-        return networkHelper.getCategoryApiCall();
+        return networkManager.getCategoryApiCall();
     }
 
     @Override
     public Observable<CategoryList> getCategoryApiCall(int idDoctor)
     {
-        return networkHelper.getCategoryApiCall(idDoctor);
+        return networkManager.getCategoryApiCall(idDoctor);
     }
 
     @Override
     public Observable<CenterList> getCenterApiCall()
     {
-        return networkHelper.getCenterApiCall();
+        return networkManager.getCenterApiCall();
     }
 
     @Override
     public Observable<DoctorList> getStaffApiCall()
     {
-        return networkHelper.getStaffApiCall();
+        return networkManager.getStaffApiCall();
     }
 
     @Override
-    public Observable<DoctorList> getStaffApiCall(int idService)
+    public Observable<DoctorInfoList> getStaffApiCall(int idSpec)
     {
-        return networkHelper.getStaffApiCall(idService);
+        return networkManager.getStaffApiCall(idSpec);
     }
 
     @Override
     public Observable<SaleList> getSaleApiCall(String date)
     {
-        return networkHelper.getSaleApiCall(date);
+        return networkManager.getSaleApiCall(date);
     }
 
     @Override
     public Observable<DoctorInfoList> getDoctorApiCall(int idDoctor)
     {
-        return networkHelper.getDoctorApiCall(idDoctor);
+        return networkManager.getDoctorApiCall(idDoctor);
     }
 
     @Override
     public Observable<VisitList> getAllReceptionApiCall()
     {
-        return networkHelper.getAllReceptionApiCall();
+        return networkManager.getAllReceptionApiCall();
     }
 
     @Override
     public Observable<VisitList> getActualReceptionApiCall()
     {
-        return networkHelper.getActualReceptionApiCall();
+        return networkManager.getActualReceptionApiCall();
     }
 
     @Override
     public Observable<ScheduleList> getScheduleByDoctorApiCall(int idDoctor, String date, int adm)
     {
-        return networkHelper.getScheduleByDoctorApiCall(idDoctor, date, adm);
+        return networkManager.getScheduleByDoctorApiCall(idDoctor, date, adm);
     }
 
     @Override
     public Observable<ScheduleList> getScheduleByServiceApiCall(int idService, String date, int adm)
     {
-        return networkHelper.getScheduleByServiceApiCall(idService, date, adm);
+        return networkManager.getScheduleByServiceApiCall(idService, date, adm);
     }
 
     @Override
     public Observable<DateList> getCurrentDateApiCall()
     {
-        return networkHelper.getCurrentDateApiCall();
+        return networkManager.getCurrentDateApiCall();
     }
 
     @Override
     public Observable<RequestResponse> readMessagesApiCall(int idRoom)
     {
-        return networkHelper.readMessagesApiCall(idRoom);
+        return networkManager.readMessagesApiCall(idRoom);
     }
 
     @Override
     public int getCurrentUserId()
     {
-        return preferencesHelper.getCurrentUserId();
+        return prefManager.getCurrentUserId();
     }
 
     @Override
     public void setCurrentUserId(int userId)
     {
-        preferencesHelper.setCurrentUserId(userId);
+        prefManager.setCurrentUserId(userId);
     }
 
     @Override
     public String getCurrentUserName()
     {
-        return preferencesHelper.getCurrentUserName();
+        return prefManager.getCurrentUserName();
     }
 
     @Override
     public void setCurrentUserName(String userName)
     {
-        preferencesHelper.setCurrentUserName(userName);
+        prefManager.setCurrentUserName(userName);
     }
 
     @Override
     public String getCurrentName()
     {
-        return preferencesHelper.getCurrentName();
+        return prefManager.getCurrentName();
     }
 
     @Override
     public void setCurrentName(String name)
     {
-        preferencesHelper.setCurrentName(name);
+        prefManager.setCurrentName(name);
     }
 
     @Override
     public String getFireBaseToken()
     {
-        return preferencesHelper.getFireBaseToken();
+        return prefManager.getFireBaseToken();
     }
 
     @Override
     public void setFireBaseToken(String token)
     {
-        preferencesHelper.setFireBaseToken(token);
+        prefManager.setFireBaseToken(token);
     }
 
     @Override
     public String getCurrentPassword()
     {
-        return preferencesHelper.getCurrentPassword();
+        return prefManager.getCurrentPassword();
     }
 
     @Override
     public void setCurrentPassword(String password)
     {
-        preferencesHelper.setCurrentPassword(password);
+        prefManager.setCurrentPassword(password);
     }
 
     @Override
     public void deleteCurrentPassword()
     {
-        preferencesHelper.deleteCurrentPassword();
+        prefManager.deleteCurrentPassword();
     }
 
     @Override
     public void saveCurrentUser(int idUser, String name, String username)
     {
-        preferencesHelper.saveCurrentUser(idUser, name, username);
+        prefManager.saveCurrentUser(idUser, name, username);
     }
 
     @Override
-    public boolean checkNetwork()
+    public boolean hasNetwork()
     {
         return NetworkUtils.isNetworkConnected(context);
     }
@@ -274,210 +273,210 @@ public class DataManager implements DataHelper
     @Override
     public void addNotification(String notification)
     {
-        preferencesHelper.addNotification(notification);
+        prefManager.addNotification(notification);
     }
 
     @Override
     public String getNotifications()
     {
-        return preferencesHelper.getNotifications();
+        return prefManager.getNotifications();
     }
 
     @Override
     public int getCurrentCenterId()
     {
-        return preferencesHelper.getCurrentCenterId();
+        return prefManager.getCurrentCenterId();
     }
 
     @Override
     public void setCurrentCenterId(int id_center)
     {
-        preferencesHelper.setCurrentCenterId(id_center);
+        prefManager.setCurrentCenterId(id_center);
     }
 
     @Override
     public int getCurrentDoctorId()
     {
-        return preferencesHelper.getCurrentDoctorId();
+        return prefManager.getCurrentDoctorId();
     }
 
     @Override
     public void setCurrentDoctorId(int id_doctor)
     {
-        preferencesHelper.setCurrentDoctorId(id_doctor);
+        prefManager.setCurrentDoctorId(id_doctor);
     }
 
     @Override
     public String getAccessToken()
     {
-        return preferencesHelper.getAccessToken();
+        return prefManager.getAccessToken();
     }
 
     @Override
     public void setAccessToken(String token)
     {
-        preferencesHelper.setAccessToken(token);
+        prefManager.setAccessToken(token);
     }
 
     @Override
     public Single<List<UserResponse>> getAllRealmUser()
     {
-        return realmHelper.getAllRealmUser();
+        return realmManager.getAllRealmUser();
     }
 
     @Override
     public Single<List<MessageResponse>> getAllRealmMessage()
     {
-        return realmHelper.getAllRealmMessage();
+        return realmManager.getAllRealmMessage();
     }
 
     @Override
     public Single<List<MessageResponse>> getAllRealmReceivedMessage()
     {
-        return realmHelper.getAllRealmReceivedMessage();
+        return realmManager.getAllRealmReceivedMessage();
     }
 
     @Override
     public Single<List<RoomResponse>> getAllRealmRoom()
     {
-        return realmHelper.getAllRealmRoom();
+        return realmManager.getAllRealmRoom();
     }
 
     @Override
     public Single<UserResponse> getRealmUser(int id)
     {
-        return realmHelper.getRealmUser(id);
+        return realmManager.getRealmUser(id);
     }
 
     @Override
     public Single<CenterResponse> getRealmCenter()
     {
-        return realmHelper.getRealmCenter();
+        return realmManager.getRealmCenter();
     }
 
     @Override
     public Completable saveRealmCenter(CenterResponse response)
     {
-        return realmHelper.saveRealmCenter(response);
+        return realmManager.saveRealmCenter(response);
     }
 
     @Override
     public Single<MessageResponse> getRealmMessage(int id)
     {
-        return realmHelper.getRealmMessage(id);
+        return realmManager.getRealmMessage(id);
     }
 
     @Override
     public Single<List<MessageResponse>> getRealmMessageList(int id)
     {
-        return realmHelper.getRealmMessageList(id);
+        return realmManager.getRealmMessageList(id);
     }
 
     @Override
     public Single<RoomResponse> getRealmChatRoom(int id)
     {
-        return realmHelper.getRealmChatRoom(id);
+        return realmManager.getRealmChatRoom(id);
     }
 
     @Override
     public Single<UserResponse> getRealmUser(String username)
     {
-        return realmHelper.getRealmUser(username);
+        return realmManager.getRealmUser(username);
     }
 
     @Override
     public Single<UserResponse> getRealmUserResponse(String username, String password)
     {
-        return realmHelper.getRealmUserResponse(username, password);
+        return realmManager.getRealmUserResponse(username, password);
     }
 
     @Override
     public Single<RoomResponse> getRealmChatRoom(String title)
     {
-        return realmHelper.getRealmChatRoom(title);
+        return realmManager.getRealmChatRoom(title);
     }
 
     @Override
     public Completable saveRealmUser(UserResponse response)
     {
-        return realmHelper.saveRealmUser(response);
+        return realmManager.saveRealmUser(response);
     }
 
     @Override
     public Completable saveRealmMessage(MessageResponse response, int idChat)
     {
-        return realmHelper.saveRealmMessage(response, idChat);
+        return realmManager.saveRealmMessage(response, idChat);
     }
 
     @Override
     public Completable saveRealmMessages(List<MessageResponse> response, int idChat)
     {
-        return realmHelper.saveRealmMessages(response, idChat);
+        return realmManager.saveRealmMessages(response, idChat);
     }
 
     @Override
     public Completable saveRealmRoom(List<RoomResponse> response)
     {
-        return realmHelper.saveRealmRoom(response);
+        return realmManager.saveRealmRoom(response);
     }
 
     @Override
     public Completable saveRealmLoginUser(UserResponse response)
     {
-        return realmHelper.saveRealmLoginUser(response);
+        return realmManager.saveRealmLoginUser(response);
     }
 
     @Override
     public Completable saveRealmStaff(List<Doctor> response)
     {
-        return realmHelper.saveRealmStaff(response);
+        return realmManager.saveRealmStaff(response);
     }
 
     @Override
     public Single<List<Doctor>> getRealmStaff()
     {
-        return realmHelper.getRealmStaff();
+        return realmManager.getRealmStaff();
     }
 
     @Override
     public Single<List<CategoryResponse>> getRealmCategory()
     {
-        return realmHelper.getRealmCategory();
+        return realmManager.getRealmCategory();
     }
 
     @Override
     public Completable saveRealmCategory(List<CategoryResponse> response)
     {
-        return realmHelper.saveRealmCategory(response);
+        return realmManager.saveRealmCategory(response);
     }
 
     @Override
     public Single<List<ServiceResponse>> getRealmPrice()
     {
-        return realmHelper.getRealmPrice();
+        return realmManager.getRealmPrice();
     }
 
     @Override
     public Single<List<ServiceResponse>> getRealmPrice(int idCategory)
     {
-        return realmHelper.getRealmPrice(idCategory);
+        return realmManager.getRealmPrice(idCategory);
     }
 
     @Override
     public Completable saveRealmPrice(List<ServiceResponse> response)
     {
-        return realmHelper.saveRealmPrice(response);
+        return realmManager.saveRealmPrice(response);
     }
 
     @Override
     public Single<List<MessageResponse>> getRealmUnReadMessage(int idChatRoom)
     {
-        return realmHelper.getRealmUnReadMessage(idChatRoom);
+        return realmManager.getRealmUnReadMessage(idChatRoom);
     }
 
     @Override
     public Single<List<MessageResponse>> getRealmMessageList(String date, int idChatRoom)
     {
-        return realmHelper.getRealmMessageList(date, idChatRoom);
+        return realmManager.getRealmMessageList(date, idChatRoom);
     }
 }

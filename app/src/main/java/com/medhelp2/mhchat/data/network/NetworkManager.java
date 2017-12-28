@@ -34,6 +34,7 @@ public class NetworkManager implements NetworkHelper
     private static final String ID_CENTER = "id_center";
     private static final String ID_CLIENT = "id_client";
     private static final String ID_DOCTOR = "id_doctor";
+    private static final String ID_SPEC = "id_spec";
     private static final String ID_SERVICE = "id_service";
     private static final String ID_USER = "id_user";
     private static final String ID_ROOM = "id_room";
@@ -215,25 +216,14 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<DoctorList> getStaffApiCall(int idService)
+    public Observable<DoctorInfoList> getStaffApiCall(int idSpec)
     {
-        return Rx2AndroidNetworking.get(ApiEndPoint.DOCTORS_BY_SERVICE)
+        return Rx2AndroidNetworking.get(ApiEndPoint.DOCTORS_BY_SPEC)
                 .addHeaders(AUTH, prefManager.getAccessToken())
                 .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
-                .addPathParameter(ID_SERVICE, String.valueOf(idService))
+                .addPathParameter(ID_SPEC, String.valueOf(idSpec))
                 .build()
-                .getObjectObservable(DoctorList.class);
-    }
-
-    @Override
-    public Observable<SaleList> getSaleApiCall(String date)
-    {
-        return Rx2AndroidNetworking.get(ApiEndPoint.SALE)
-                .addHeaders(AUTH, prefManager.getAccessToken())
-                .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
-                .addPathParameter(ADM_DATE, date)
-                .build()
-                .getObjectObservable(SaleList.class);
+                .getObjectObservable(DoctorInfoList.class);
     }
 
     @Override
@@ -245,6 +235,17 @@ public class NetworkManager implements NetworkHelper
                 .addPathParameter(ID_DOCTOR, String.valueOf(idDoctor))
                 .build()
                 .getObjectObservable(DoctorInfoList.class);
+    }
+
+    @Override
+    public Observable<SaleList> getSaleApiCall(String date)
+    {
+        return Rx2AndroidNetworking.get(ApiEndPoint.SALE)
+                .addHeaders(AUTH, prefManager.getAccessToken())
+                .addPathParameter(ID_CENTER, String.valueOf(prefManager.getCurrentCenterId()))
+                .addPathParameter(ADM_DATE, date)
+                .build()
+                .getObjectObservable(SaleList.class);
     }
 
     @Override

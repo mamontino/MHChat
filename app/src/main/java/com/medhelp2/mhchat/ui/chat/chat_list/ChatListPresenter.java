@@ -29,7 +29,7 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
     public void loadMessageList(int idChat)
     {
         Timber.d("Загрузка списка сообщений");
-        if (getDataHelper().checkNetwork())
+        if (getDataHelper().hasNetwork())
         {
             loadMessagesFromServer(idChat);
         } else
@@ -43,7 +43,7 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
     public void updateMessageList(int idChat)
     {
         Timber.d("updateMessageList: Загрузка списка сообщений");
-        if (getDataHelper().checkNetwork())
+        if (getDataHelper().hasNetwork())
         {
             loadMessagesFromServer(idChat);
         } else

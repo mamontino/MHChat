@@ -1,6 +1,5 @@
 package com.medhelp2.mhchat.data.model;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
@@ -10,17 +9,13 @@ public class CategoryList
 {
 
     @SerializedName("error")
-    @Expose
     private boolean error;
 
     @SerializedName("response")
-    @Expose
-    private List<CategoryResponse> spec = new ArrayList<CategoryResponse>();
+    private List<CategoryResponse> spec = new ArrayList<>();
 
     @SerializedName("message")
-    @Expose
     private String message;
-
 
     public String getMessage()
     {

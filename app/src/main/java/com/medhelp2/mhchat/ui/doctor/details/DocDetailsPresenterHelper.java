@@ -10,8 +10,4 @@ public interface DocDetailsPresenterHelper<V extends DocDetailsViewHelper> exten
     void loadDocInfo(int idDoctor);
 
     void dispose();
-
-    void onScheduleClicked();
-
-    void onRecordClicked();
 }

@@ -1,6 +1,5 @@
 package com.medhelp2.mhchat.data.db;
 
-
 import android.content.Context;
 
 import com.medhelp2.mhchat.data.model.CategoryResponse;
@@ -26,7 +25,6 @@ import timber.log.Timber;
 
 import static com.medhelp2.mhchat.data.model.AppNames.ID_ROOM;
 import static com.medhelp2.mhchat.data.model.AppNames.TIMESTAMP;
-
 
 @PerApplication
 public class RealmManager implements RealmHelper

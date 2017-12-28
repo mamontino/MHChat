@@ -147,7 +147,7 @@ public class SyncService extends Service
                             {
                                 Timber.d("Токен не был загружен на сервер: " + throwable.getMessage());
 
-                                if (!dataManager.checkNetwork())
+                                if (!dataManager.hasNetwork())
                                 {
                                     noConnectionSend();
                                 } else
@@ -178,7 +178,7 @@ public class SyncService extends Service
                         {
                             Timber.d("Отзыв не отправлен на сервер: " + throwable.getMessage());
 
-                            if (!dataManager.checkNetwork())
+                            if (!dataManager.hasNetwork())
                             {
                                 noConnectionSend();
                             } else
@@ -201,7 +201,7 @@ public class SyncService extends Service
                 @Override
                 public void onReceive(Context context, Intent intent)
                 {
-                    if (dataManager.checkNetwork())
+                    if (dataManager.hasNetwork())
                     {
                         sendToken();
                     }

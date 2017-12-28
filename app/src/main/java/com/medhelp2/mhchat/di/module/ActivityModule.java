@@ -51,9 +51,6 @@ import com.medhelp2.mhchat.ui.search.SearchAdapter;
 import com.medhelp2.mhchat.ui.search.SearchPresenter;
 import com.medhelp2.mhchat.ui.search.SearchPresenterHelper;
 import com.medhelp2.mhchat.ui.search.SearchViewHelper;
-import com.medhelp2.mhchat.ui.select.SelectPresenter;
-import com.medhelp2.mhchat.ui.select.SelectPresenterHelper;
-import com.medhelp2.mhchat.ui.select.SelectViewHelper;
 import com.medhelp2.mhchat.ui.splash.SplashPresenter;
 import com.medhelp2.mhchat.ui.splash.SplashPresenterHelper;
 import com.medhelp2.mhchat.ui.splash.SplashViewHelper;
@@ -65,7 +62,6 @@ import java.util.ArrayList;
 import dagger.Module;
 import dagger.Provides;
 import io.reactivex.disposables.CompositeDisposable;
-
 
 @Module
 public class ActivityModule
@@ -126,7 +122,6 @@ public class ActivityModule
         return presenter;
     }
 
-
     @PerActivity
     @Provides
     ContactsPresenterHelper<ContactsViewHelper> provideContactsPresenter(ContactsPresenter<ContactsViewHelper> presenter)
@@ -175,12 +170,6 @@ public class ActivityModule
 
     @Provides
     RateDoctorPresenterHelper<RateDoctorViewHelper> provideRateDoctorPresenter(RateDoctorPresenter<RateDoctorViewHelper> presenter)
-    {
-        return presenter;
-    }
-
-    @Provides
-    SelectPresenterHelper<SelectViewHelper> provideSelectPresenter(SelectPresenter<SelectViewHelper> presenter)
     {
         return presenter;
     }

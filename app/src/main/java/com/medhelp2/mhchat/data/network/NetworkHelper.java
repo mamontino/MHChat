@@ -50,7 +50,7 @@ public interface NetworkHelper
 
     Observable<DoctorList> getStaffApiCall();
 
-    Observable<DoctorList> getStaffApiCall(int idService);
+    Observable<DoctorInfoList> getStaffApiCall(int idService);
 
     Observable<SaleList> getSaleApiCall(String date);
 

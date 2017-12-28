@@ -9,16 +9,18 @@ import android.widget.BaseAdapter;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
+import com.medhelp2.mhchat.data.model.CategoryResponse;
+
 import java.util.ArrayList;
 import java.util.List;
 
 class DocSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
 
     private final Context context;
-    private List<String> list = new ArrayList<>();
+    private List<CategoryResponse> list = new ArrayList<>();
 
-    DocSpinnerAdapter(Context context, List<String> response) {
-        this.list = response;
+    DocSpinnerAdapter(Context context, List<CategoryResponse> list) {
+        this.list = list;
         this.context = context;
     }
 
@@ -41,7 +43,7 @@ class DocSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
         txt.setPadding(16, 16, 16, 16);
         txt.setTextSize(18);
         txt.setGravity(Gravity.CENTER_VERTICAL);
-        txt.setText(list.get(position));
+        txt.setText(list.get(position).getTitle());
         txt.setTextColor(Color.parseColor("#FFFFFF"));
         return txt;
     }
@@ -51,7 +53,7 @@ class DocSpinnerAdapter extends BaseAdapter implements SpinnerAdapter {
         txt.setGravity(Gravity.START);
         txt.setPadding(16, 16, 16, 16);
         txt.setTextSize(16);
-        txt.setText(list.get(position));
+        txt.setText(list.get(position).getTitle());
         txt.setTextColor(Color.parseColor("#FFFFFF"));
         return txt;
     }

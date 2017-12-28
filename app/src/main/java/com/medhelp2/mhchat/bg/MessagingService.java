@@ -94,7 +94,7 @@ public final class MessagingService extends Service
             Timber.d("Добавлен новый элемент в очередь: " + body.getMessage());
         }
 
-        if (dataManager.checkNetwork())
+        if (dataManager.hasNetwork())
         {
             sendMessageToServer();
         } else
@@ -113,7 +113,7 @@ public final class MessagingService extends Service
                 @Override
                 public void onReceive(Context context, Intent intent)
                 {
-                    if (dataManager.checkNetwork())
+                    if (dataManager.hasNetwork())
                     {
                         sendMessageToServer();
                     }
@@ -155,7 +155,7 @@ public final class MessagingService extends Service
                     {
                         Timber.d("Отправка сообщения с ошибкой: " + throwable.getMessage());
 
-                        if (!dataManager.checkNetwork())
+                        if (!dataManager.hasNetwork())
                         {
                             runConnectionReceiver();
                         } else

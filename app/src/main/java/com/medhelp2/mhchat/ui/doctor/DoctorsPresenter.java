@@ -1,11 +1,9 @@
 package com.medhelp2.mhchat.ui.doctor;
 
 import com.medhelp2.mhchat.data.DataHelper;
-import com.medhelp2.mhchat.data.model.Doctor;
+import com.medhelp2.mhchat.data.model.CategoryList;
 import com.medhelp2.mhchat.ui.base.BasePresenter;
 import com.medhelp2.mhchat.utils.rx.SchedulerProvider;
-
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -31,7 +29,6 @@ public class DoctorsPresenter<V extends DoctorsViewHelper> extends BasePresenter
     @Override
     public void getCenterInfo()
     {
-        Timber.d("Получение информации о центре из локального хранилища");
         getCompositeDisposable().add(getDataHelper().getRealmCenter()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
@@ -50,10 +47,9 @@ public class DoctorsPresenter<V extends DoctorsViewHelper> extends BasePresenter
     }
 
     @Override
-    public void getDoctorList()
+    public void getDoctorList(int idSpec)
     {
-        Timber.d("Получение списка докторов из сети");
-        getCompositeDisposable().add(getDataHelper().getStaffApiCall()
+        getCompositeDisposable().add(getDataHelper().getStaffApiCall(idSpec)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
@@ -61,7 +57,7 @@ public class DoctorsPresenter<V extends DoctorsViewHelper> extends BasePresenter
                     try
                     {
                         Timber.d("Данные успешно загружены из сети");
-                        saveDoctorList(response.getResponse());
+                        getMvpView().updateView(response.getResponse());
                     } catch (Exception e)
                     {
                         e.printStackTrace();
@@ -69,41 +65,61 @@ public class DoctorsPresenter<V extends DoctorsViewHelper> extends BasePresenter
                 }, throwable -> Timber.d("Данные из сети загружены с ошибкой: " + throwable.getMessage())));
     }
 
-    private void saveDoctorList(List<Doctor> response)
+    @Override
+    public void getSpecialtyByCenter()
     {
-        Timber.d("Сохранение списка докторов в локальное хранилище");
-        getCompositeDisposable().add(getDataHelper().saveRealmStaff(response)
+        getCompositeDisposable().add(getDataHelper().getCategoryApiCall()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(() ->
-                {
-                    try
-                    {
-                        Timber.d("Данные успешно сохранены в локальное хранилище");
-                        getLocalDoctorList();
-                    } catch (Exception e)
-                    {
-                        e.printStackTrace();
-                    }
-                }, throwable -> Timber.d("Данные в локальное хранилище не были сохранены, ошибка: " + throwable.getMessage())));
-    }
-
-    private void getLocalDoctorList()
-    {
-        Timber.d("Получение списка докторов из локального хранища");
-        getCompositeDisposable().add(getDataHelper().getRealmStaff()
-                .subscribeOn(getSchedulerProvider().io())
-                .observeOn(getSchedulerProvider().ui())
+                .map(CategoryList::getSpec)
                 .subscribe(response ->
                 {
                     try
                     {
-                        Timber.d("Данные успешно загружены из локального хранилища");
-                        getMvpView().updateView(response);
+                        Timber.d("Данные успешно загружены из сети");
+                        getMvpView().updateSpecialty(response);
                     } catch (Exception e)
                     {
                         e.printStackTrace();
                     }
-                }, throwable -> Timber.d("Данные из локального хранилища загружены с ошибкой: " + throwable.getMessage())));
+                }, throwable -> Timber.e("Данные из сети загружены с ошибкой: " + throwable.getMessage())));
     }
+
+//    private void saveDoctorList(List<Doctor> response)
+//    {
+//        Timber.d("Сохранение списка докторов в локальное хранилище");
+//        getCompositeDisposable().add(getDataHelper().saveRealmStaff(response)
+//                .subscribeOn(getSchedulerProvider().io())
+//                .observeOn(getSchedulerProvider().ui())
+//                .subscribe(() ->
+//                {
+//                    try
+//                    {
+//                        Timber.d("Данные успешно сохранены в локальное хранилище");
+//                        getLocalDoctorList();
+//                    } catch (Exception e)
+//                    {
+//                        e.printStackTrace();
+//                    }
+//                }, throwable -> Timber.d("Данные в локальное хранилище не были сохранены, ошибка: " + throwable.getMessage())));
+//    }
+//
+//    private void getLocalDoctorList()
+//    {
+//        Timber.d("Получение списка докторов из локального хранища");
+//        getCompositeDisposable().add(getDataHelper().getRealmStaff()
+//                .subscribeOn(getSchedulerProvider().io())
+//                .observeOn(getSchedulerProvider().ui())
+//                .subscribe(response ->
+//                {
+//                    try
+//                    {
+//                        Timber.d("Данные успешно загружены из локального хранилища");
+//                        getMvpView().updateView(response);
+//                    } catch (Exception e)
+//                    {
+//                        e.printStackTrace();
+//                    }
+//                }, throwable -> Timber.d("Данные из локального хранилища загружены с ошибкой: " + throwable.getMessage())));
+//    }
 }
