@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.base;
 
+
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -27,7 +28,7 @@ import com.medhelp2.mhchat.utils.main.NetworkUtils;
 
 import butterknife.Unbinder;
 
-
+@SuppressWarnings("unused")
 public abstract class BaseActivity extends AppCompatActivity
         implements MvpView, BaseFragment.Callback
 {

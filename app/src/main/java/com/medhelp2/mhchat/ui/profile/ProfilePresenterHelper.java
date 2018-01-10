@@ -8,6 +8,8 @@ import com.medhelp2.mhchat.ui.base.MvpPresenter;
 @PerActivity
 public interface ProfilePresenterHelper<V extends ProfileViewHelper> extends MvpPresenter<V>
 {
+    CenterResponse getCenterInfo();
+
     void updateHeaderInfo();
 
     void getVisits();
@@ -16,5 +18,5 @@ public interface ProfilePresenterHelper<V extends ProfileViewHelper> extends Mvp
 
     void removePassword();
 
-    CenterResponse getCenterInfo();
+    void unSubscribe();
 }

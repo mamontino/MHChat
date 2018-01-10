@@ -3,7 +3,6 @@ package com.medhelp2.mhchat.data.network;
 import com.medhelp2.mhchat.data.model.CategoryList;
 import com.medhelp2.mhchat.data.model.CenterList;
 import com.medhelp2.mhchat.data.model.DateList;
-import com.medhelp2.mhchat.data.model.ScheduleList;
 import com.medhelp2.mhchat.data.model.DoctorInfoList;
 import com.medhelp2.mhchat.data.model.DoctorList;
 import com.medhelp2.mhchat.data.model.MessageList;
@@ -11,6 +10,7 @@ import com.medhelp2.mhchat.data.model.RequestResponse;
 import com.medhelp2.mhchat.data.model.RoomList;
 import com.medhelp2.mhchat.data.model.RoomResponse;
 import com.medhelp2.mhchat.data.model.SaleList;
+import com.medhelp2.mhchat.data.model.ScheduleList;
 import com.medhelp2.mhchat.data.model.ServiceList;
 import com.medhelp2.mhchat.data.model.UserList;
 import com.medhelp2.mhchat.data.model.VisitList;
@@ -42,6 +42,7 @@ public class NetworkManager implements NetworkHelper
     private static final String PASSWORD = "password";
     private static final String FB_TOKEN = "fb_token";
     private static final String MESSAGE = "message";
+    private static final String ID_MESSAGE = "id_message";
     private static final String ADM_DATE = "date";
     private static final String ADM_TIME = "adm";
     private static final String STAR = "star";
@@ -87,11 +88,12 @@ public class NetworkManager implements NetworkHelper
     }
 
     @Override
-    public Observable<MessageList> getMessageListApiCall(int idRoom)
+    public Observable<MessageList> getMessageListApiCall(int idRoom, int idMessage)
     {
         return Rx2AndroidNetworking.get(ApiEndPoint.MESSAGE_LIST)
                 .addHeaders(AUTH, prefManager.getAccessToken())
                 .addPathParameter(ID_ROOM, String.valueOf(idRoom))
+                .addPathParameter(ID_MESSAGE, String.valueOf(idMessage))
                 .build()
                 .getObjectObservable(MessageList.class);
     }
@@ -162,6 +164,29 @@ public class NetworkManager implements NetworkHelper
                 .addPathParameter(ID_DOCTOR, String.valueOf(idDoctor))
                 .build()
                 .getObjectObservable(ServiceList.class);
+    }
+
+    @Override
+    public void loadFile(String image)
+    {
+//        AndroidNetworking.download(image, dirPath, fileName)
+//                .setTag("loadAnalise")
+//                .setPriority(Priority.MEDIUM)
+//                .build()
+//                .setDownloadProgressListener((bytesDownloaded, totalBytes) ->
+//                {
+//                    // do anything with progress
+//                })
+//                .startDownload(new DownloadListener() {
+//                    @Override
+//                    public void onDownloadComplete() {
+//                        // do anything after completion
+//                    }
+//                    @Override
+//                    public void onError(ANError error) {
+//                        // handle error
+//                    }
+//                });
     }
 
     @Override

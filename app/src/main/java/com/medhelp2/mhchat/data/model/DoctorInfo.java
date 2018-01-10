@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 import io.realm.annotations.PrimaryKey;
 
+@SuppressWarnings("unused")
 public class DoctorInfo implements Parcelable
 {
     @PrimaryKey

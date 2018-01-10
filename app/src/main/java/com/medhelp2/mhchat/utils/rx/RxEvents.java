@@ -14,4 +14,20 @@ public class RxEvents
     public static class stopChatRefreshing
     {
     }
+
+    public static class hasConnection
+    {
+    }
+
+    public static class noConnection
+    {
+    }
+
+    public static class incommingMessage
+    {
+    }
+
+    public static class outgoingMessage
+    {
+    }
 }

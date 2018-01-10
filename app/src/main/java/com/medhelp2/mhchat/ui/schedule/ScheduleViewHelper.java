@@ -12,4 +12,6 @@ public interface ScheduleViewHelper extends MvpView
     void setupCalendar(DateResponse today, List<ScheduleResponse> response);
 
     void updateCalendar(String day, List<ScheduleResponse> response);
+
+    void showErrorScreen();
 }

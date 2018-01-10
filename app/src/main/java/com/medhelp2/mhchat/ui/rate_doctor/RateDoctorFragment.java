@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
@@ -57,7 +58,7 @@ public class RateDoctorFragment extends BaseDialog implements RateDoctorViewHelp
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.fragment_rate, container, false);
@@ -94,6 +95,7 @@ public class RateDoctorFragment extends BaseDialog implements RateDoctorViewHelp
         ratingMessageView.setVisibility(View.VISIBLE);
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     protected void setUp(View view)
     {
@@ -141,6 +143,7 @@ public class RateDoctorFragment extends BaseDialog implements RateDoctorViewHelp
         super.dismissDialog(TAG);
     }
 
+    @SuppressWarnings("all")
     @Override
     public void sendReview(String message, float rating)
     {

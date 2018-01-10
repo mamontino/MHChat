@@ -1,15 +1,20 @@
 package com.medhelp2.mhchat.ui.doctor;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
 import com.medhelp2.mhchat.ui.search.SearchPresenter;
+import com.medhelp2.mhchat.utils.main.AppConstants;
+import com.medhelp2.mhchat.utils.main.TimesUtils;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,6 +79,7 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         }
     }
 
+    @SuppressWarnings("unused")
     void addItems(List<DoctorInfo> repoList)
     {
         response.clear();
@@ -87,10 +93,10 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         TextView docName;
 
         @BindView(R.id.doc_spec_tv)
-        TextView docSpec;
-//
-//        @BindView(R.id.doc_image)
-//        ImageView docImage;
+        TextView docExp;
+
+        @BindView(R.id.doc_img)
+        ImageView docImage;
 
 
         ViewHolder(View itemView)
@@ -101,9 +107,9 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
         protected void clear()
         {
-//            docImage.setImageResource(0);
+            docImage.setImageDrawable(null);
             docName.setText("");
-            docSpec.setText("");
+            docExp.setText("");
         }
 
         public void onBind(int position)
@@ -112,9 +118,28 @@ public class DoctorsAdapter extends RecyclerView.Adapter<BaseViewHolder>
             final DoctorInfo repo = response.get(position);
             if (repo != null)
             {
-//                docImage.setImageBitmap(ImageConverter.convertBase64StringToBitmap(repo.));
                 docName.setText(repo.getFullName());
-                docSpec.setText(repo.getSpecialty());
+                int type = TimesUtils.getTypeYear(repo.getExpr());
+
+                Picasso.with(docImage.getContext())
+                        .load(Uri.parse(repo.getPhoto() + "&token=" + AppConstants.API_KEY))
+                        .placeholder(R.drawable.holder_doctor)
+                        .error(R.drawable.holder_doctor)
+                        .into(docImage);
+
+                String exp = null;
+                if (type == AppConstants.TYPE_YEAR_ONE)
+                {
+                    exp = this.docExp.getResources().getString(R.string.f_exp_year, repo.getExpr());
+                } else if (type == AppConstants.TYPE_YEAR_TWO)
+                {
+                    exp = this.docExp.getResources().getString(R.string.f_exp_2, repo.getExpr());
+                }
+                if (type == AppConstants.TYPE_YEAR_THREE)
+                {
+                    exp = this.docExp.getResources().getString(R.string.f_exp_1, repo.getExpr());
+                }
+                docExp.setText(exp);
             }
         }
     }

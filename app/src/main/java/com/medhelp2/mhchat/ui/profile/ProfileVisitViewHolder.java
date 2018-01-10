@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.profile;
 
+import android.net.Uri;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -7,11 +8,12 @@ import android.widget.TextView;
 
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.VisitResponse;
+import com.medhelp2.mhchat.utils.main.AppConstants;
+import com.medhelp2.mhchat.utils.main.TimesUtils;
+import com.squareup.picasso.Picasso;
 import com.thoughtbot.expandablerecyclerview.viewholders.ChildViewHolder;
 
-import timber.log.Timber;
-
-public class ProfileVisitViewHolder extends ChildViewHolder
+class ProfileVisitViewHolder extends ChildViewHolder
 {
     private ImageView receptionLogo;
     private TextView receptionTitle;
@@ -24,7 +26,7 @@ public class ProfileVisitViewHolder extends ChildViewHolder
     private TextView receptionDoctorNo;
     private TextView receptionTimeNo;
 
-    public ProfileVisitViewHolder(View itemView)
+    ProfileVisitViewHolder(View itemView)
     {
         super(itemView);
         receptionLogo = itemView.findViewById(R.id.image_doc_item);
@@ -39,23 +41,29 @@ public class ProfileVisitViewHolder extends ChildViewHolder
         receptionTimeNo = itemView.findViewById(R.id.tv_date_item_no);
     }
 
-    public void onBindButton(VisitResponse response)
+    void onBindButton(VisitResponse response)
     {
-        if (response != null){
-            if (response.getTitle() != null && receptionTitle != null){
+        if (response != null)
+        {
+            if (response.getTitle() != null && receptionTitle != null)
+            {
                 receptionTitle.setText(response.getTitle());
             }
-            if (response.getFullName() != null && receptionDoctor != null){
+            if (response.getFullName() != null && receptionDoctor != null)
+            {
                 receptionDoctor.setText(response.getFullName());
             }
-            if (response.getAdmDate() != null && receptionTime != null){
-                receptionTime.setText(response.getAdmDate());
+            if (response.getAdmDate() != null && receptionTime != null)
+            {
+                receptionTime.setText(TimesUtils.transformStringDate(response.getAdmDate()));
             }
-//            if (response.getPhoto() != null && receptionLogo != null){
-//                receptionLogo.setImageBitmap(response.getPhoto());
-//            }
+
+            Picasso.with(receptionLogo.getContext())
+                    .load(Uri.parse(response.getPhoto() + "&token=" + AppConstants.API_KEY))
+                    .placeholder(R.drawable.holder_doctor)
+                    .error(R.drawable.holder_doctor)
+                    .into(receptionLogo);
         }
-        Timber.d("response == null");
 
         receptionConfirm.setOnClickListener(view ->
         {
@@ -68,19 +76,28 @@ public class ProfileVisitViewHolder extends ChildViewHolder
         });
     }
 
-    public void onBindNoButton(VisitResponse response)
+    void onBindNoButton(VisitResponse response)
     {
-        if (response != null){
-            if (response.getTitle() != null && receptionTitleNo != null){
+        if (response != null)
+        {
+            if (response.getTitle() != null && receptionTitleNo != null)
+            {
                 receptionTitleNo.setText(response.getTitle());
             }
-            if (response.getFullName() != null && receptionDoctorNo != null){
+            if (response.getFullName() != null && receptionDoctorNo != null)
+            {
                 receptionDoctorNo.setText(response.getFullName());
             }
-            if (response.getAdmDate() != null && receptionTimeNo != null){
-                receptionTimeNo.setText(response.getAdmDate());
+            if (response.getAdmDate() != null && receptionTimeNo != null)
+            {
+                receptionTimeNo.setText(TimesUtils.transformStringDate(response.getAdmDate()));
             }
+
+            Picasso.with(receptionLogoNo.getContext())
+                    .load(Uri.parse(response.getPhoto() + "&token=" + AppConstants.API_KEY))
+                    .placeholder(R.drawable.holder_doctor)
+                    .error(R.drawable.holder_doctor)
+                    .into(receptionLogoNo);
         }
-        Timber.d("response == null");
     }
 }

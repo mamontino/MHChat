@@ -9,6 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
+@SuppressWarnings("unused")
 public class CategoryResponse extends RealmObject implements Parcelable
 {
     @PrimaryKey

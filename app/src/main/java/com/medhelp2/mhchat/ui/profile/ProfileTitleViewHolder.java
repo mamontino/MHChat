@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.profile;
 
+
 import android.view.View;
 import android.widget.TextView;
 
@@ -7,16 +8,15 @@ import com.medhelp2.mhchat.R;
 import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import com.thoughtbot.expandablerecyclerview.viewholders.GroupViewHolder;
 
-public class ProfileTitleViewHolder extends GroupViewHolder
+class ProfileTitleViewHolder extends GroupViewHolder
 {
     private TextView title;
 
-    public ProfileTitleViewHolder(View itemView)
+    ProfileTitleViewHolder(View itemView)
     {
         super(itemView);
         title = itemView.findViewById(R.id.tv_profile_item_title);
     }
-
 
     @Override
     public void expand()
@@ -30,7 +30,7 @@ public class ProfileTitleViewHolder extends GroupViewHolder
         title.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.ic_arrow_down, 0);
     }
 
-    public void setGroupName(ExpandableGroup group)
+    void setGroupName(ExpandableGroup group)
     {
         if (group.getTitle() != null)
         {

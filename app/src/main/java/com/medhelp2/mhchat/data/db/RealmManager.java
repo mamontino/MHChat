@@ -2,11 +2,11 @@ package com.medhelp2.mhchat.data.db;
 
 import android.content.Context;
 
+import com.medhelp2.mhchat.data.model.AppNames;
 import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.Doctor;
 import com.medhelp2.mhchat.data.model.MessageResponse;
-import com.medhelp2.mhchat.data.model.AppNames;
 import com.medhelp2.mhchat.data.model.RoomResponse;
 import com.medhelp2.mhchat.data.model.ServiceResponse;
 import com.medhelp2.mhchat.data.model.UserResponse;
@@ -167,17 +167,42 @@ public class RealmManager implements RealmHelper
     }
 
     @Override
-    public Single<List<MessageResponse>> getRealmMessageList(int idChat)
+    public Single<List<MessageResponse>> getRealmMessageList(int idRoom)
     {
         Realm.init(context);
         Realm realm = Realm.getInstance(config);
         List<MessageResponse> responses = realm.copyFromRealm(realm
                 .where(MessageResponse.class)
-                .equalTo(AppNames.ID_ROOM, idChat)
+                .equalTo(AppNames.ID_ROOM, idRoom)
                 .findAllSorted(AppNames.ID_ROOM, Sort.ASCENDING));
         realm.close();
         Timber.d("getRealmMessageList");
         return Single.just(responses);
+    }
+
+    @SuppressWarnings("all")
+    @Override
+    public Single<MessageResponse> getLastMessage(int idRoom)
+    {
+        Realm.init(context);
+        Realm realm = Realm.getInstance(config);
+
+        try
+        {
+            MessageResponse responses = realm.copyFromRealm(realm
+                    .where(MessageResponse.class)
+                    .equalTo(AppNames.ID_ROOM, idRoom)
+                    .findAllSorted(AppNames.ID_MESSAGE, Sort.DESCENDING)
+                    .first());
+            realm.close();
+            Timber.e("id_message: " + responses.getIdMessage());
+            return Single.just(responses);
+        } catch (Exception e)
+        {
+            realm.close();
+            Timber.e("id_message: 0" + e.getMessage());
+            return Single.just(new MessageResponse(0));
+        }
     }
 
     @Override
@@ -419,48 +444,48 @@ public class RealmManager implements RealmHelper
         return Single.just(responses);
     }
 
-//    @Override
-//    public Completable setRealmReadMessages(int idRoom)
-//    {
-//        try
-//        {
-//            return Completable.fromAction(() ->
-//            {
-//                Realm.init(context);
-//                Realm realm = Realm.getInstance(config);
-//
-//                List<RoomResponse> response = realm.copyFromRealm(realm
-//                        .where(RoomResponse.class)
-//                        .equalTo(ID_ROOM, idRoom)
-//                        .findAll());
-//
-//                List<RoomResponse> response1 = new ArrayList<>();
-//
-//                for (int i = 0; i < response.size() + 1; i++)
-//                {
-//                    try
-//                    {
-//                        RoomResponse room = new RoomResponse(idRoom, response.get(i).getIdCenter(), response.get(i).getSaleDescription());
-//                        response1.add(room);
-//                    } catch (Exception e)
-//                    {
-//                        e.printStackTrace();
-//                    }
-//                }
-//
-//                realm.beginTransaction();
-//                realm.insertOrUpdate(response1);
-//                realm.commitTransaction();
-//                realm.close();
-//                Timber.d("Сохранение пользователя прошло успешно");
-//                Realm.compactRealm(config);
-//            });
-//        } catch (Exception e)
-//        {
-//            Timber.e("Сохранение пользователя произошло с ошибкой: " + e.getMessage());
-//            return Completable.complete();
-//        }
-//    }
+    //    @Override
+    //    public Completable setRealmReadMessages(int idRoom)
+    //    {
+    //        try
+    //        {
+    //            return Completable.fromAction(() ->
+    //            {
+    //                Realm.init(context);
+    //                Realm realm = Realm.getInstance(config);
+    //
+    //                List<RoomResponse> response = realm.copyFromRealm(realm
+    //                        .where(RoomResponse.class)
+    //                        .equalTo(ID_ROOM, idRoom)
+    //                        .findAll());
+    //
+    //                List<RoomResponse> response1 = new ArrayList<>();
+    //
+    //                for (int i = 0; i < response.size() + 1; i++)
+    //                {
+    //                    try
+    //                    {
+    //                        RoomResponse room = new RoomResponse(idRoom, response.get(i).getIdCenter(), response.get(i).getSaleDescription());
+    //                        response1.add(room);
+    //                    } catch (Exception e)
+    //                    {
+    //                        e.printStackTrace();
+    //                    }
+    //                }
+    //
+    //                realm.beginTransaction();
+    //                realm.insertOrUpdate(response1);
+    //                realm.commitTransaction();
+    //                realm.close();
+    //                Timber.d("Сохранение пользователя прошло успешно");
+    //                Realm.compactRealm(config);
+    //            });
+    //        } catch (Exception e)
+    //        {
+    //            Timber.e("Сохранение пользователя произошло с ошибкой: " + e.getMessage());
+    //            return Completable.complete();
+    //        }
+    //    }
 
     @Override
     public Single<List<CategoryResponse>> getRealmCategory()

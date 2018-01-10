@@ -1,9 +1,9 @@
 package com.medhelp2.mhchat.data.model;
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
@@ -11,19 +11,20 @@ import java.io.Serializable;
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
+@SuppressWarnings("unused")
 public class RoomResponse extends RealmObject implements Serializable, Parcelable
 {
     @PrimaryKey
     @SerializedName("id_room")
-    @Expose
     private int idRoom;
 
     @SerializedName("id_doctor")
-    @Expose
     private int idDoctor;
 
+    @SerializedName("image")
+    private String image;
+
     @SerializedName("full_name")
-    @Expose
     private String fullName;
 
     public int getIdRoom()
@@ -56,6 +57,16 @@ public class RoomResponse extends RealmObject implements Serializable, Parcelabl
         this.fullName = fullName;
     }
 
+    public String getImage()
+    {
+        return image;
+    }
+
+    public void setImage(String image)
+    {
+        this.image = image;
+    }
+
     @Override
     public int describeContents()
     {
@@ -68,6 +79,7 @@ public class RoomResponse extends RealmObject implements Serializable, Parcelabl
         dest.writeInt(this.idRoom);
         dest.writeInt(this.idDoctor);
         dest.writeString(this.fullName);
+        dest.writeString(this.image);
     }
 
     public RoomResponse()
@@ -79,6 +91,7 @@ public class RoomResponse extends RealmObject implements Serializable, Parcelabl
         this.idRoom = in.readInt();
         this.idDoctor = in.readInt();
         this.fullName = in.readString();
+        this.image = in.readString();
     }
 
     public RoomResponse(int idRoom, int idDoctor, String fullName)

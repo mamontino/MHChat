@@ -2,6 +2,7 @@ package com.medhelp2.mhchat.ui.profile;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,13 +22,16 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.bg.SyncService;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.VisitResponse;
+import com.medhelp2.mhchat.ui.analise.AnaliseActivity;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
@@ -35,7 +39,9 @@ import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.rate_app.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
-import com.medhelp2.mhchat.utils.view.ImageConverter;
+import com.medhelp2.mhchat.utils.main.AppConstants;
+import com.medhelp2.mhchat.utils.main.TimesUtils;
+import com.medhelp2.mhchat.utils.rx.RxEvents;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
 import com.squareup.picasso.Picasso;
@@ -47,17 +53,19 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Maybe;
+import butterknife.OnClick;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener
 {
     @Inject
     ProfilePresenterHelper<ProfileViewHelper> presenter;
+
+    @Inject
+    CompositeDisposable disposables;
 
     @BindView(R.id.toolbar_profile)
     Toolbar toolbar;
@@ -71,11 +79,20 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @BindView(R.id.tv_center_name_profile)
     TextView centerName;
 
+    @BindView(R.id.tv_no_con_bottom)
+    TextView tvNoCon;
+
     @BindView(R.id.tv_phone_profile)
     TextView centerPhone;
 
     @BindView(R.id.tv_phone_hint_profile)
     TextView centerPhoneHint;
+
+    @BindView(R.id.err_tv_message)
+    TextView errMessage;
+
+    @BindView(R.id.err_load_btn)
+    Button errLoadBtn;
 
     @BindView(R.id.rv_profile)
     RecyclerView recyclerView;
@@ -92,12 +109,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @BindView(R.id.swipe_profile)
     SwipeRefreshLayout swipeProfile;
 
-    private ActionBarDrawerToggle drawerToggle;
     private TextView headerTitle;
-    private ImageView headerLogo;
-
-    private ProfileAdapter adapter;
-    private ArrayList<ProfileParentModel> parentModels;
 
     public static Intent getStartIntent(Context context)
     {
@@ -112,13 +124,8 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         getActivityComponent().inject(this);
         setUnBinder(ButterKnife.bind(this));
         presenter.onAttach(this);
+
         setUp();
-        if (savedInstanceState == null)
-        {
-            presenter.updateToken();
-            presenter.getVisits();
-            presenter.updateHeaderInfo();
-        }
     }
 
     @SuppressWarnings("unused")
@@ -161,8 +168,10 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @Override
     public void updateHeader(CenterResponse response)
     {
+        String centerUrl = response.getLogo();
+
         View headerLayout = navView.getHeaderView(0);
-        headerLogo = headerLayout.findViewById(R.id.header_logo);
+        ImageView headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
 
         centerName.setText(response.getTitle());
@@ -171,52 +180,43 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         {
             centerPhoneHint.setVisibility(View.VISIBLE);
             centerPhone.setText(response.getPhone());
+            centerPhone.setOnClickListener(v -> callToCenter(response.getPhone()));
         }
 
         headerTitle.setText(response.getTitle());
 
-        Maybe<String> stringMaybe = Maybe.just(response.getLogo());
+        Picasso.with(this)
+                .load(Uri.parse(centerUrl + "&token=" + AppConstants.API_KEY))
+                .placeholder(R.drawable.holder_center)
+                .error(R.drawable.holder_center)
+                .into(logoProfile);
 
-        CompositeDisposable disposable = new CompositeDisposable();
-        disposable.add(stringMaybe
-                .subscribeOn(Schedulers.computation())
-                .map(ImageConverter::convertBase64StringToBitmap)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bitmap ->
-                        {
-                            logoProfile.setImageBitmap(bitmap);
-                            headerLogo.setImageBitmap(bitmap);
-                        }
-                        , throwable ->
-                        {
-                            Picasso.with(headerLogo.getContext())
-                                    .load(R.drawable.holder_center)
-                                    .into(logoProfile);
-
-                            Picasso.with(headerLogo.getContext())
-                                    .load(R.drawable.holder_center)
-                                    .into(headerLogo);
-
-                            Timber.e("Ошибка загрузки изображения: " + throwable.getMessage());
-                        }
-                ));
+        Picasso.with(this)
+                .load(Uri.parse(centerUrl + "&token=" + AppConstants.API_KEY))
+                .placeholder(R.drawable.holder_center)
+                .error(R.drawable.holder_center)
+                .into(headerLogo);
     }
 
     @Override
-    public void updateData(List<VisitResponse> response)
+    public void updateData(List<VisitResponse> response, String today)
     {
-        parentModels = new ArrayList<>();
+        ArrayList<ProfileParentModel> parentModels = new ArrayList<>();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        if (response != null && response.size() > 0)
+        if (response.size() > 0 && today != null)
         {
+            recyclerView.setVisibility(View.VISIBLE);
+            errMessage.setVisibility(View.GONE);
+            errLoadBtn.setVisibility(View.GONE);
+
             List<VisitResponse> actualReceptions = new ArrayList<>();
             List<VisitResponse> latestReceptions = new ArrayList<>();
 
             for (VisitResponse visit : response)
             {
-                if (visit.getState().equals("true") || visit.getState().equals("wait"))
+                if (TimesUtils.getMillisFromVisit(visit.getAdmDate()) > TimesUtils.getMillisFromServer(today))
                 {
                     actualReceptions.add(visit);
                 } else
@@ -235,11 +235,12 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
                 parentModels.add(new ProfileParentModel("Прошедшие", latestReceptions));
             }
 
-            adapter = new ProfileAdapter(this, parentModels);
+            ProfileAdapter adapter = new ProfileAdapter(this, parentModels);
             recyclerView.setAdapter(adapter);
             recyclerView.setItemAnimator(new DefaultItemAnimator());
             adapter.onGroupClick(0);
-            recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this, recyclerView, new RecyclerViewClickListener()
+            recyclerView.addOnItemTouchListener(new RecyclerViewTouchListener(this,
+                    recyclerView, new RecyclerViewClickListener()
             {
                 @Override
                 public void onClick(View view, int position)
@@ -253,7 +254,54 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
 
                 }
             }));
+        } else
+        {
+            showErrorScreen();
         }
+    }
+
+    private void setupRxBus()
+    {
+        disposables.add(((MainApp) getApplication())
+                .bus()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object ->
+                {
+                    if (object instanceof RxEvents.hasConnection)
+                    {
+                        tvNoCon.setVisibility(View.GONE);
+                        fab.setVisibility(View.VISIBLE);
+                    } else if (object instanceof RxEvents.noConnection)
+                    {
+                        tvNoCon.setVisibility(View.VISIBLE);
+                        fab.setVisibility(View.GONE);
+                    }
+                }));
+    }
+
+    @Override
+    protected void onPause()
+    {
+        disposables.dispose();
+        super.onPause();
+    }
+
+    @Override
+    public void showErrorScreen()
+    {
+        recyclerView.setVisibility(View.GONE);
+        errMessage.setVisibility(View.VISIBLE);
+        errLoadBtn.setVisibility(View.VISIBLE);
+        errLoadBtn.setOnClickListener(v -> presenter.getVisits());
+    }
+
+    private void callToCenter(String phone)
+    {
+        Intent intent = new Intent(Intent.ACTION_DIAL);
+        intent.setData(Uri.parse("tel:" + phone));
+        startActivity(intent);
     }
 
     @Override
@@ -268,27 +316,21 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     public void lockDrawer()
     {
         if (drawer != null)
-        {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-        }
     }
 
     @Override
     public void unlockDrawer()
     {
         if (drawer != null)
-        {
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-        }
     }
 
     @Override
     public void closeNavigationDrawer()
     {
         if (drawer != null)
-        {
             drawer.closeDrawer(Gravity.START);
-        }
     }
 
     @Override
@@ -310,6 +352,10 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
 
             case R.id.nav_item_price:
                 showSearchActivity();
+                return true;
+
+            case R.id.nav_item_result:
+                showAnaliseActivity();
                 return true;
 
             case R.id.nav_item_record:
@@ -351,6 +397,14 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     }
 
     @Override
+    public void showAnaliseActivity()
+    {
+        Intent intent = AnaliseActivity.getStartIntent(this);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public void showDoctorsActivity()
     {
         Intent intent = DoctorsActivity.getStartIntent(this);
@@ -361,11 +415,18 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @Override
     protected void onResume()
     {
+        setupRxBus();
         super.onResume();
+
+        if (!presenter.isNetworkMode())
+        {
+            tvNoCon.setVisibility(View.VISIBLE);
+            fab.setVisibility(View.GONE);
+        }
+
         if (drawer != null)
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
-
 
     @Override
     protected void setUp()
@@ -373,12 +434,29 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         setupToolbar();
         setupDrawer();
         setupRefresh();
-        fab.setOnClickListener(v -> showSearchActivity());
+
+        presenter.updateToken();
+        presenter.getVisits();
+        presenter.updateHeaderInfo();
     }
+
+    @SuppressWarnings("unused")
+    @OnClick(R.id.fab_profile)
+    public void fabClick()
+    {
+        if (isNetworkConnected())
+        {
+            showSearchActivity();
+        } else
+        {
+            showError(R.string.connection_error);
+        }
+    }
+
 
     private void setupDrawer()
     {
-        drawerToggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawer,
                 toolbar,
@@ -411,6 +489,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
             drawer.closeDrawer(GravityCompat.START);
         } else
         {
+            presenter.unSubscribe();
             super.onBackPressed();
         }
     }
@@ -418,7 +497,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     private void setupNavMenu()
     {
         View headerLayout = navView.getHeaderView(0);
-        headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
         navView.setNavigationItemSelectedListener(this);
     }
@@ -426,10 +504,7 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     private void setupRefresh()
     {
         swipeProfile.setOnRefreshListener(this);
-        swipeProfile.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeProfile.setColorSchemeColors(getResources().getColor(android.R.color.holo_red_light));
     }
 
     @Override
@@ -441,6 +516,13 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
     @Override
     public void onRefresh()
     {
-        presenter.getVisits();
+        if (isNetworkConnected())
+        {
+            presenter.getVisits();
+        } else
+        {
+            showError(R.string.connection_error);
+            swipeDismiss();
+        }
     }
 }

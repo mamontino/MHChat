@@ -17,12 +17,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
+import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.ServiceResponse;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
+import com.medhelp2.mhchat.utils.rx.RxEvents;
 import com.medhelp2.mhchat.utils.view.ItemListDecorator;
 
 import java.util.ArrayList;
@@ -32,7 +36,9 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class ServiceActivity extends BaseActivity implements ServiceViewHelper,
         Spinner.OnItemSelectedListener
@@ -43,10 +49,22 @@ public class ServiceActivity extends BaseActivity implements ServiceViewHelper,
     ServicePresenter<ServiceViewHelper> presenter;
 
     @Inject
+    CompositeDisposable disposables;
+
+    @Inject
     LinearLayoutManager layoutManager;
 
     @BindView(R.id.rv_service)
     RecyclerView recyclerView;
+
+    @BindView(R.id.tv_no_con_center)
+    TextView tvNoCon;
+
+    @BindView(R.id.err_tv_message)
+    TextView errMessage;
+
+    @BindView(R.id.err_load_btn)
+    Button errLoadBtn;
 
     @BindView(R.id.spinner_service)
     Spinner spinner;
@@ -74,13 +92,25 @@ public class ServiceActivity extends BaseActivity implements ServiceViewHelper,
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_service);
         getActivityComponent().inject(this);
+        setUnBinder(ButterKnife.bind(this));
+        presenter.onAttach(this);
         setUp();
     }
 
     @Override
-    protected void onStart()
+    protected void setUp()
     {
-        super.onStart();
+        spinner.setVisibility(View.GONE);
+
+        if (!presenter.isNetworkMode())
+        {
+            tvNoCon.setVisibility(View.VISIBLE);
+        }
+
+        setupToolbar();
+        serviceCash = new ArrayList<>();
+        recyclerView.setLayoutManager(layoutManager);
+
         Bundle bundle = getIntent().getExtras();
         if (bundle != null)
         {
@@ -89,14 +119,23 @@ public class ServiceActivity extends BaseActivity implements ServiceViewHelper,
         }
     }
 
-    @Override
-    protected void setUp()
+    private void setupRxBus()
     {
-        setUnBinder(ButterKnife.bind(this));
-        presenter.onAttach(this);
-        setupToolbar();
-        serviceCash = new ArrayList<>();
-        recyclerView.setLayoutManager(layoutManager);
+        disposables.add(((MainApp) getApplication())
+                .bus()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object ->
+                {
+                    if (object instanceof RxEvents.hasConnection)
+                    {
+                        tvNoCon.setVisibility(View.GONE);
+                    } else if (object instanceof RxEvents.noConnection)
+                    {
+                        tvNoCon.setVisibility(View.VISIBLE);
+                    }
+                }));
     }
 
     @SuppressWarnings("unused")
@@ -114,6 +153,21 @@ public class ServiceActivity extends BaseActivity implements ServiceViewHelper,
     }
 
     @Override
+    protected void onResume()
+    {
+        setupRxBus();
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        disposables.dispose();
+    }
+
+    @Override
+    @SuppressWarnings("all")
     public boolean onCreateOptionsMenu(Menu menu)
     {
         MenuInflater inflater = getMenuInflater();
@@ -160,7 +214,10 @@ public class ServiceActivity extends BaseActivity implements ServiceViewHelper,
     @Override
     public void updateView(List<CategoryResponse> categories, List<ServiceResponse> services)
     {
-        Timber.d("updateCategory");
+        errMessage.setVisibility(View.GONE);
+        errLoadBtn.setVisibility(View.GONE);
+        spinner.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
 
         adapter = new ServiceAdapter(serviceCash, idDoctor);
         recyclerView.addItemDecoration(new ItemListDecorator(this));
@@ -204,6 +261,16 @@ public class ServiceActivity extends BaseActivity implements ServiceViewHelper,
     }
 
     @Override
+    public void showErrorScreen()
+    {
+        recyclerView.setVisibility(View.GONE);
+        spinner.setVisibility(View.GONE);
+        errMessage.setVisibility(View.VISIBLE);
+        errLoadBtn.setVisibility(View.VISIBLE);
+        errLoadBtn.setOnClickListener(v -> presenter.getData(idDoctor));
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
         switch (item.getItemId())
@@ -213,6 +280,13 @@ public class ServiceActivity extends BaseActivity implements ServiceViewHelper,
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+            presenter.unSubscribe();
+            super.onBackPressed();
     }
 
     @Override

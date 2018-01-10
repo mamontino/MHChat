@@ -15,11 +15,15 @@ public interface ProfileViewHelper extends MvpView
 
     void closeNavigationDrawer();
 
+    void showErrorScreen();
+
     void swipeDismiss();
 
     void onRefresh();
 
     void showContactsActivity();
+
+    void showAnaliseActivity();
 
     void showSaleActivity();
 
@@ -31,7 +35,7 @@ public interface ProfileViewHelper extends MvpView
 
     void updateHeader(CenterResponse response);
 
-    void updateData(List<VisitResponse> response);
+    void updateData(List<VisitResponse> response, String today);
 
     void runSendRegistrationService(String fbToken, int idUser);
 }

@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.base;
 
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.medhelp2.mhchat.utils.main.MainUtils;
 
 import butterknife.Unbinder;
 
+@SuppressWarnings("unused")
 public abstract class BaseFragmentList extends ListFragment implements MvpView
 {
     private BaseActivity activity;
@@ -106,11 +108,7 @@ public abstract class BaseFragmentList extends ListFragment implements MvpView
     @Override
     public boolean isNetworkConnected()
     {
-        if (activity != null)
-        {
-            return activity.isNetworkConnected();
-        }
-        return false;
+        return activity != null && activity.isNetworkConnected();
     }
 
     @Override

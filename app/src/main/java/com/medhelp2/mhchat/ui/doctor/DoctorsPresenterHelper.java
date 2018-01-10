@@ -13,4 +13,6 @@ public interface DoctorsPresenterHelper<V extends DoctorsViewHelper> extends Mvp
     void getSpecialtyByCenter();
 
     void removePassword();
+
+    void unSubscribe();
 }

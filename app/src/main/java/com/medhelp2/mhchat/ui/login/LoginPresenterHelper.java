@@ -7,4 +7,6 @@ import com.medhelp2.mhchat.ui.base.MvpPresenter;
 public interface LoginPresenterHelper<V extends LoginViewHelper> extends MvpPresenter<V>
 {
     void onLoginClick(String username, String password);
+
+    void getUsername();
 }

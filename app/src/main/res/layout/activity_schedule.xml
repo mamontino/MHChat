@@ -1,100 +1,106 @@
 <android.support.design.widget.CoordinatorLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-        <ScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <include layout="@layout/schedule_description"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/base_margin_32dp"
-                    android:background="@color/light_gray"
-                    android:gravity="center"
-                    android:text="Выберите день:"/>
-
-                <com.prolificinteractive.materialcalendarview.MaterialCalendarView
-                    android:id="@+id/calendar_schedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:mcv_selectionColor="@color/color_primary_dark"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/base_margin_32dp"
-                    android:background="@color/light_gray"
-                    android:gravity="center"
-                    android:text="Выберите удобное время:"/>
-
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/rv_schedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@color/transparent"
-                    android:clipToPadding="false"/>
-
-                <TextView
-                    android:id="@+id/err_schedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/activity_horizontal_margin"
-                    android:text="К сожалению, данный день уже расписан. Пожалуйста, выберите другую дату."
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/empty_schedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/activity_horizontal_margin"
-                    android:text="Выберите дату, на которую планируете записаться"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:id="@+id/hol_schedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:padding="@dimen/activity_horizontal_margin"
-                    android:text="К сожалению, в данный день доктор не работает. Пожалуйста, выберите другую дату."
-                    android:visibility="gone"/>
-
-            </LinearLayout>
-        </ScrollView>
-
-        <android.support.design.widget.AppBarLayout
-            android:id="@+id/app_bar_schedule"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+            android:orientation="vertical">
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsing_toolbar_schedule"
+            <include layout="@layout/item_no_connection_center"/>
+
+            <include layout="@layout/schedule_description"/>
+
+            <TextView
+                android:id="@+id/holder_schedule_day"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_margin_32dp"
+                android:background="@color/light_gray"
+                android:gravity="center"
+                android:text="Выберите день:"/>
+
+            <com.prolificinteractive.materialcalendarview.MaterialCalendarView
+                android:id="@+id/calendar_schedule"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
-                app:contentScrim="@color/color_primary"
-                app:layout_collapseMode="parallax"
-                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
-                app:titleEnabled="false">
+                app:mcv_selectionColor="@color/color_primary_dark"/>
 
-                <android.support.v7.widget.Toolbar
-                    android:id="@+id/toolbar_schedule"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:background="@color/transparent"/>
+            <TextView
+                android:id="@+id/holder_schedule_time"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/base_margin_32dp"
+                android:background="@color/light_gray"
+                android:gravity="center"
+                android:text="Выберите удобное время:"/>
 
-            </android.support.design.widget.CollapsingToolbarLayout>
-        </android.support.design.widget.AppBarLayout>
-    </android.support.design.widget.CoordinatorLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/transparent"
+                android:clipToPadding="false"/>
+
+            <TextView
+                android:id="@+id/err_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="К сожалению, данный день уже расписан. Пожалуйста, выберите другую дату."
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/empty_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="Выберите дату, на которую планируете записаться"
+                android:visibility="gone"/>
+
+            <TextView
+                android:id="@+id/hol_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="@dimen/activity_horizontal_margin"
+                android:text="К сожалению, в данный день доктор не работает. Пожалуйста, выберите другую дату."
+                android:visibility="gone"/>
+
+        </LinearLayout>
+    </ScrollView>
+
+    <include layout="@layout/item_error_download"/>
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/app_bar_schedule"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/collapsing_toolbar_schedule"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scaleType="centerCrop"
+            app:contentScrim="@color/color_primary"
+            app:layout_collapseMode="parallax"
+            app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed"
+            app:titleEnabled="false">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/toolbar_schedule"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="@color/transparent"/>
+
+        </android.support.design.widget.CollapsingToolbarLayout>
+    </android.support.design.widget.AppBarLayout>
+</android.support.design.widget.CoordinatorLayout>

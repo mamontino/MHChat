@@ -1,55 +1,47 @@
 package com.medhelp2.mhchat.data.model;
 
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
-
+@SuppressWarnings("unused")
 public class MessageResponse extends RealmObject implements Parcelable
 {
     @PrimaryKey
     @SerializedName("id")
-    @Expose
     private int idMessage;
 
     @SerializedName("id_room")
-    @Expose
     private int idRoom;
 
     @SerializedName("message")
-    @Expose
     private String message;
 
     @SerializedName("id_user")
-    @Expose
     private int idUser;
 
     @SerializedName("id_doctor")
-    @Expose
     private int idDoctor;
 
     @SerializedName("is_read")
-    @Expose
     private String isRead;
 
     @SerializedName("time_stamp")
-    @Expose
     private String timeStamp;
 
     @SerializedName("message_key")
-    @Expose
     private String messageKey;
 
-    public int getidMessage() {
+    public int getIdMessage() {
         return idMessage;
     }
 
-    public void setidMessage(int idMessage) {
+    public void setIdMessage(int idMessage) {
         this.idMessage = idMessage;
     }
 
@@ -131,6 +123,11 @@ public class MessageResponse extends RealmObject implements Parcelable
 
     public MessageResponse()
     {
+    }
+
+    public MessageResponse(int idMessage)
+    {
+        this.idMessage = idMessage;
     }
 
     protected MessageResponse(Parcel in)

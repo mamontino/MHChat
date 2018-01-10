@@ -23,10 +23,21 @@
             android:layout_margin="@dimen/fab_margin"
             app:srcCompat="@drawable/ic_call_white_24dp"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_sale"
-            style="@style/RecyclerMatchHorizontalPadding"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <include layout="@layout/item_no_connection_bottom"/>
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_sale"
+                style="@style/RecyclerMatchHorizontalPadding"/>
+
+            <include layout="@layout/item_error_download"/>
+
+        </LinearLayout>
 
         <android.support.design.widget.AppBarLayout
             android:id="@+id/app_bar_sale"

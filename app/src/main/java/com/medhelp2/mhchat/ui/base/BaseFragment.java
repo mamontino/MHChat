@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.base;
 
+
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -13,6 +14,7 @@ import com.medhelp2.mhchat.utils.main.MainUtils;
 
 import butterknife.Unbinder;
 
+@SuppressWarnings("all")
 public abstract class BaseFragment extends Fragment implements MvpView
 {
     private BaseActivity activity;
@@ -158,7 +160,8 @@ public abstract class BaseFragment extends Fragment implements MvpView
     @Override
     public void onDestroy()
     {
-        if (unbinder != null) {
+        if (unbinder != null)
+        {
             unbinder.unbind();
         }
         super.onDestroy();

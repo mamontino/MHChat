@@ -23,8 +23,8 @@ public class MainApp extends Application implements Application.ActivityLifecycl
     private AppComponent appComponent;
     private  RxBus bus;
     private int activityCount = 0;
-    public boolean isChatActivityStarted = false;
-    public boolean isContactsActivityStarted = false;
+    private boolean isChatActivityStarted = false;
+    private boolean isContactsActivityStarted = false;
 
     @Override
     public void onCreate()
@@ -69,6 +69,16 @@ public class MainApp extends Application implements Application.ActivityLifecycl
     public boolean isAppForeground()
     {
         return activityCount > 0;
+    }
+
+    public boolean getChatActivityStarted()
+    {
+        return isChatActivityStarted;
+    }
+
+    public boolean getContactsActivityStarted()
+    {
+        return isContactsActivityStarted;
     }
 
     @Override

@@ -15,12 +15,11 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
-import timber.log.Timber;
 
 public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> implements LoginPresenterHelper<V>, LifecycleObserver
 {
     @Inject
-    public LoginPresenter(DataHelper dataHelper,
+    LoginPresenter(DataHelper dataHelper,
             SchedulerProvider schedulerProvider,
             CompositeDisposable compositeDisposable)
     {
@@ -32,42 +31,46 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
     {
         if (username == null || username.isEmpty() || password == null || password.isEmpty())
         {
-            Timber.d("Пустое значение");
             getMvpView().showError(R.string.empty_data);
             return;
         }
 
         if (getDataHelper().hasNetwork())
         {
-            Timber.d("Инернет соединение... Верификация пользователя");
             verifyUser(username, password);
         } else
         {
-            Timber.d("Инернет соединение отсутствует");
             getMvpView().showError(R.string.connection_error);
         }
     }
 
+    @Override
+    public void getUsername()
+    {
+        try
+        {
+            getMvpView().updateUsernameHint(getDataHelper().getCurrentUserName());
+        } catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+    }
 
     private void verifyUser(String username, String password)
     {
-        Timber.d("Верификация пользователя на сервере");
         getMvpView().showLoading();
         getCompositeDisposable().add(getDataHelper().doLoginApiCall(username, password)
                 .subscribeOn(getSchedulerProvider().io())
-                .map((response) ->
+                .map(response ->
                 {
                     UserResponse userResponse;
                     List ar = response.getResponse();
                     userResponse = (UserResponse) ar.get(0);
-                    Timber.d(response.getMessage());
                     return userResponse;
                 })
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
                 {
-                    Timber.d("Данные пользователя загружены успешно: " + response.getIdUser() + " " + response.getUsername());
-
                     if (!isViewAttached())
                     {
                         return;
@@ -89,7 +92,6 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
                     {
                         return;
                     }
-                    Timber.d("Данные пользователя были загружены с ошибкой: " + throwable.getMessage());
                     getMvpView().hideLoading();
                     getMvpView().showError("Данные пользователя были загружены с ошибкой: " + throwable.getMessage());
                 }));
@@ -100,11 +102,9 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
         try
         {
             getDataHelper().deleteCurrentPassword();
-            Timber.e("Успешное удаление пароля из SharedPreference");
         } catch (Exception e)
         {
-            Timber.e("Ошибка удаления пароля из SharedPreference: " + e.getMessage());
-            getMvpView().showError("Ошибка удаления пароля из SharedPreference: " + e.getMessage());
+            getMvpView().showError("Ошибка удаления пароля: " + e.getMessage());
         }
     }
 
@@ -114,10 +114,8 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
         {
             getDataHelper().setCurrentPassword(password);
             getDataHelper().setCurrentUserName(username);
-            Timber.d("Успешное сохранение пароля в SharedPreference");
         } catch (Exception e)
         {
-            Timber.e("Ошибка сохранения пароля в SharedPreference: " + e.getMessage());
             getMvpView().showError("Ошибка сохранения пароля в SharedPreference: " + e.getMessage());
         }
     }
@@ -131,12 +129,9 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
             getDataHelper().setCurrentCenterId(response.getIdCenter());
             getDataHelper().setCurrentUserName(response.getUsername());
             getDataHelper().setAccessToken(response.getApiKey());
-            Timber.d("Успешное сохранение пользовательских данных в SharedPreference: "
-                    + response.getIdUser() + " " + response.getUsername());
         } catch (Exception e)
         {
-            Timber.e("Ошибка сохранения пользовательских данных в SharedPreference: " + e.getMessage());
-            getMvpView().showError("Ошибка сохранения пользовательских данных в SharedPreference: " + e.getMessage());
+            getMvpView().showError("Не удалось сохранить данные на устройстве");
         }
     }
 
@@ -148,12 +143,10 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
                 .map(CenterList::getResponse)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(response ->
-                                saveCenterInfo(response.get(0)), throwable ->
+                .subscribe(response -> saveCenterInfo(response.get(0)), throwable ->
                         {
                             getMvpView().hideLoading();
                             getMvpView().openProfileActivity();
-                            Timber.e("Данные центра загружены с ошибкой: " + throwable.getMessage());
                         }
                 ));
     }
@@ -164,16 +157,10 @@ public class LoginPresenter<V extends LoginViewHelper> extends BasePresenter<V> 
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(() ->
-                        {
-                            getMvpView().hideLoading();
-                            getMvpView().openProfileActivity();
-                            getMvpView().closeActivity();
-                        },
-                        throwable ->
-                        {
-                            getMvpView().hideLoading();
-                            Timber.e("Ошибка сохранения CenterResponse " +
-                                    "в локальное хранилище: " + throwable.getMessage());
-                        }));
+                {
+                    getMvpView().hideLoading();
+                    getMvpView().openProfileActivity();
+                    getMvpView().closeActivity();
+                }, throwable -> getMvpView().hideLoading()));
     }
 }

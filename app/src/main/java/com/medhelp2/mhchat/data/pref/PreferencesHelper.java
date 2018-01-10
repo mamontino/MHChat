@@ -2,6 +2,10 @@ package com.medhelp2.mhchat.data.pref;
 
 public interface PreferencesHelper
 {
+    void setNetworkMode(int mode);
+
+    int getNetworkMode();
+
     int getCurrentUserId();
 
     void setCurrentUserId(int userId);
@@ -29,6 +33,10 @@ public interface PreferencesHelper
     void addNotification(String notification);
 
     String getNotifications();
+
+    int getStartMode();
+
+    void setStartMode(int mode);
 
     int getCurrentCenterId();
 

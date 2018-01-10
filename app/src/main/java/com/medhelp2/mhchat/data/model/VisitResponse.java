@@ -3,40 +3,33 @@ package com.medhelp2.mhchat.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.annotations.PrimaryKey;
 
+@SuppressWarnings("unused")
 public class VisitResponse implements Parcelable
 {
     @PrimaryKey
     @SerializedName("id_schedule")
-    @Expose
     private int idSchedule;
 
     @SerializedName("adm_date")
-    @Expose
     private String admDate;
 
     @SerializedName("adm_time")
-    @Expose
     private String admTime;
 
     @SerializedName("full_name")
-    @Expose
     private String fullName;
 
     @SerializedName("state")
-    @Expose
     private String state;
 
     @SerializedName("title")
-    @Expose
     private String title;
 
     @SerializedName("photo")
-    @Expose
     private String photo;
 
     public int getIdSchedule()
@@ -132,6 +125,7 @@ public class VisitResponse implements Parcelable
     {
     }
 
+    @SuppressWarnings("all")
     protected VisitResponse(Parcel in)
     {
         this.idSchedule = in.readInt();

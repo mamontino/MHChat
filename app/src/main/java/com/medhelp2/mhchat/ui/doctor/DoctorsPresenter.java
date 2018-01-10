@@ -13,7 +13,7 @@ import timber.log.Timber;
 public class DoctorsPresenter<V extends DoctorsViewHelper> extends BasePresenter<V> implements DoctorsPresenterHelper<V>
 {
     @Inject
-    public DoctorsPresenter(DataHelper dataHelper,
+    DoctorsPresenter(DataHelper dataHelper,
             SchedulerProvider schedulerProvider,
             CompositeDisposable compositeDisposable)
     {
@@ -62,7 +62,7 @@ public class DoctorsPresenter<V extends DoctorsViewHelper> extends BasePresenter
                     {
                         e.printStackTrace();
                     }
-                }, throwable -> Timber.d("Данные из сети загружены с ошибкой: " + throwable.getMessage())));
+                }, throwable -> getMvpView().showErrorScreen()));
     }
 
     @Override
@@ -82,44 +82,54 @@ public class DoctorsPresenter<V extends DoctorsViewHelper> extends BasePresenter
                     {
                         e.printStackTrace();
                     }
-                }, throwable -> Timber.e("Данные из сети загружены с ошибкой: " + throwable.getMessage())));
+                }, throwable -> getMvpView().showErrorScreen()));
     }
 
-//    private void saveDoctorList(List<Doctor> response)
-//    {
-//        Timber.d("Сохранение списка докторов в локальное хранилище");
-//        getCompositeDisposable().add(getDataHelper().saveRealmStaff(response)
-//                .subscribeOn(getSchedulerProvider().io())
-//                .observeOn(getSchedulerProvider().ui())
-//                .subscribe(() ->
-//                {
-//                    try
-//                    {
-//                        Timber.d("Данные успешно сохранены в локальное хранилище");
-//                        getLocalDoctorList();
-//                    } catch (Exception e)
-//                    {
-//                        e.printStackTrace();
-//                    }
-//                }, throwable -> Timber.d("Данные в локальное хранилище не были сохранены, ошибка: " + throwable.getMessage())));
-//    }
-//
-//    private void getLocalDoctorList()
-//    {
-//        Timber.d("Получение списка докторов из локального хранища");
-//        getCompositeDisposable().add(getDataHelper().getRealmStaff()
-//                .subscribeOn(getSchedulerProvider().io())
-//                .observeOn(getSchedulerProvider().ui())
-//                .subscribe(response ->
-//                {
-//                    try
-//                    {
-//                        Timber.d("Данные успешно загружены из локального хранилища");
-//                        getMvpView().updateView(response);
-//                    } catch (Exception e)
-//                    {
-//                        e.printStackTrace();
-//                    }
-//                }, throwable -> Timber.d("Данные из локального хранилища загружены с ошибкой: " + throwable.getMessage())));
-//    }
+    //    private void saveDoctorList(List<Doctor> response)
+    //    {
+    //        Timber.d("Сохранение списка докторов в локальное хранилище");
+    //        getCompositeDisposable().add(getDataHelper().saveRealmStaff(response)
+    //                .subscribeOn(getSchedulerProvider().io())
+    //                .observeOn(getSchedulerProvider().ui())
+    //                .subscribe(() ->
+    //                {
+    //                    try
+    //                    {
+    //                        Timber.d("Данные успешно сохранены в локальное хранилище");
+    //                        getLocalDoctorList();
+    //                    } catch (Exception e)
+    //                    {
+    //                        e.printStackTrace();
+    //                    }
+    //                }, throwable -> Timber.d("Данные в локальное хранилище не были сохранены, ошибка: " + throwable.getMessage())));
+    //    }
+    //
+    //    private void getLocalDoctorList()
+    //    {
+    //        Timber.d("Получение списка докторов из локального хранища");
+    //        getCompositeDisposable().add(getDataHelper().getRealmStaff()
+    //                .subscribeOn(getSchedulerProvider().io())
+    //                .observeOn(getSchedulerProvider().ui())
+    //                .subscribe(response ->
+    //                {
+    //                    try
+    //                    {
+    //                        Timber.d("Данные успешно загружены из локального хранилища");
+    //                        getMvpView().updateView(response);
+    //                    } catch (Exception e)
+    //                    {
+    //                        e.printStackTrace();
+    //                    }
+    //                }, throwable -> Timber.d("Данные из локального хранилища загружены с ошибкой: " + throwable.getMessage())));
+    //    }
+
+    @Override
+    public void unSubscribe()
+    {
+        if (!getCompositeDisposable().isDisposed())
+        {
+            getCompositeDisposable().dispose();
+            getMvpView().hideLoading();
+        }
+    }
 }

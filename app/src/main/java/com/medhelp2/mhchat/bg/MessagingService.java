@@ -46,7 +46,6 @@ public final class MessagingService extends Service
     @Override
     public void onCreate()
     {
-        Timber.d("MessagingService onCreate");
         super.onCreate();
         MainApp app = (MainApp) getApplication();
         app.getComponent().inject(this);
@@ -55,7 +54,6 @@ public final class MessagingService extends Service
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Timber.d("MessagingService onStartCommand");
         int idUser = intent.getIntExtra(SERVICE_USER_ID, 0);
         int idChatRoom = intent.getIntExtra(SERVICE_CHAT_ROOM, 0);
         String message = intent.getStringExtra(SERVICE_MESSAGE);
@@ -67,7 +65,6 @@ public final class MessagingService extends Service
     @Override
     public void onDestroy()
     {
-        Timber.d("MessagingService onDestroy");
         if (isCon != null)
         {
             unregisterReceiver(isCon);
@@ -79,7 +76,6 @@ public final class MessagingService extends Service
     @Override
     public IBinder onBind(Intent intent)
     {
-        Timber.d("MessagingService onBindButton");
         return null;
     }
 
@@ -105,7 +101,6 @@ public final class MessagingService extends Service
 
     private void runConnectionReceiver()
     {
-        Timber.e("Отсутствует соединение с интернетом runConnectionReceiver");
         if (isCon == null)
         {
             isCon = new BroadcastReceiver()

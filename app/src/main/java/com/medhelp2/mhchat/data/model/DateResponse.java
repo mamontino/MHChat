@@ -1,21 +1,18 @@
 package com.medhelp2.mhchat.data.model;
 
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class DateResponse
 {
     @SerializedName("today")
-    @Expose
     private String today;
 
     @SerializedName("week_day")
-    @Expose
     private String weekDay;
 
     @SerializedName("last_monday")
-    @Expose
     private String lastMonday;
 
     public String getToday() {

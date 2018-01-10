@@ -28,7 +28,6 @@ public class ServicePresenter<V extends ServiceViewHelper> extends BasePresenter
 
     private void getPrice(List<CategoryResponse> categoryResponse, int idDoctor)
     {
-        Timber.d("getPrice");
         getMvpView().showLoading();
         getCompositeDisposable().add(getDataHelper()
                 .getPriceApiCall(idDoctor)
@@ -45,6 +44,7 @@ public class ServicePresenter<V extends ServiceViewHelper> extends BasePresenter
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
@@ -71,6 +71,17 @@ public class ServicePresenter<V extends ServiceViewHelper> extends BasePresenter
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
+    }
+
+    @Override
+    public void unSubscribe()
+    {
+        if (!getCompositeDisposable().isDisposed())
+        {
+            getCompositeDisposable().dispose();
+            getMvpView().hideLoading();
+        }
     }
 }

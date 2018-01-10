@@ -11,6 +11,8 @@ import android.support.annotation.Nullable;
 
 import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.data.DataHelper;
+import com.medhelp2.mhchat.utils.main.AppConstants;
+import com.medhelp2.mhchat.utils.rx.RxEvents;
 
 import javax.inject.Inject;
 
@@ -42,29 +44,25 @@ public class SyncService extends Service
     public void onCreate()
     {
         super.onCreate();
-        Timber.d("SyncService onCreate");
         MainApp app = (MainApp) getApplication();
         app.getComponent().inject(this);
+        changeConnectionFlag();
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Timber.d("SyncService onStartCommand");
-
         assert intent != null;
         String token = intent.getStringExtra(REGISTRATION_TOKEN);
         int userId = intent.getIntExtra(USER_REGISTRATION_ID, 0);
 
         if (token != null && !token.trim().equals(""))
         {
-            Timber.d("Сохранение токена");
             saveToken(token);
         }
 
         if (userId != 0)
         {
-            Timber.d("Отправка токена на сервер для пользователя: " + userId);
             sendToken();
         }
 
@@ -82,7 +80,6 @@ public class SyncService extends Service
     @Override
     public void onDestroy()
     {
-        Timber.d("SyncService onDestroy");
         if (isCon != null)
         {
             unregisterReceiver(isCon);
@@ -94,7 +91,6 @@ public class SyncService extends Service
     @Override
     public IBinder onBind(Intent intent)
     {
-        Timber.d("SyncService onBindButton");
         return binder;
     }
 
@@ -108,16 +104,13 @@ public class SyncService extends Service
 
     public void saveToken(String token)
     {
-        Timber.d("Сохранение токена в SharedPreference: " + token);
         try
         {
             dataManager.setFireBaseToken(token);
-            stopSelf();
 
         } catch (Exception e)
         {
-            Timber.e("Ошибка сохранения токена: " + e.getMessage());
-            stopSelf();
+            e.printStackTrace();
         }
     }
 
@@ -131,32 +124,29 @@ public class SyncService extends Service
         {
             Timber.d("Ошибка чтение токена: " + e.getMessage());
         }
-        Timber.d("Отправка токена на сервер: " + token);
-        Timber.d("UserId: " + dataManager.getCurrentUserId());
-        if (dataManager.getCurrentUserId() != 0 && dataManager.getFireBaseToken() != null && !dataManager.getFireBaseToken().trim().equals(""))
+
+        if (dataManager.getCurrentUserId() != 0 && dataManager
+                .getFireBaseToken() != null && !dataManager
+                .getFireBaseToken().trim().equals(""))
         {
-            new CompositeDisposable().add(dataManager.sendTokenToServerApiCall(token)
+            new CompositeDisposable().add(dataManager
+                    .sendTokenToServerApiCall(token)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(response ->
-                            {
-                                Timber.d("Токен успешно обновлен на сервере: " + response.getResponse());
-                                stopSelf();
-                            }
-                            , throwable ->
-                            {
-                                Timber.d("Токен не был загружен на сервер: " + throwable.getMessage());
+                            Timber.d("Токен успешно обновлен на сервере: " + response.getResponse()), throwable ->
+                    {
+                        Timber.d("Токен не был загружен на сервер: " + throwable.getMessage());
 
-                                if (!dataManager.hasNetwork())
-                                {
-                                    noConnectionSend();
-                                } else
-                                {
-                                    Timber.e("Непредвиденная ошибка отправки токена на сервер");
-                                    stopSelf();
-                                }
-                            }
-                    ));
+                        if (!dataManager.hasNetwork())
+                        {
+                            noConnectionSend();
+                        } else
+                        {
+                            Timber.e("Непредвиденная ошибка отправки токена на сервер");
+                            stopSelf();
+                        }
+                    }));
         } else
         {
             Timber.e("Пустое значение идентификатора пользователя");
@@ -165,35 +155,21 @@ public class SyncService extends Service
 
     public void sendReview(String message, int rating)
     {
-        Timber.e("Отправка отзыва на сервер");
-        new CompositeDisposable().add(dataManager.sendReviewToServerApiCall(message, rating)
+        new CompositeDisposable().add(dataManager
+                .sendReviewToServerApiCall(message, rating)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(response ->
-                        {
-                            Timber.d("Отзыв успешно отправлен на сервер: " + response.getResponse());
-                            stopSelf();
-                        }
-                        , throwable ->
-                        {
-                            Timber.d("Отзыв не отправлен на сервер: " + throwable.getMessage());
-
-                            if (!dataManager.hasNetwork())
-                            {
-                                noConnectionSend();
-                            } else
-                            {
-                                Timber.e("Непредвиденная ошибка отправки отзыва на сервер");
-                                stopSelf();
-                            }
-                        }
-                ));
+                .subscribe(response -> Timber.d("sendReview"), throwable ->
+                {
+                    if (!dataManager.hasNetwork())
+                    {
+                        noConnectionSend();
+                    }
+                }));
     }
 
     private void noConnectionSend()
     {
-        Timber.e("Отсутствует соединение с интернетом, повторная отправка токена");
-
         if (isCon == null)
         {
             isCon = new BroadcastReceiver()
@@ -207,6 +183,42 @@ public class SyncService extends Service
                     }
                 }
             };
+            IntentFilter filters = new IntentFilter();
+            filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
+            registerReceiver(isCon, filters);
+        }
+    }
+
+    /**
+     *  При изменении соостояния сетевого соединения меняет флаг NETWORK_MODE
+     */
+    private void changeConnectionFlag()
+    {
+        if (isCon == null)
+        {
+            isCon = new BroadcastReceiver()
+            {
+                @Override
+                public void onReceive(Context context, Intent intent)
+                {
+                    if (dataManager.hasNetwork())
+                    {
+                        dataManager.setNetworkMode(AppConstants.NETWORK_MODE);
+                        ((MainApp) getApplication())
+                                .bus()
+                                .send(new RxEvents.hasConnection());
+                        Timber.d("NETWORK_MODE");
+                    } else
+                    {
+                        dataManager.setNetworkMode(AppConstants.NOT_NETWORK_MODE);
+                        ((MainApp) getApplication())
+                                .bus()
+                                .send(new RxEvents.noConnection());
+                        Timber.d("NOT_NETWORK_MODE");
+                    }
+                }
+            };
+
             IntentFilter filters = new IntentFilter();
             filters.addAction("android.net.conn.CONNECTIVITY_CHANGE");
             registerReceiver(isCon, filters);

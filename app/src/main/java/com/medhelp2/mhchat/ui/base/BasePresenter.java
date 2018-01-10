@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.base;
 
+
 import android.util.Log;
 
 import com.androidnetworking.common.ANConstants;
@@ -16,6 +17,7 @@ import javax.inject.Inject;
 
 import io.reactivex.disposables.CompositeDisposable;
 
+@SuppressWarnings("unused")
 public class BasePresenter<V extends MvpView> implements MvpPresenter<V>
 {
     private static final String TAG = "BasePresenter";
@@ -61,8 +63,16 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V>
 
     public void checkViewAttached()
     {
-        if (!isViewAttached()) throw new MvpViewNotAttachedException();
+        if (!isViewAttached())
+            throw new MvpViewNotAttachedException();
     }
+
+    @Override
+    public boolean isNetworkMode()
+    {
+        return getDataHelper().getNetworkMode() == AppConstants.NETWORK_MODE;
+    }
+
 
     public DataHelper getDataHelper()
     {
@@ -118,7 +128,7 @@ public class BasePresenter<V extends MvpView> implements MvpPresenter<V>
 
     public static class MvpViewNotAttachedException extends RuntimeException
     {
-        public MvpViewNotAttachedException()
+        MvpViewNotAttachedException()
         {
             super("Please call Presenter.onAttach(MvpView) before" +
                     " requesting data to the Presenter");

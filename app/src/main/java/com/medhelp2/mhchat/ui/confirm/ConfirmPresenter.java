@@ -12,7 +12,6 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
-import timber.log.Timber;
 
 public class ConfirmPresenter<V extends ConfirmViewHelper> extends BasePresenter<V>
         implements ConfirmPresenterHelper<V>
@@ -25,8 +24,7 @@ public class ConfirmPresenter<V extends ConfirmViewHelper> extends BasePresenter
         super(dataHelper, schedulerProvider, compositeDisposable);
     }
 
-    private Disposable disposable;
-
+    @SuppressWarnings("unused")
     @Override
     public void loadDocInfo(int idDoctor)
     {
@@ -39,10 +37,7 @@ public class ConfirmPresenter<V extends ConfirmViewHelper> extends BasePresenter
         {
             if (getMvpView().isNetworkConnected())
             {
-                Timber.d("Получение информации о докторе из сети: \n" +
-                        "idDoctor: " + idDoctor);
-
-                disposable = getDataHelper().getDoctorApiCall(idDoctor)
+                Disposable disposable = getDataHelper().getDoctorApiCall(idDoctor)
                         .subscribeOn(getSchedulerProvider().io())
                         .observeOn(getSchedulerProvider().ui())
                         .subscribeWith(new DisposableObserver<DoctorInfoList>()
@@ -50,21 +45,20 @@ public class ConfirmPresenter<V extends ConfirmViewHelper> extends BasePresenter
                             @Override
                             public void onNext(DoctorInfoList doctors)
                             {
-                                Timber.e("Новый элемент: " + doctors.getMessage());
-                                Timber.e("Размер: " + doctors.getResponse().size());
+
                                 getMvpView().updateDocInfo(doctors.getResponse().get(0));
                             }
 
                             @Override
                             public void onError(Throwable e)
                             {
-                                Timber.e("Данные из сети загружены с ошибкой: " + e.getMessage());
+                                getMvpView().showError(R.string.data_load_network_err);
+                                getMvpView().dismissDialog();
                             }
 
                             @Override
                             public void onComplete()
                             {
-                                Timber.e("onComplete");
                             }
                         });
                 getMvpView().hideLoading();
@@ -75,7 +69,6 @@ public class ConfirmPresenter<V extends ConfirmViewHelper> extends BasePresenter
                 getMvpView().showError(R.string.connection_error);
             }
         }
-//        disposable.dispose();
     }
 
     @Override

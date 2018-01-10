@@ -1,33 +1,36 @@
 package com.medhelp2.mhchat.ui.login;
 
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.widget.CheckBox;
 import android.widget.EditText;
 
+import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
-import com.medhelp2.mhchat.ui.chat.ChatActivity;
-import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
+import com.medhelp2.mhchat.utils.rx.RxEvents;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class LoginActivity extends BaseActivity implements LoginViewHelper
 {
     @Inject
     LoginPresenterHelper<LoginViewHelper> presenter;
+
+    @Inject
+    CompositeDisposable disposables;
 
     private static final String LOGIN_KEY = "LOGIN_KEY";
     private static final String PASSWORD_KEY = "PASSWORD_KEY";
@@ -43,7 +46,6 @@ public class LoginActivity extends BaseActivity implements LoginViewHelper
 
     private String username;
     private String password;
-
 
     public static Intent getStartIntent(Context context)
     {
@@ -71,34 +73,31 @@ public class LoginActivity extends BaseActivity implements LoginViewHelper
         getActivityComponent().inject(this);
         ButterKnife.bind(this);
         presenter.onAttach(LoginActivity.this);
+        presenter.getUsername();
 
-        if (savedInstanceState == null)
-        {
-            username = "";
-            password = "";
-        } else
+        if (savedInstanceState != null)
         {
             username = savedInstanceState.getString(LOGIN_KEY);
             etUsername.setText(username);
             password = savedInstanceState.getString(PASSWORD_KEY);
             etPassword.setText(password);
         }
-        setUp();
 
-        etPassword.setOnEditorActionListener((v, actionId, event) ->
+        setUp();
+    }
+
+    @Override
+    public void updateUsernameHint(String username)
+    {
+        if (username != null && username.length() > 0)
         {
-            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_NAVIGATE_NEXT))
-                    || (actionId == EditorInfo.IME_ACTION_DONE))
-            {
-                    userLogin();
-            }
-            return false;
-        });
+            etUsername.setText(username);
+            etUsername.setSelection(etUsername.getText().length());
+        }
     }
 
     private void cleanUserData()
     {
-        Timber.d("cleanUserData");
         etUsername.setText("");
         etPassword.setText("");
     }
@@ -106,60 +105,75 @@ public class LoginActivity extends BaseActivity implements LoginViewHelper
     @Override
     public boolean isNeedSave()
     {
-        Timber.d("isNeedSave: " + chbSave.isChecked());
         return chbSave.isChecked();
     }
 
     @Override
     protected void setUp()
     {
+        setupRxBus();
 
+        if (!presenter.isNetworkMode())
+        {
+            showNoConnectionDialog();
+        }
+
+        etPassword.setOnEditorActionListener((v, actionId, event) ->
+        {
+            if ((event != null && (event.getKeyCode() == KeyEvent.KEYCODE_NAVIGATE_NEXT))
+                    || (actionId == EditorInfo.IME_ACTION_DONE))
+            {
+                userLogin();
+            }
+            return false;
+        });
     }
 
-    @Override
-    public void openNetworkSettings()
+    private void setupRxBus()
     {
-        Intent intent = new Intent(Settings.ACTION_DATA_ROAMING_SETTINGS);
-        ComponentName cName = new ComponentName("com.android.phone", "com.android.phone.Settings");
-        intent.setComponent(cName);
+        disposables.add(((MainApp) getApplication())
+                .bus()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object ->
+                {
+                    if (object instanceof RxEvents.hasConnection)
+                    {
+                        hideNoConnectionDialog();
+                    } else if (object instanceof RxEvents.noConnection)
+                    {
+                        showNoConnectionDialog();
+                    }
+                }));
+    }
+
+    private void showNoConnectionDialog()
+    {
+    }
+
+    private void hideNoConnectionDialog()
+    {
     }
 
     @Override
     public void openProfileActivity()
     {
-        Timber.d("openProfileActivity");
         Intent intent = ProfileActivity.getStartIntent(this);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
     @Override
-    public void openChatActivity()
-    {
-        Timber.d("openChatActivity");
-        Intent intent = ChatActivity.getStartIntent(this);
-        startActivity(intent);
-    }
-
-    @Override
-    public void openContactsActivity()
-    {
-        Timber.d("openContactsActivity");
-        Intent intent = ContactsActivity.getStartIntent(this);
-        startActivity(intent);
-    }
-
-    @Override
     public void closeActivity()
     {
-        Timber.d("closeActivity");
         finish();
     }
 
+    @SuppressWarnings("unused")
     @OnClick(R.id.btn_login_enter)
     void onLoginClick(View view)
     {
-        Timber.d("onLoginClick");
         userLogin();
     }
 
@@ -167,7 +181,6 @@ public class LoginActivity extends BaseActivity implements LoginViewHelper
     {
         username = etUsername.getText().toString();
         password = etPassword.getText().toString();
-        Timber.d("onLoginClick: " + "username: " + username + " password: " + password);
         presenter.onLoginClick(username, password);
         cleanUserData();
     }

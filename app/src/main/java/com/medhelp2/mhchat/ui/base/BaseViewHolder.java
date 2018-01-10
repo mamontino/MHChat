@@ -1,8 +1,10 @@
 package com.medhelp2.mhchat.ui.base;
 
+
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+@SuppressWarnings("unused")
 public abstract class BaseViewHolder extends RecyclerView.ViewHolder
 {
     private int currentPosition;

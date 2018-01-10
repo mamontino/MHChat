@@ -6,13 +6,9 @@ import com.medhelp2.mhchat.ui.base.MvpView;
 
 import java.util.List;
 
-public interface SaleViewHelper extends MvpView {
-
-    void lockDrawer();
-
-    void unlockDrawer();
-
-    void closeNavigationDrawer();
+public interface SaleViewHelper extends MvpView
+{
+    void showErrorScreen();
 
     void showProfileActivity();
 
@@ -21,6 +17,8 @@ public interface SaleViewHelper extends MvpView {
     void showSearchActivity();
 
     void showContactsActivity();
+
+    void showAnaliseActivity();
 
     void showRateFragment();
 

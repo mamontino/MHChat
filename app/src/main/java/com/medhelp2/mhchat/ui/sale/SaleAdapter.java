@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.sale;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,7 +11,7 @@ import android.widget.TextView;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.SaleResponse;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
-import com.medhelp2.mhchat.utils.view.ImageConverter;
+import com.medhelp2.mhchat.utils.main.AppConstants;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -19,11 +20,6 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Maybe;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
 {
@@ -31,18 +27,11 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
     SalePresenter presenter;
 
     private static final int VIEW_TYPE_NORMAL = 11;
-
-    private Callback callback;
     private List<SaleResponse> response;
 
     public SaleAdapter(List<SaleResponse> response)
     {
         this.response = response;
-    }
-
-    public void setCallback(Callback callback)
-    {
-        this.callback = callback;
     }
 
     @Override
@@ -93,11 +82,6 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
         notifyDataSetChanged();
     }
 
-    interface Callback
-    {
-        void onEmptyViewAddContactClick();
-    }
-
     class ViewHolder extends BaseViewHolder
     {
         @BindView(R.id.sale_item_image)
@@ -120,31 +104,16 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
         public void onBind(int position)
         {
-            Timber.d(response.get(position).getSaleDescription());
             super.onBind(position);
             final SaleResponse repo = response.get(position);
+
             if (repo != null)
             {
-                if (repo.getSaleImage() != null)
-                {
-                    Maybe<String> flowable = Maybe.just(repo.getSaleImage());
-
-                    CompositeDisposable disposable = new CompositeDisposable();
-                    disposable.add(flowable
-                            .subscribeOn(Schedulers.computation())
-                            .map(ImageConverter::convertBase64StringToBitmap)
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe(bitmap ->
-                                            saleImage.setImageBitmap(bitmap)
-                                    , throwable ->
-                                    {
-                                        Picasso.with(saleImage.getContext())
-                                                .load(R.drawable.holder_sale)
-                                                .into(saleImage);
-                                        Timber.e("Ошибка загрузки изображения: " + throwable.getMessage());
-                                    }
-                            ));
-                }
+                Picasso.with(saleImage.getContext())
+                        .load(Uri.parse(repo.getSaleImage() + "&token=" + AppConstants.API_KEY))
+                        .placeholder(R.drawable.holder_sale)
+                        .error(R.drawable.holder_sale)
+                        .into(saleImage);
 
                 if (repo.getSaleDescription() != null)
                 {
@@ -156,11 +125,8 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
 
     class EmptyViewHolder extends BaseViewHolder
     {
-//        @BindView(R.id.empty_image_add_contact)
-//        ImageButton btnAddContact;
-//
-//        @BindView(R.id.empty_tv_add_contact)
-//        TextView tvInfoMessage;
+        @BindView(R.id.err_tv_message)
+        TextView errMessage;
 
         EmptyViewHolder(View itemView)
         {
@@ -172,12 +138,5 @@ public class SaleAdapter extends RecyclerView.Adapter<BaseViewHolder>
         protected void clear()
         {
         }
-
-//        @OnClick(R.id.err_btn_retry)
-//        void onClickAddContact()
-//        {
-//            if (callback != null)
-//                callback.onEmptyViewAddContactClick();
-//        }
     }
 }

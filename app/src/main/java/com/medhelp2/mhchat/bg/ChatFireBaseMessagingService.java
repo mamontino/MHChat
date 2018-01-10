@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.bg;
 
+
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -25,7 +26,7 @@ import timber.log.Timber;
 
 import static com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment.BROADCAST_INCOMING_MESSAGE;
 
-
+@SuppressWarnings("all")
 public class ChatFireBaseMessagingService extends FirebaseMessagingService
 {
     public static final int NOTIFICATION_ID = 357;
@@ -34,7 +35,6 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
     private static final String ID_ROOM = "id_room";
     private static final String ID_DOCTOR = "id_doctor";
     private static final String MESSAGE = "message";
-    private JSONObject data;
     private String message;
     private int idRoom;
     private int idDoctor;
@@ -45,7 +45,7 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
         Timber.d("Получено новое сообщение от: " + remoteMessage.getFrom());
         try
         {
-            data = new JSONObject(remoteMessage.getData().toString()).getJSONObject("data");
+            JSONObject data = new JSONObject(remoteMessage.getData().toString()).getJSONObject("data");
             message = data.getString(MESSAGE);
             idRoom = Integer.parseInt(data.getString(ID_ROOM));
             idDoctor = Integer.parseInt(data.getString(ID_DOCTOR));
@@ -57,13 +57,9 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
 
         if (remoteMessage.getData().size() > 0)
         {
-            Timber.d("Полученные данные: " + remoteMessage.getData());
-
-            if (((MainApp) getApplicationContext()).isChatActivityStarted)
+            if (((MainApp) getApplicationContext()).getChatActivityStarted())
             {
-                Timber.d("ChatActivity запущено");
                 Timber.d("id_room: " + idRoom);
-
                 try
                 {
                     showChatActivity(idRoom);
@@ -82,7 +78,7 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
                     Timber.d("Ошибка запуска приложения: " + e.getMessage());
                 }
 
-            } else if (((MainApp) getApplicationContext()).isContactsActivityStarted)
+            } else if (((MainApp) getApplicationContext()).getContactsActivityStarted())
             {
                 try
                 {
@@ -126,8 +122,6 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
 
     private void showContactsActivity(String message)
     {
-        Timber.d("sendNotification");
-
         Intent intent = new Intent(this, ContactsActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);
@@ -152,8 +146,6 @@ public class ChatFireBaseMessagingService extends FirebaseMessagingService
 
     private void showSplashActivity(String message)
     {
-        Timber.d("sendNotification");
-
         Intent intent = new Intent(this, SplashActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
         final PendingIntent resultPendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_CANCEL_CURRENT);

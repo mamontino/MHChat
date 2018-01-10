@@ -10,4 +10,6 @@ public interface ChatListViewHelper extends MvpView
     void updateMessageList(List<MessageResponse> response);
 
     void stopRefreshing();
+
+    void showErrorScreen();
 }

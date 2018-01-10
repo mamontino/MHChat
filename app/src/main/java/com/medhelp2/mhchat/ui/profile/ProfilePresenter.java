@@ -1,7 +1,10 @@
 package com.medhelp2.mhchat.ui.profile;
 
+import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.DataHelper;
 import com.medhelp2.mhchat.data.model.CenterResponse;
+import com.medhelp2.mhchat.data.model.DateList;
+import com.medhelp2.mhchat.data.model.DateResponse;
 import com.medhelp2.mhchat.di.scope.PerActivity;
 import com.medhelp2.mhchat.ui.base.BasePresenter;
 import com.medhelp2.mhchat.utils.rx.SchedulerProvider;
@@ -16,7 +19,7 @@ public class ProfilePresenter<V extends ProfileViewHelper>
         extends BasePresenter<V> implements ProfilePresenterHelper<V>
 {
     @Inject
-    public ProfilePresenter(DataHelper dataHelper,
+    ProfilePresenter(DataHelper dataHelper,
             SchedulerProvider schedulerProvider,
             CompositeDisposable compositeDisposable)
     {
@@ -27,6 +30,28 @@ public class ProfilePresenter<V extends ProfileViewHelper>
     public void getVisits()
     {
         getMvpView().showLoading();
+
+        final String[] today = new String[1];
+
+        getCompositeDisposable().add(getDataHelper().getCurrentDateApiCall()
+                .subscribeOn(getSchedulerProvider().io())
+                .map(DateList::getResponse)
+                .map(DateResponse::getToday)
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(date ->
+                        today[0] = date, throwable ->
+                {
+                    if (!isViewAttached())
+                    {
+                        return;
+                    }
+                    getMvpView().hideLoading();
+                    getMvpView().swipeDismiss();
+                    getMvpView().showErrorScreen();
+                }));
+
+        Timber.d(today[0]);
+
         getCompositeDisposable().add(getDataHelper()
                 .getAllReceptionApiCall()
                 .subscribeOn(getSchedulerProvider().io())
@@ -37,23 +62,18 @@ public class ProfilePresenter<V extends ProfileViewHelper>
                     {
                         return;
                     }
-                    if (response != null && response.getResponse() != null)
-                    {
-                        getMvpView().updateData(response.getResponse());
-                    }
                     getMvpView().hideLoading();
                     getMvpView().swipeDismiss();
+                    getMvpView().updateData(response.getResponse(), today[0]);
                 }, throwable ->
                 {
-                    Timber.e("Данные посещений загружены с ошибкой: "
-                            + throwable.getMessage());
-
                     if (!isViewAttached())
                     {
                         return;
                     }
                     getMvpView().hideLoading();
                     getMvpView().swipeDismiss();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
@@ -61,7 +81,6 @@ public class ProfilePresenter<V extends ProfileViewHelper>
     public void updateHeaderInfo()
     {
         getMvpView().showLoading();
-
         getCompositeDisposable().add(getDataHelper().getRealmCenter()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
@@ -76,12 +95,12 @@ public class ProfilePresenter<V extends ProfileViewHelper>
                     getMvpView().hideLoading();
                 }, throwable ->
                 {
-                    Timber.e("Данные центра загружены с ошибкой: " + throwable.getMessage());
                     if (!isViewAttached())
                     {
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showError(R.string.data_load_db_err);
                 }));
     }
 
@@ -101,7 +120,7 @@ public class ProfilePresenter<V extends ProfileViewHelper>
             }
         } catch (Exception e)
         {
-            Timber.d("Ошибка чтения пользовательских данных из SharedPreference");
+            getMvpView().showError(R.string.data_load_pref_err);
         }
     }
 
@@ -117,9 +136,8 @@ public class ProfilePresenter<V extends ProfileViewHelper>
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(() ->
-                                Timber.e("Данные успешно сохранены в локальное хранилище"),
-                        throwable -> Timber.e("Ошибка сохранения CenterResponse " +
-                                "в локальное хранилище: " + throwable.getMessage())));
+                {
+                }, throwable -> getMvpView().showError(R.string.data_load_db_err)));
     }
 
     @Override
@@ -129,7 +147,20 @@ public class ProfilePresenter<V extends ProfileViewHelper>
         getCompositeDisposable().add(getDataHelper().getRealmCenter()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(centerResponse -> center[0] = centerResponse));
+                .subscribe(centerResponse -> center[0] = centerResponse, throwable ->
+                {
+                    getMvpView().showError("www");
+                }));
         return center[0];
+    }
+
+    @Override
+    public void unSubscribe()
+    {
+        if (!getCompositeDisposable().isDisposed())
+        {
+            getCompositeDisposable().dispose();
+            getMvpView().hideLoading();
+        }
     }
 }

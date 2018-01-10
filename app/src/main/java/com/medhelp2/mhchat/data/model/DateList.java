@@ -1,21 +1,18 @@
 package com.medhelp2.mhchat.data.model;
 
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+@SuppressWarnings("unused")
 public class DateList
 {
     @SerializedName("error")
-    @Expose
     private boolean error;
 
     @SerializedName("message")
-    @Expose
     private String message;
 
     @SerializedName("response")
-    @Expose
     private DateResponse response;
 
     public boolean isError() {

@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.contacts;
 
+import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.DataHelper;
 import com.medhelp2.mhchat.data.model.RoomResponse;
 import com.medhelp2.mhchat.ui.base.BasePresenter;
@@ -12,27 +13,27 @@ import javax.inject.Inject;
 import io.reactivex.disposables.CompositeDisposable;
 import timber.log.Timber;
 
-public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresenter<V> implements ContactsPresenterHelper<V> {
+public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresenter<V> implements ContactsPresenterHelper<V>
+{
 
     @Inject
-    public ContactsPresenter(DataHelper dataHelper,
+    ContactsPresenter(DataHelper dataHelper,
             SchedulerProvider schedulerProvider,
-            CompositeDisposable compositeDisposable) {
+            CompositeDisposable compositeDisposable)
+    {
         super(dataHelper, schedulerProvider, compositeDisposable);
     }
 
     @Override
     public void getCenterInfo()
     {
-        Timber.d("Получение информации о центре из локального хранилища");
         getCompositeDisposable().add(getDataHelper().getRealmCenter()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(centerResponse -> {
+                .subscribe(centerResponse ->
+                {
                     try
                     {
-                        Timber.d("Данные успешно загружены из локального хранилища");
-                        Timber.d(centerResponse.getTitle() + " " + (centerResponse.getPhone()));
                         getMvpView().updateHeader(centerResponse);
                     } catch (Exception e)
                     {
@@ -54,14 +55,9 @@ public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresent
                     {
                         return;
                     }
-                    Timber.d("Данные успешно загружены в updateSaleList");
-                    Timber.d(response.toString());
-
                     saveUserList(response);
-//                    updateUnread();
                     getMvpView().hideLoading();
                     getMvpView().updateUserListData(response);
-
                 }, throwable ->
                 {
                     if (!isViewAttached())
@@ -69,7 +65,8 @@ public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresent
                         return;
                     }
                     getMvpView().hideLoading();
-                    Timber.e("Загрузка данных в updateSaleList произошла с ошибкой: " + throwable.getMessage());
+                    getMvpView().showError(R.string.data_load_network_err);
+                    getMvpView().showErrorScreen();
                 }));
     }
 
@@ -79,55 +76,55 @@ public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresent
         getDataHelper().setCurrentPassword("");
     }
 
-//    @Override
-//    public void updateUnread()
-//    {
-//        getCompositeDisposable().add(getDataHelper().getUnreadCountApiCall()
-//                .subscribeOn(getSchedulerProvider().io())
-//                .observeOn(getSchedulerProvider().ui())
-//                .subscribe(response ->
-//                {
-//                    if (!isViewAttached())
-//                    {
-//                        return;
-//                    }
-//                    Timber.d("Данные успешно загружены в updateSaleList");
-//                    Timber.d(response.toString());
-//                    saveUserListAndUpdate(response);
-//                }, throwable ->
-//                {
-//                    if (!isViewAttached())
-//                    {
-//                        return;
-//                    }
-//                    getMvpView().hideLoading();
-//                    Timber.e("Загрузка данных в updateSaleList произошла с ошибкой: " + throwable.getMessage());
-//                }));
-//    }
+    //    @Override
+    //    public void updateUnread()
+    //    {
+    //        getCompositeDisposable().add(getDataHelper().getUnreadCountApiCall()
+    //                .subscribeOn(getSchedulerProvider().io())
+    //                .observeOn(getSchedulerProvider().ui())
+    //                .subscribe(response ->
+    //                {
+    //                    if (!isViewAttached())
+    //                    {
+    //                        return;
+    //                    }
+    //                    Timber.d("Данные успешно загружены в updateAnaliseList");
+    //                    Timber.d(response.toString());
+    //                    saveUserListAndUpdate(response);
+    //                }, throwable ->
+    //                {
+    //                    if (!isViewAttached())
+    //                    {
+    //                        return;
+    //                    }
+    //                    getMvpView().hideLoading();
+    //                    Timber.e("Загрузка данных в updateAnaliseList произошла с ошибкой: " + throwable.getMessage());
+    //                }));
+    //    }
 
-//    @Override
-//    public void loadUserInfo(int id)
-//    {
-//        getMvpView().showLoading();
-//        getCompositeDisposable().add(getDataHelper().getRoomListApiCall()
-//                .subscribeOn(getSchedulerProvider().computation())
-//                .observeOn(getSchedulerProvider().ui())
-//                .subscribe(response ->
-//                {
-//                    if (!isViewAttached())
-//                    {
-//                        return;
-//                    }
-//                    getDataHelper().saveRealmRoom(response);
-//                }, throwable ->
-//                {
-//                    if (!isViewAttached())
-//                    {
-//                        return;
-//                    }
-//                    getMvpView().hideLoading();
-//                }));
-//    }
+    //    @Override
+    //    public void loadUserInfo(int id)
+    //    {
+    //        getMvpView().showLoading();
+    //        getCompositeDisposable().add(getDataHelper().getRoomListApiCall()
+    //                .subscribeOn(getSchedulerProvider().computation())
+    //                .observeOn(getSchedulerProvider().ui())
+    //                .subscribe(response ->
+    //                {
+    //                    if (!isViewAttached())
+    //                    {
+    //                        return;
+    //                    }
+    //                    getDataHelper().saveRealmRoom(response);
+    //                }, throwable ->
+    //                {
+    //                    if (!isViewAttached())
+    //                    {
+    //                        return;
+    //                    }
+    //                    getMvpView().hideLoading();
+    //                }));
+    //    }
 
     private void saveUserList(List<RoomResponse> response)
     {
@@ -148,31 +145,31 @@ public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresent
                 ));
     }
 
-//    private void saveUserListAndUpdate(List<RoomResponse> response)
-//    {
-//        getCompositeDisposable().add(getDataHelper().saveRealmRoom(response)
-//                .subscribeOn(getSchedulerProvider().computation())
-//                .observeOn(getSchedulerProvider().computation())
-//                .subscribe(() ->
-//                        {
-//                            Timber.d("saveUserListAndUpdate");
-//                            if (!isViewAttached())
-//                            {
-//                                return;
-//                            }
-//                            getMvpView().hideLoading();
-//                            loadUsersFromDb();
-//                        }, throwable ->
-//                        {
-//                            Timber.e("Данные не были сохранены в saveUserList" + throwable.getMessage());
-//                            if (!isViewAttached())
-//                            {
-//                                return;
-//                            }
-//                            getMvpView().hideLoading();
-//                        }
-//                ));
-//    }
+    //    private void saveUserListAndUpdate(List<RoomResponse> response)
+    //    {
+    //        getCompositeDisposable().add(getDataHelper().saveRealmRoom(response)
+    //                .subscribeOn(getSchedulerProvider().computation())
+    //                .observeOn(getSchedulerProvider().computation())
+    //                .subscribe(() ->
+    //                        {
+    //                            Timber.d("saveUserListAndUpdate");
+    //                            if (!isViewAttached())
+    //                            {
+    //                                return;
+    //                            }
+    //                            getMvpView().hideLoading();
+    //                            loadUsersFromDb();
+    //                        }, throwable ->
+    //                        {
+    //                            Timber.e("Данные не были сохранены в saveUserList" + throwable.getMessage());
+    //                            if (!isViewAttached())
+    //                            {
+    //                                return;
+    //                            }
+    //                            getMvpView().hideLoading();
+    //                        }
+    //                ));
+    //    }
 
 
     private void loadUsersFromDb()
@@ -197,6 +194,17 @@ public class ContactsPresenter<V extends ContactsViewHelper> extends BasePresent
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
+    }
+
+    @Override
+    public void unSubscribe()
+    {
+        if (!getCompositeDisposable().isDisposed())
+        {
+            getCompositeDisposable().dispose();
+            getMvpView().hideLoading();
+        }
     }
 }

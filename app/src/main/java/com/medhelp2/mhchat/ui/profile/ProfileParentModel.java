@@ -9,9 +9,9 @@ import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
 import java.util.List;
 
 @SuppressLint("ParcelCreator")
-public class ProfileParentModel extends ExpandableGroup<VisitResponse>
+class ProfileParentModel extends ExpandableGroup<VisitResponse>
 {
-    public ProfileParentModel(String title, List<VisitResponse> items)
+    ProfileParentModel(String title, List<VisitResponse> items)
     {
         super(title, items);
     }

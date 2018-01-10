@@ -5,6 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 
 import com.medhelp2.mhchat.di.scope.PerActivity;
+import com.medhelp2.mhchat.ui.analise.AnaliseAdapter;
+import com.medhelp2.mhchat.ui.analise.AnalisePresenter;
+import com.medhelp2.mhchat.ui.analise.AnalisePresenterHelper;
+import com.medhelp2.mhchat.ui.analise.AnaliseViewHelper;
 import com.medhelp2.mhchat.ui.chat.ChatPresenter;
 import com.medhelp2.mhchat.ui.chat.ChatPresenterHelper;
 import com.medhelp2.mhchat.ui.chat.ChatViewHelper;
@@ -28,18 +32,24 @@ import com.medhelp2.mhchat.ui.doctor.details.DocDetailsViewHelper;
 import com.medhelp2.mhchat.ui.doctor.service.ServicePresenter;
 import com.medhelp2.mhchat.ui.doctor.service.ServicePresenterHelper;
 import com.medhelp2.mhchat.ui.doctor.service.ServiceViewHelper;
+import com.medhelp2.mhchat.ui.exit.ExitPresenter;
+import com.medhelp2.mhchat.ui.exit.ExitPresenterHelper;
+import com.medhelp2.mhchat.ui.exit.ExitViewHelper;
+import com.medhelp2.mhchat.ui.license.LicensePresenter;
+import com.medhelp2.mhchat.ui.license.LicensePresenterHelper;
+import com.medhelp2.mhchat.ui.license.LicenseViewHelper;
 import com.medhelp2.mhchat.ui.login.LoginPresenter;
 import com.medhelp2.mhchat.ui.login.LoginPresenterHelper;
 import com.medhelp2.mhchat.ui.login.LoginViewHelper;
 import com.medhelp2.mhchat.ui.profile.ProfilePresenter;
 import com.medhelp2.mhchat.ui.profile.ProfilePresenterHelper;
 import com.medhelp2.mhchat.ui.profile.ProfileViewHelper;
-import com.medhelp2.mhchat.ui.rate_doctor.RateDoctorPresenter;
-import com.medhelp2.mhchat.ui.rate_doctor.RateDoctorPresenterHelper;
-import com.medhelp2.mhchat.ui.rate_doctor.RateDoctorViewHelper;
 import com.medhelp2.mhchat.ui.rate_app.RatePresenter;
 import com.medhelp2.mhchat.ui.rate_app.RatePresenterHelper;
 import com.medhelp2.mhchat.ui.rate_app.RateViewHelper;
+import com.medhelp2.mhchat.ui.rate_doctor.RateDoctorPresenter;
+import com.medhelp2.mhchat.ui.rate_doctor.RateDoctorPresenterHelper;
+import com.medhelp2.mhchat.ui.rate_doctor.RateDoctorViewHelper;
 import com.medhelp2.mhchat.ui.sale.SaleAdapter;
 import com.medhelp2.mhchat.ui.sale.SalePresenter;
 import com.medhelp2.mhchat.ui.sale.SalePresenterHelper;
@@ -124,6 +134,13 @@ public class ActivityModule
 
     @PerActivity
     @Provides
+    AnalisePresenterHelper<AnaliseViewHelper> provideAnalisePresenter(AnalisePresenter<AnaliseViewHelper> presenter)
+    {
+        return presenter;
+    }
+
+    @PerActivity
+    @Provides
     ContactsPresenterHelper<ContactsViewHelper> provideContactsPresenter(ContactsPresenter<ContactsViewHelper> presenter)
     {
         return presenter;
@@ -132,6 +149,13 @@ public class ActivityModule
     @PerActivity
     @Provides
     DocDetailsPresenterHelper<DocDetailsViewHelper> provideDocDetailsPresenter(DocDetailsPresenter<DocDetailsViewHelper> presenter)
+    {
+        return presenter;
+    }
+
+    @PerActivity
+    @Provides
+    LicensePresenterHelper<LicenseViewHelper> provideLicensePresenter(LicensePresenter<LicenseViewHelper> presenter)
     {
         return presenter;
     }
@@ -158,6 +182,12 @@ public class ActivityModule
 
     @Provides
     ConfirmPresenterHelper<ConfirmViewHelper> provideConfirmPresenter(ConfirmPresenter<ConfirmViewHelper> presenter)
+    {
+        return presenter;
+    }
+
+    @Provides
+    ExitPresenterHelper<ExitViewHelper> provideExitPresenter(ExitPresenter<ExitViewHelper> presenter)
     {
         return presenter;
     }
@@ -220,6 +250,13 @@ public class ActivityModule
     SaleAdapter provideSaleAdapter()
     {
         return new SaleAdapter(new ArrayList<>());
+    }
+
+    @PerActivity
+    @Provides
+    AnaliseAdapter provideAnaliseAdapter()
+    {
+        return new AnaliseAdapter(new ArrayList<>());
     }
 
     @PerActivity

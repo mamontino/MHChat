@@ -5,6 +5,7 @@ import com.medhelp2.mhchat.di.scope.PerActivity;
 import com.medhelp2.mhchat.ui.base.MvpPresenter;
 
 @PerActivity
+@SuppressWarnings("unused")
 public interface ConfirmPresenterHelper<V extends ConfirmViewHelper> extends MvpPresenter<V>
 {
     void loadDocInfo(int idDoctor);

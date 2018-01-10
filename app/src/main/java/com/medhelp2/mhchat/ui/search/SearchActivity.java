@@ -2,6 +2,7 @@ package com.medhelp2.mhchat.ui.search;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -28,10 +29,12 @@ import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.ServiceResponse;
+import com.medhelp2.mhchat.ui.analise.AnaliseActivity;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
@@ -40,7 +43,8 @@ import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rate_app.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
-import com.medhelp2.mhchat.utils.view.ImageConverter;
+import com.medhelp2.mhchat.utils.main.AppConstants;
+import com.medhelp2.mhchat.utils.rx.RxEvents;
 import com.medhelp2.mhchat.utils.view.ItemListDecorator;
 import com.squareup.picasso.Picasso;
 
@@ -51,17 +55,18 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class SearchActivity extends BaseActivity implements SearchViewHelper, Spinner.OnItemSelectedListener,
         NavigationView.OnNavigationItemSelectedListener, SwipeRefreshLayout.OnRefreshListener
 {
     @Inject
     SearchPresenter<SearchViewHelper> presenter;
+
+    @Inject
+    CompositeDisposable disposables;
 
     @BindView(R.id.rv_search)
     RecyclerView recyclerView;
@@ -81,7 +86,15 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     @BindView(R.id.nav_view_search)
     NavigationView navView;
 
-    private ActionBarDrawerToggle drawerToggle;
+    @BindView(R.id.tv_no_con_center)
+    TextView tvNoCon;
+
+    @BindView(R.id.err_tv_message)
+    TextView errMessage;
+
+    @BindView(R.id.err_load_btn)
+    TextView errLoadBtn;
+
     private TextView headerTitle;
     private ImageView headerLogo;
 
@@ -97,7 +110,6 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
-        Timber.d("onCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
         getActivityComponent().inject(this);
@@ -112,25 +124,11 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
         headerTitle.setText(response.getTitle());
 
-        Maybe<String> stringMaybe = Maybe.just(response.getLogo());
-
-        CompositeDisposable disposable = new CompositeDisposable();
-        disposable.add(stringMaybe
-                .subscribeOn(Schedulers.computation())
-                .map(ImageConverter::convertBase64StringToBitmap)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bitmap ->
-                                headerLogo.setImageBitmap(bitmap)
-
-                        , throwable ->
-                        {
-                            Picasso.with(headerLogo.getContext())
-                                    .load(R.drawable.holder_center)
-                                    .into(headerLogo);
-
-                            Timber.e("Ошибка загрузки изображения: " + throwable.getMessage());
-                        }
-                ));
+        Picasso.with(this)
+                .load(Uri.parse(response.getLogo() + "&token=" + AppConstants.API_KEY))
+                .placeholder(R.drawable.holder_center)
+                .error(R.drawable.holder_center)
+                .into(headerLogo);
     }
 
     @Override
@@ -138,13 +136,39 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     {
         setUnBinder(ButterKnife.bind(this));
         presenter.onAttach(this);
+        spinner.setVisibility(View.GONE);
         presenter.getCenterInfo();
+
+        if (!presenter.isNetworkMode())
+        {
+            tvNoCon.setVisibility(View.VISIBLE);
+        }
+
         setupToolbar();
         setupDrawer();
         serviceCash = new ArrayList<>();
         presenter.getData();
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
+    }
+
+    private void setupRxBus()
+    {
+        disposables.add(((MainApp) getApplication())
+                .bus()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object ->
+                {
+                    if (object instanceof RxEvents.hasConnection)
+                    {
+                        tvNoCon.setVisibility(View.GONE);
+                    } else if (object instanceof RxEvents.noConnection)
+                    {
+                        tvNoCon.setVisibility(View.VISIBLE);
+                    }
+                }));
     }
 
     @SuppressWarnings("unused")
@@ -159,6 +183,13 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setDisplayShowHomeEnabled(true);
         }
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        presenter.unSubscribe();
+        super.onBackPressed();
     }
 
     @Override
@@ -202,8 +233,23 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     }
 
     @Override
+    public void showErrorScreen()
+    {
+        recyclerView.setVisibility(View.GONE);
+        spinner.setVisibility(View.GONE);
+        errMessage.setVisibility(View.VISIBLE);
+        errLoadBtn.setVisibility(View.VISIBLE);
+        errLoadBtn.setOnClickListener(v -> presenter.getData());
+    }
+
+    @Override
     public void updateView(List<CategoryResponse> categories, List<ServiceResponse> services)
     {
+        spinner.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.VISIBLE);
+        errMessage.setVisibility(View.GONE);
+        errLoadBtn.setVisibility(View.GONE);
+
         adapter = new SearchAdapter(serviceCash);
 
         recyclerView.addItemDecoration(new ItemListDecorator(this));
@@ -244,6 +290,13 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
 
             }
         });
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        disposables.dispose();
     }
 
     @Override
@@ -319,6 +372,10 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
             case R.id.nav_item_record:
                 return true;
 
+            case R.id.nav_item_result:
+                showAnaliseActivity();
+                return true;
+
             case R.id.nav_item_sale:
                 showSaleActivity();
                 return true;
@@ -363,6 +420,14 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     }
 
     @Override
+    public void showAnaliseActivity()
+    {
+        Intent intent = AnaliseActivity.getStartIntent(this);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public void showRateFragment()
     {
         RateFragment.newInstance().show(getSupportFragmentManager());
@@ -371,6 +436,7 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
     @Override
     protected void onResume()
     {
+        setupRxBus();
         super.onResume();
         if (drawer != null)
         {
@@ -380,8 +446,7 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
 
     private void setupDrawer()
     {
-        Timber.d("setupDrawer");
-        drawerToggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawer,
                 toolbar,

@@ -46,6 +46,12 @@
         </activity>
 
         <activity
+            android:name=".ui.analise.AnaliseActivity"
+            android:label="@string/app_analise"
+            android:screenOrientation="portrait">
+        </activity>
+
+        <activity
             android:name=".ui.contacts.ContactsActivity"
             android:label="@string/app_chat"
             android:screenOrientation="portrait">
@@ -71,12 +77,6 @@
         <activity
             android:name=".ui.profile.ProfileActivity"
             android:label="@string/app_profile"
-            android:screenOrientation="portrait">
-        </activity>
-
-        <activity
-            android:name=".ui.select.SelectActivity"
-            android:label="@string/app_select"
             android:screenOrientation="portrait">
         </activity>
 

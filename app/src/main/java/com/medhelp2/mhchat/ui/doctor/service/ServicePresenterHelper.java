@@ -8,4 +8,6 @@ import com.medhelp2.mhchat.ui.base.MvpPresenter;
 public interface ServicePresenterHelper<V extends ServiceViewHelper> extends MvpPresenter<V>
 {
     void getData(int idDoctor);
+
+    void unSubscribe();
 }

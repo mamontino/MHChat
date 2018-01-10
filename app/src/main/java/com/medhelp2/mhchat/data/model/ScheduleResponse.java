@@ -1,33 +1,41 @@
 package com.medhelp2.mhchat.data.model;
 
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class ScheduleResponse
 {
     @SerializedName("id_doctor")
-    @Expose
     private int idDoctor;
 
     @SerializedName("full_name")
-    @Expose
     private String fullName;
 
     @SerializedName("is_work")
-    @Expose
     private boolean isWork;
 
     @SerializedName("adm_day")
-    @Expose
     private String admDay;
 
     @SerializedName("adm_time")
-    @Expose
     private List<String> admTime = new ArrayList<>();
+
+    public ScheduleResponse()
+    {
+    }
+
+    public ScheduleResponse(int idDoctor, String fullName, boolean isWork, String admDay, List<String> admTime)
+    {
+        this.idDoctor = idDoctor;
+        this.fullName = fullName;
+        this.isWork = isWork;
+        this.admDay = admDay;
+        this.admTime = admTime;
+    }
 
     public boolean isWork()
     {

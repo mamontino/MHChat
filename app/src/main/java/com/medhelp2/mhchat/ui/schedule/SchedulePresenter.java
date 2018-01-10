@@ -55,6 +55,7 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
@@ -81,6 +82,7 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
@@ -115,6 +117,7 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
@@ -150,6 +153,7 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
@@ -178,6 +182,7 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
@@ -205,6 +210,7 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
@@ -213,9 +219,8 @@ public class SchedulePresenter<V extends ScheduleViewHelper> extends BasePresent
     {
         if (!getCompositeDisposable().isDisposed())
         {
-            return;
+            getCompositeDisposable().dispose();
         }
-        getCompositeDisposable().clear();
         getMvpView().hideLoading();
     }
 }

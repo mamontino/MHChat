@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import io.realm.DynamicRealm;
 import io.realm.RealmSchema;
 
+@SuppressWarnings("all")
 public class RealmMigration implements io.realm.RealmMigration
 {
     @Override

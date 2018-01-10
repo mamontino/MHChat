@@ -20,11 +20,20 @@
             style="@style/MatchParent"
             android:background="@color/bg_chat">
 
-            <FrameLayout
-                android:id="@+id/fr_chat"
-                android:name="com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment"
-                style="@style/MatchParent"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+              c
+
+                <FrameLayout
+                    android:id="@+id/fr_chat"
+                    android:name="com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment"
+                    style="@style/MatchParent"/>
+
+            </LinearLayout>
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/app_bar_chat"

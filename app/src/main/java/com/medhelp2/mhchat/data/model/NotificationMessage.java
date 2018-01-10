@@ -1,6 +1,6 @@
 package com.medhelp2.mhchat.data.model;
 
-
+@SuppressWarnings("unused")
 public class NotificationMessage
 {
     private String message;
@@ -43,5 +43,4 @@ public class NotificationMessage
     {
         this.idUser = idUser;
     }
-
 }

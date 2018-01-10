@@ -20,7 +20,7 @@ interface ApiEndPoint
 
     //    GET MESSAGE
 
-    String MESSAGE_LIST = BASE_URL + "message/{id_room}";
+    String MESSAGE_LIST = BASE_URL + "message/{id_room}/{id_message}";
 
     String UNREAD_API = BASE_URL + "unread/{id_room}/{id_user}";
 

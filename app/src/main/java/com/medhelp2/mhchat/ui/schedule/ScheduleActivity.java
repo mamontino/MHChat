@@ -13,8 +13,10 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.DateResponse;
 import com.medhelp2.mhchat.data.model.ScheduleResponse;
@@ -22,6 +24,7 @@ import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.schedule.decorators.DayDecorator;
 import com.medhelp2.mhchat.ui.schedule.decorators.SelectDecorator;
 import com.medhelp2.mhchat.utils.main.TimesUtils;
+import com.medhelp2.mhchat.utils.rx.RxEvents;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.prolificinteractive.materialcalendarview.CalendarMode;
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView;
@@ -42,7 +45,9 @@ import butterknife.ButterKnife;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionParameters;
 import io.github.luizgrp.sectionedrecyclerviewadapter.SectionedRecyclerViewAdapter;
 import io.github.luizgrp.sectionedrecyclerviewadapter.StatelessSection;
-import timber.log.Timber;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.schedulers.Schedulers;
 
 public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper,
         OnDateSelectedListener, OnMonthChangedListener
@@ -53,6 +58,9 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
 
     @Inject
     SchedulePresenter<ScheduleViewHelper> presenter;
+
+    @Inject
+    CompositeDisposable disposables;
 
     @BindView(R.id.rv_schedule)
     RecyclerView recyclerView;
@@ -72,8 +80,26 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @BindView(R.id.empty_schedule)
     TextView emptySchedule;
 
+    @BindView(R.id.tv_no_con_center)
+    TextView tvNoCon;
+
+    @BindView(R.id.err_tv_message)
+    TextView errMessage;
+
+    @BindView(R.id.err_load_btn)
+    TextView errLoadBtn;
+
     @BindView(R.id.hol_schedule)
     TextView holSchedule;
+
+    @BindView(R.id.holder_schedule_day)
+    TextView holScheduleDay;
+
+    @BindView(R.id.holder_schedule_time)
+    TextView holScheduleTime;
+
+    @BindView(R.id.schedule_description)
+    LinearLayout scheduleDescription;
 
     private String todayString;
     private int idDoctor;
@@ -110,6 +136,15 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     {
         setUnBinder(ButterKnife.bind(this));
 
+        holScheduleDay.setVisibility(View.GONE);
+        holScheduleTime.setVisibility(View.GONE);
+        scheduleDescription.setVisibility(View.GONE);
+
+        if (!presenter.isNetworkMode())
+        {
+            tvNoCon.setVisibility(View.VISIBLE);
+        }
+
         setupToolbar();
         setupCalendarView();
 
@@ -125,9 +160,36 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     }
 
     @Override
-    protected void onStart()
+    protected void onResume()
     {
-        super.onStart();
+        setupRxBus();
+        super.onResume();
+    }
+
+    private void setupRxBus()
+    {
+        disposables.add(((MainApp) getApplication())
+                .bus()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object ->
+                {
+                    if (object instanceof RxEvents.hasConnection)
+                    {
+                        tvNoCon.setVisibility(View.GONE);
+                    } else if (object instanceof RxEvents.noConnection)
+                    {
+                        tvNoCon.setVisibility(View.VISIBLE);
+                    }
+                }));
+    }
+
+    @Override
+    protected void onPause()
+    {
+        super.onPause();
+        disposables.dispose();
     }
 
     private void setupCalendarView()
@@ -198,9 +260,14 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
     @Override
     public void updateCalendar(String day, List<ScheduleResponse> response)
     {
-        recyclerView.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         errorSchedule.setVisibility(View.GONE);
+        errMessage.setVisibility(View.GONE);
+        errLoadBtn.setVisibility(View.GONE);
         emptySchedule.setVisibility(View.VISIBLE);
+        holScheduleDay.setVisibility(View.VISIBLE);
+        holScheduleTime.setVisibility(View.VISIBLE);
+        scheduleDescription.setVisibility(View.VISIBLE);
 
         timeList.clear();
         timeList.addAll(response);
@@ -236,6 +303,29 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
                 calendar.add(Calendar.DATE, 1);
             }
         }
+    }
+
+    @Override
+    public void showErrorScreen()
+    {
+        recyclerView.setVisibility(View.GONE);
+        holScheduleDay.setVisibility(View.GONE);
+        holScheduleTime.setVisibility(View.GONE);
+        scheduleDescription.setVisibility(View.GONE);
+
+        errMessage.setVisibility(View.VISIBLE);
+        errLoadBtn.setVisibility(View.VISIBLE);
+        errLoadBtn.setVisibility(View.VISIBLE);
+        errLoadBtn.setOnClickListener(v ->
+        {
+            if (idDoctor != 0)
+            {
+                presenter.getDateFromDoctor(idDoctor, idService, adm);
+            } else
+            {
+                presenter.getDateFromService(idService, adm);
+            }
+        });
     }
 
     @Override
@@ -308,168 +398,163 @@ public class ScheduleActivity extends BaseActivity implements ScheduleViewHelper
         }
     }
 
-        @SuppressWarnings("unused")
-        private void setupToolbar ()
+    @SuppressWarnings("unused")
+    private void setupToolbar()
+    {
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        AppBarLayout.LayoutParams appBarParams = (AppBarLayout.LayoutParams) toolbarLayout.getLayoutParams();
+        if (actionBar != null)
         {
-            setSupportActionBar(toolbar);
-            ActionBar actionBar = getSupportActionBar();
-            AppBarLayout.LayoutParams appBarParams = (AppBarLayout.LayoutParams) toolbarLayout.getLayoutParams();
-            if (actionBar != null)
-            {
-                actionBar.setHomeAsUpIndicator(R.drawable.ic_back_white_24dp);
-                actionBar.setDisplayHomeAsUpEnabled(true);
-                actionBar.setDisplayShowHomeEnabled(true);
-            }
-        }
-
-        @Override
-        public boolean onOptionsItemSelected (MenuItem item)
-        {
-            switch (item.getItemId())
-            {
-                case android.R.id.home:
-                    super.onBackPressed();
-                    return true;
-            }
-            return super.onOptionsItemSelected(item);
-        }
-
-        @Override
-        protected void onDestroy ()
-        {
-            presenter.onDetach();
-            super.onDestroy();
-        }
-
-        private class TimeSection extends StatelessSection
-        {
-            boolean expanded = true;
-            String title;
-            List<String> list;
-
-            TimeSection(String title, List<String> list)
-            {
-                super(new SectionParameters.Builder(R.layout.item_date)
-                        .headerResourceId(R.layout.item_groupe)
-                        .build());
-
-                this.title = title;
-                this.list = list;
-            }
-
-            @Override
-            public int getContentItemsTotal()
-            {
-                return expanded ? list.size() : 0;
-            }
-
-            @Override
-            public RecyclerView.ViewHolder getItemViewHolder(View view)
-            {
-                return new ItemViewHolder(view);
-            }
-
-            @Override
-            public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position)
-            {
-                Timber.e("onBindItemViewHolder");
-
-                final ItemViewHolder itemHolder = (ItemViewHolder) holder;
-
-                String name = title;
-                String category = list.get(position);
-
-                itemHolder.tvItem.setText(name);
-                itemHolder.tvItem.setText(category);
-
-                itemHolder.rootView.setOnClickListener(v ->
-                {
-
-                });
-            }
-
-            @Override
-            public RecyclerView.ViewHolder getHeaderViewHolder(View view)
-            {
-                return new HeaderViewHolder(view);
-            }
-
-            @Override
-            public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder)
-            {
-                Timber.e("onBindHeaderViewHolder");
-
-                HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
-
-                headerHolder.tvTitle.setText(title);
-
-                headerHolder.rootView.setOnClickListener(v ->
-                {
-                    expanded = !expanded;
-                    headerHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds
-                            (0, 0, expanded ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down, 0);
-                    sectionAdapter.notifyDataSetChanged();
-                });
-            }
-        }
-
-        private class HeaderViewHolder extends RecyclerView.ViewHolder
-        {
-            private final View rootView;
-            private final TextView tvTitle;
-
-            HeaderViewHolder(View view)
-            {
-                super(view);
-                rootView = view;
-                tvTitle = view.findViewById(R.id.tv_profile_item_title);
-            }
-        }
-
-        private class ItemViewHolder extends RecyclerView.ViewHolder
-        {
-            private final View rootView;
-            private final TextView tvItem;
-
-            ItemViewHolder(View view)
-            {
-                super(view);
-
-                rootView = view;
-                tvItem = view.findViewById(R.id.tv_date_item_row);
-            }
-        }
-
-        private class DateState
-        {
-            String name;
-            List<String> category;
-
-            DateState(String name, List<String> category)
-            {
-                this.name = name;
-                this.category = category;
-            }
-
-            public String getName()
-            {
-                return name;
-            }
-
-            public void setName(String name)
-            {
-                this.name = name;
-            }
-
-            public List<String> getCategory()
-            {
-                return category;
-            }
-
-            public void setCategory(List<String> category)
-            {
-                this.category = category;
-            }
+            actionBar.setHomeAsUpIndicator(R.drawable.ic_back_white_24dp);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setDisplayShowHomeEnabled(true);
         }
     }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
+            case android.R.id.home:
+                super.onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed()
+    {
+        presenter.unSubscribe();
+        super.onBackPressed();
+    }
+
+    @Override
+    protected void onDestroy()
+    {
+        presenter.onDetach();
+        super.onDestroy();
+    }
+
+    private class TimeSection extends StatelessSection
+    {
+        boolean expanded = true;
+        String title;
+        List<String> list;
+
+        TimeSection(String title, List<String> list)
+        {
+            super(new SectionParameters.Builder(R.layout.item_date)
+                    .headerResourceId(R.layout.item_groupe)
+                    .build());
+
+            this.title = title;
+            this.list = list;
+        }
+
+        @Override
+        public int getContentItemsTotal()
+        {
+            return expanded ? list.size() : 0;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder getItemViewHolder(View view)
+        {
+            return new ItemViewHolder(view);
+        }
+
+        @Override
+        public void onBindItemViewHolder(RecyclerView.ViewHolder holder, int position)
+        {
+            final ItemViewHolder itemHolder = (ItemViewHolder) holder;
+
+            String name = title;
+            String category = list.get(position);
+
+            itemHolder.tvItem.setText(name);
+            itemHolder.tvItem.setText(category);
+            itemHolder.rootView.setOnClickListener(v ->
+            {
+
+            });
+        }
+
+        @Override
+        public RecyclerView.ViewHolder getHeaderViewHolder(View view)
+        {
+            return new HeaderViewHolder(view);
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder)
+        {
+            HeaderViewHolder headerHolder = (HeaderViewHolder) holder;
+            headerHolder.tvTitle.setText(title);
+            headerHolder.rootView.setOnClickListener(v ->
+            {
+                expanded = !expanded;
+                headerHolder.tvTitle.setCompoundDrawablesWithIntrinsicBounds
+                        (0, 0, expanded ? R.drawable.ic_arrow_up : R.drawable.ic_arrow_down, 0);
+                sectionAdapter.notifyDataSetChanged();
+            });
+        }
+    }
+
+    private class HeaderViewHolder extends RecyclerView.ViewHolder
+    {
+        private final View rootView;
+        private final TextView tvTitle;
+
+        HeaderViewHolder(View view)
+        {
+            super(view);
+            rootView = view;
+            tvTitle = view.findViewById(R.id.tv_profile_item_title);
+        }
+    }
+
+    private class ItemViewHolder extends RecyclerView.ViewHolder
+    {
+        private final View rootView;
+        private final TextView tvItem;
+
+        ItemViewHolder(View view)
+        {
+            super(view);
+
+            rootView = view;
+            tvItem = view.findViewById(R.id.tv_date_item_row);
+        }
+    }
+
+    private class DateState
+    {
+        String name;
+        List<String> category;
+
+        DateState(String name, List<String> category)
+        {
+            this.name = name;
+            this.category = category;
+        }
+
+        public String getName()
+        {
+            return name;
+        }
+
+        public void setName(String name)
+        {
+            this.name = name;
+        }
+
+        List<String> getCategory()
+        {
+            return category;
+        }
+    }
+}
 

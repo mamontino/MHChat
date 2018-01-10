@@ -6,6 +6,8 @@
                     android:layout_height="match_parent"
                     android:paddingBottom="@dimen/base_element_margin">
 
+    <include layout="@layout/item_no_connection_center"/>
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_chat_list"
             android:layout_width="match_parent"
@@ -14,7 +16,9 @@
             android:layout_alignParentTop="true"
             android:clipToPadding="false"/>
 
-        <LinearLayout
+    <include layout="@layout/item_error_download"/>
+
+    <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

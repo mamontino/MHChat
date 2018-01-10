@@ -39,6 +39,8 @@ public interface RealmHelper
 
     Single<List<MessageResponse>> getRealmMessageList(int idRoom);
 
+    Single <MessageResponse> getLastMessage(int idRoom);
+
     Single<RoomResponse> getRealmChatRoom(int id);
 
     Single<UserResponse> getRealmUserResponse(String username, String password);

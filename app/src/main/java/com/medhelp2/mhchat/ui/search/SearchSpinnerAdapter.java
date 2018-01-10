@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.search;
 
+
 import android.content.Context;
 import android.graphics.Color;
 import android.view.Gravity;

@@ -4,28 +4,24 @@ package com.medhelp2.mhchat.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.annotations.PrimaryKey;
 
+@SuppressWarnings("unused")
 public class SaleResponse implements Parcelable
 {
     @PrimaryKey
     @SerializedName("id_sale")
-    @Expose
     private int idSale;
 
     @SerializedName("id_center")
-    @Expose
     private int idCenter;
 
     @SerializedName("sale_image")
-    @Expose
     private String saleImage;
 
     @SerializedName("sale_description")
-    @Expose
     private String saleDescription;
 
     public int getIdSale() {

@@ -8,6 +8,7 @@
     <string name="app_doctors">Специалисты</string>
     <string name="app_search">Поиск услуг</string>
     <string name="app_sale">Акции</string>
+    <string name="app_analise">Результаты анализов</string>
     <string name="app_select">Выбор услуги</string>
 
     <!--hint message-->
@@ -19,6 +20,11 @@
     <string name="hint_reception_date">Дата приема:</string>
     <string name="hint_phone">Телефон:</string>
 
+    <!--Doctor item-->
+    <string name="f_exp_1">Стаж: %d лет</string>
+    <string name="f_exp_year">Стаж: %d год</string>
+    <string name="f_exp_2">Стаж: %d года</string>
+
     <!--Drawer-->
     <string name="open_drawer">Drawer Open</string>
     <string name="close_drawer">Drawer Close</string>
@@ -27,6 +33,7 @@
     <string name="nav_schedule">Расписание</string>
     <string name="nav_chat">Чат</string>
     <string name="nav_record">Записаться</string>
+    <string name="nav_result">Результаты анализов</string>
     <string name="nav_price">Прейскурант</string>
     <string name="nav_contacts">Контакты</string>
     <string name="nav_sale">Акции</string>
@@ -40,18 +47,18 @@
     <string name="api_default_error">Что-то пошло не так.</string>
     <string name="err_msg_name">Введите полное имя</string>
     <string name="err_msg_email">Введите корректный e-mail</string>
-    <string name="some_error">Произошла непредвиденная ошибка.</string>
-    <string name="connection_error">Отсутствует соединение с интернетом.</string>
+    <string name="some_error">Произошла непредвиденная ошибка</string>
+    <string name="connection_error">Отсутствует соединение с интернетом</string>
     <string name="empty_error_message">Не удалось \n загрузить даные</string>
-    <string name="empty_screen">Не у далось загрузить данные.\n Проверьте подключение \nк интернету и \nповторите попытку.</string>
+    <string name="empty_screen_text">Не у далось загрузить данные.\n Проверьте подключение \nк интернету и \nповторите попытку.</string>
     <string name="please_retry">Попробуйте позже</string>
     <string name="empty_chat_message">Вы еще не отправляли \n и не получали сообщений \n от этого пользователя</string>
 
     <!--Login-->
     <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
-    <string name="empty_data">Все поля дожны быть заполнены.</string>
-    <string name="invalid_data">Пожалуйста введите корректные данные.</string>
+    <string name="empty_data">Все поля дожны быть заполнены</string>
+    <string name="invalid_data">Пожалуйста введите корректные данные</string>
     <string name="login_header">Введите учетные данные</string>
 
     <!--about fragment-->
@@ -76,6 +83,20 @@
     <!--play store-->
     <string name="google_play_store_link">"https://play.google.com/store/apps/details?id="</string>
     <string name="google_market_link">"market://details?id="</string>
+
+    <!--exit dialog-->
+    <string name="exit_from_app">Вы действительно хотите\nвыйти из учетной записи?</string>
+    <string name="exit_btn_negative">Нет</string>
+    <string name="exit_btn_positive">Да</string>
+
+    <!--confirm dialog-->
+    <string name="confirm_event_positive">Записаться на прием?</string>
+    <string name="confirm_event_negative">Отменить запись?</string>
+    <string name="confirm_event_day">Подтвердить запись?</string>
+    <string name="confirm_no_connection_message">Отсутствует соединение с интернетом</string>
+    <string name="confirm_btn_negative">Нет</string>
+    <string name="confirm_btn_positive">Да</string>
+    <string name="confirm_btn_positive_ok">OK</string>
 
     <!--button-->
     <string name="btn_later">Позже</string>
@@ -121,11 +142,11 @@
 
     <!--data load message-->
     <string name="data_load_network_ok">Данные успешно загружены из сети</string>
-    <string name="data_load_network_err">Ошибка загрузки данных из сети: </string>
-    <string name="data_load_db_ok">Данные успешно загружены из сети из локального хранилища</string>
-    <string name="data_load_db_err">Ошибка загрузки данных из локального хранилища: </string>
-    <string name="data_load_pref_ok">Данные успешно загружены из Shared Preference </string>
-    <string name="data_load_pref_err">Ошибка загрузки данных из Shared Preference: </string>
+    <string name="data_load_network_err">Ошибка загрузки данных из сети./nПроверьте соединение с интернетом и повторите попытку</string>
+    <string name="data_load_db_ok">Данные успешно загружены из локального хранилища</string>
+    <string name="data_load_db_err">Ошибка загрузки данных из локального хранилища</string>
+    <string name="data_load_pref_ok">Данные успешно загружены из Shared Preference</string>
+    <string name="data_load_pref_err">Ошибка загрузки данных из Shared Preference</string>
 
     <!--image description-->
     <string name="company_logo">Логотип компании</string>
@@ -133,6 +154,7 @@
     <string name="user_image">Изображение пользователя</string>
     <string name="keyboard">Клавиатура</string>
     <string name="btn_rate">Оценить</string>
+    <string name="empty_screen_btn">Повторить</string>
 
     <!--Calendar-->
     <array name="calendar_days_array">

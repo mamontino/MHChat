@@ -12,16 +12,13 @@ public interface SchedulePresenterHelper<V extends ScheduleViewHelper> extends M
 
     void getDateFromDoctor(int idDoctor, int idService, int adm);
 
-
     void getScheduleByService(int idService, DateResponse today, int adm);
 
     void getScheduleByService(int idService, String day, int adm);
 
-
     void getScheduleByDoctor(int idDoctor, DateResponse today, int adm);
 
     void getScheduleByDoctor(int idDoctor, String day, int adm);
-
 
     void removePassword();
 

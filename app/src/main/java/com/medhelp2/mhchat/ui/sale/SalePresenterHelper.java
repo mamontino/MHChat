@@ -6,13 +6,11 @@ import com.medhelp2.mhchat.ui.base.MvpPresenter;
 @PerActivity
 public interface SalePresenterHelper<V extends SaleViewHelper> extends MvpPresenter<V>
 {
-    public void getCenterInfo();
+    void getCenterInfo();
 
     void updateSaleList();
 
     void removePassword();
 
-//    void loadUserInfo(int id);
-
-//    void updateUnread();
+    void unSubscribe();
 }

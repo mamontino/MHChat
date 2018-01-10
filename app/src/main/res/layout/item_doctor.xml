@@ -26,7 +26,6 @@
         android:layout_marginBottom="@dimen/base_element_margin"
         android:gravity="center_horizontal"
         android:maxLines="1"
-        android:text="Иванов Иван Иванович"
         android:textColor="#444444"
         android:textStyle="bold"
         android:textSize="@dimen/text_size_16sp"/>
@@ -37,7 +36,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:maxLines="1"
-        android:text="Терапевт"
         android:textColor="#444444"
         android:textSize="@dimen/text_size_16sp"
         android:layout_below="@+id/doc_name_tv"

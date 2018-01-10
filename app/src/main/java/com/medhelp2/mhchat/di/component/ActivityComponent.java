@@ -2,6 +2,7 @@ package com.medhelp2.mhchat.di.component;
 
 import com.medhelp2.mhchat.di.module.ActivityModule;
 import com.medhelp2.mhchat.di.scope.PerActivity;
+import com.medhelp2.mhchat.ui.analise.AnaliseActivity;
 import com.medhelp2.mhchat.ui.chat.ChatActivity;
 import com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment;
 import com.medhelp2.mhchat.ui.confirm.ConfirmFragment;
@@ -9,6 +10,8 @@ import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
 import com.medhelp2.mhchat.ui.doctor.details.DocDetailsFragment;
 import com.medhelp2.mhchat.ui.doctor.service.ServiceActivity;
+import com.medhelp2.mhchat.ui.exit.ExitFragment;
+import com.medhelp2.mhchat.ui.license.LicenseFragment;
 import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rate_app.RateFragment;
@@ -54,4 +57,10 @@ public interface ActivityComponent
     void inject(ConfirmFragment confirmFragment);
 
     void inject(RateDoctorFragment rateDoctorFragment);
+
+    void inject(ExitFragment exitFragment);
+
+    void inject(AnaliseActivity analiseActivity);
+
+    void inject(LicenseFragment licenseFragment);
 }

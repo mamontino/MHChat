@@ -1,9 +1,11 @@
 package com.medhelp2.mhchat.ui.splash;
 
+
 import com.medhelp2.mhchat.data.DataHelper;
 import com.medhelp2.mhchat.data.model.CenterList;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.ui.base.BasePresenter;
+import com.medhelp2.mhchat.utils.main.AppConstants;
 import com.medhelp2.mhchat.utils.rx.SchedulerProvider;
 
 import javax.inject.Inject;
@@ -21,13 +23,7 @@ public class SplashPresenter<V extends SplashViewHelper> extends BasePresenter<V
     }
 
     @Override
-    public void onAttach(V mvpView)
-    {
-        super.onAttach(mvpView);
-        openNextActivity();
-    }
-
-    private void openNextActivity()
+    public void openNextActivity()
     {
         String username = null;
         String password = null;
@@ -64,11 +60,7 @@ public class SplashPresenter<V extends SplashViewHelper> extends BasePresenter<V
                                 return;
                             }
                             saveCenterInfo(response.get(0));
-                        }, throwable ->
-                        {
-                            getMvpView().openLoginActivity();
-                            Timber.e("Данные центра загружены с ошибкой: " + throwable.getMessage());
-                        }
+                        }, throwable -> getMvpView().openLoginActivity()
                 ));
     }
 
@@ -79,11 +71,12 @@ public class SplashPresenter<V extends SplashViewHelper> extends BasePresenter<V
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(() ->
                                 getMvpView().openProfileActivity(),
-                        throwable ->
-                        {
-                            getMvpView().openLoginActivity();
-                            Timber.e("Ошибка сохранения CenterResponse " +
-                                    "в локальное хранилище: " + throwable.getMessage());
-                        }));
+                        throwable -> getMvpView().openLoginActivity()));
+    }
+
+    @Override
+    public boolean isFirstStart()
+    {
+        return getDataHelper().getStartMode() != AppConstants.NOT_FIRST_START;
     }
 }

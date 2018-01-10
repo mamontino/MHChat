@@ -80,7 +80,7 @@
 
     <style name="RecyclerMatchHorizontalPadding">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
         <item name="android:paddingLeft">@dimen/activity_horizontal_margin</item>
         <item name="android:paddingRight">@dimen/activity_horizontal_margin</item>
         <item name="android:clipToPadding">false</item>

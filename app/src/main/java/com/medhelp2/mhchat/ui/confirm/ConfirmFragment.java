@@ -26,7 +26,7 @@ import butterknife.OnClick;
 
 public class ConfirmFragment extends BaseDialog implements ConfirmViewHelper
 {
-    public static final String TAG = "ConfirmFragment";
+    public static final String TAG = "ExitFragment";
     public static final String EXTRA_ID = "EXTRA_ID";
 
     @Inject
@@ -91,10 +91,17 @@ public class ConfirmFragment extends BaseDialog implements ConfirmViewHelper
     }
 
     @Override
+    @SuppressWarnings("all")
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        idDoctor = getArguments().getInt(EXTRA_ID, 0);
+        try
+        {
+            idDoctor = getArguments().getInt(EXTRA_ID, 0);
+        } catch (NullPointerException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     @SuppressWarnings("unused")

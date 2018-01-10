@@ -21,6 +21,7 @@ public class PreferencesManager implements PreferencesHelper
     private static final String PREF_KEY_NOTIFICATIONS = "notifications";
     private static final String PREF_KEY_CURRENT_CENTER_ID = "PREF_KEY_CURRENT_CENTER_ID";
     private static final String PREF_KEY_CURRENT_DOCTOR_ID = "PREF_KEY_CURRENT_DOCTOR_ID";
+    private static final String PREF_KEY_START_MODE = "PREF_KEY_START_MODE";
 
     private final SharedPreferences preferences;
 
@@ -29,6 +30,26 @@ public class PreferencesManager implements PreferencesHelper
     {
         String prefName = AppConstants.PREF_NAME;
         preferences = context.getSharedPreferences(prefName, Context.MODE_PRIVATE);
+    }
+
+    /**
+     * Установить флаг подключения к сети
+     * @param mode - принимает значения NETWORK_MODE или NOT_NETWORK_MODE
+     */
+    @Override
+    public void setNetworkMode(int mode)
+    {
+        preferences.edit().putInt(AppConstants.PREF_KEY_NETWORK_MODE, mode).apply();
+    }
+
+    /**
+     * Возвращает флаг подключения к сети
+     * @return mode - значения NETWORK_MODE или NOT_NETWORK_MODE
+     */
+    @Override
+    public int getNetworkMode()
+    {
+        return preferences.getInt(AppConstants.PREF_KEY_NETWORK_MODE, 0);
     }
 
     @Override
@@ -124,6 +145,18 @@ public class PreferencesManager implements PreferencesHelper
     public String getNotifications()
     {
         return preferences.getString(PREF_KEY_NOTIFICATIONS, null);
+    }
+
+    @Override
+    public int getStartMode()
+    {
+        return preferences.getInt(PREF_KEY_START_MODE, 0);
+    }
+
+    @Override
+    public void setStartMode(int mode)
+    {
+        preferences.edit().putInt(PREF_KEY_START_MODE, mode).apply();
     }
 
     @Override

@@ -30,7 +30,7 @@ public interface NetworkHelper
 
     Observable<RoomResponse> getRoomByIdApiCall(int id);
 
-    Observable<MessageList> getMessageListApiCall(int idChat);
+    Observable<MessageList> getMessageListApiCall(int idChat, int idMessage);
 
     Observable<RequestResponse> sendMessageApiCall(int idRoom, String message);
 
@@ -39,6 +39,8 @@ public interface NetworkHelper
     Observable<List<RoomResponse>> getUnreadCountApiCall();
 
     Observable<ServiceList> getPriceApiCall(int idDoctor);
+
+    void loadFile (String image);
 
     Observable<ServiceList> getPriceApiCall();
 

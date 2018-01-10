@@ -26,7 +26,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder>
     private List<MessageResponse> response;
     private int idUser;
 
-    public ChatAdapter(List<MessageResponse> response, int idUser)
+    ChatAdapter(List<MessageResponse> response, int idUser)
     {
         this.response = response;
         this.idUser = idUser;
@@ -93,6 +93,7 @@ public class ChatAdapter extends RecyclerView.Adapter<BaseViewHolder>
         }
     }
 
+    @SuppressWarnings("unused")
     void addItems(List<MessageResponse> repoList)
     {
         response.clear();

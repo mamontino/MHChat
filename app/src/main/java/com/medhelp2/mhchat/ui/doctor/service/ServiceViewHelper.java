@@ -10,4 +10,6 @@ import java.util.List;
 public interface ServiceViewHelper extends MvpView
 {
     void updateView(List<CategoryResponse> categories, List<ServiceResponse> services);
+
+    void showErrorScreen();
 }

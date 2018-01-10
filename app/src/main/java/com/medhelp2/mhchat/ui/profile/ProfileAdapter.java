@@ -23,7 +23,7 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
     private static final int ERROR_MODE = 5;
     private Context context;
 
-    public ProfileAdapter(Activity context, List<? extends ExpandableGroup> groups)
+    ProfileAdapter(Activity context, List<? extends ExpandableGroup> groups)
     {
         super(groups);
         this.context = context;
@@ -48,6 +48,7 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
     public ProfileVisitViewHolder onCreateChildViewHolder(ViewGroup parent, final int viewType)
     {
         LayoutInflater inflater = (LayoutInflater) context.getSystemService(LAYOUT_INFLATER_SERVICE);
+
         switch (viewType)
         {
             case BUTTON_MODE:
@@ -71,6 +72,7 @@ public class ProfileAdapter extends MultiTypeExpandableRecyclerViewAdapter<Profi
                 }
 
                 return new ProfileVisitViewHolder(viewNoBtn);
+
             default:
                 throw new IllegalArgumentException("Invalid viewType");
         }

@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.doctor.details;
 
+
 import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.ui.base.DialogMvpView;
 

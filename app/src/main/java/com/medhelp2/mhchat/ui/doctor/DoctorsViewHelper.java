@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.doctor;
 
+
 import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.Doctor;
@@ -8,6 +9,7 @@ import com.medhelp2.mhchat.ui.base.MvpView;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public interface DoctorsViewHelper extends MvpView
 {
     void lockDrawer();
@@ -21,6 +23,10 @@ public interface DoctorsViewHelper extends MvpView
     void showScheduleActivity(Doctor doctor);
 
     void showProfileActivity();
+
+    void showErrorScreen();
+
+    void showAnaliseActivity();
 
     void showSaleActivity();
 

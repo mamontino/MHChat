@@ -28,7 +28,6 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
     @Override
     public void loadMessageList(int idChat)
     {
-        Timber.d("Загрузка списка сообщений");
         if (getDataHelper().hasNetwork())
         {
             loadMessagesFromServer(idChat);
@@ -42,7 +41,6 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
     @Override
     public void updateMessageList(int idChat)
     {
-        Timber.d("updateMessageList: Загрузка списка сообщений");
         if (getDataHelper().hasNetwork())
         {
             loadMessagesFromServer(idChat);
@@ -55,14 +53,12 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
     @Override
     public void loadLocalMessages(int idChat)
     {
-        Timber.d("Загрузка сообщений из локального хранилища для idChat: " + idChat);
         getMvpView().showLoading();
         getCompositeDisposable().add(getDataHelper().getRealmMessageList(idChat)
                 .subscribeOn(getSchedulerProvider().computation())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
                 {
-                    Timber.d("Загрузка сообщений произошла успешно");
                     if (!isViewAttached())
                     {
                         return;
@@ -73,26 +69,39 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
 
                 }, throwable ->
                 {
-                    Timber.e("Загрузка сообщений произошла с ошибкой" + throwable.getMessage());
                     if (!isViewAttached())
                     {
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
     @Override
     public void loadMessagesFromServer(int idRoom)
     {
-        Timber.d("Загрузка сообщений из сети");
         getMvpView().showLoading();
-        getCompositeDisposable().add(getDataHelper().getMessageListApiCall(idRoom)
+
+        getMvpView().showLoading();
+        getCompositeDisposable().add(getDataHelper().getLastMessage(idRoom)
+                .subscribeOn(getSchedulerProvider().io())
+                .observeOn(getSchedulerProvider().ui())
+                .subscribe(response -> loadMessages(idRoom, response.getIdMessage())
+                       , throwable -> loadMessages(idRoom, 0)
+                ));
+    }
+
+    private void loadMessages(int idRoom, int idMessage){
+
+        Timber.e("loadMessages: " + idRoom + " : " + idMessage);
+
+        getCompositeDisposable().add(getDataHelper().getMessageListApiCall(idRoom, idMessage)
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(response ->
                 {
-                    Timber.d("Загрузка сообщений из сети произошла успешно");
+                    Timber.d("Загрузка сообщений из сети произошла успешно: " + idMessage);
                     if (!isViewAttached())
                     {
                         return;
@@ -101,25 +110,24 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
                     getMvpView().stopRefreshing();
                 }, throwable ->
                 {
-                    Timber.d("Загрузка сообщений из сети произошла с ошибкой");
+                    Timber.d("Загрузка сообщений из сети произошла с ошибкой: " + idMessage);
                     if (!isViewAttached())
                     {
                         return;
                     }
                     loadLocalMessages(idRoom);
                     getMvpView().stopRefreshing();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
     private void saveMessages(List<MessageResponse> response, int idRoom)
     {
-        Timber.d("Сохранение списка сообщений в локальное хранилище");
         getCompositeDisposable().add(getDataHelper().saveRealmMessages(response, idRoom)
                 .subscribeOn(getSchedulerProvider().computation())
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe(() ->
                 {
-                    Timber.d("Данные успешно сохранены в локальное хранилище");
                     if (!isViewAttached())
                     {
                         return;
@@ -139,7 +147,6 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
                 .observeOn(getSchedulerProvider().ui())
                 .subscribe((response) ->
                 {
-                    Timber.d("Успешная отправка сообщения");
                     if (!isViewAttached())
                     {
                         return;
@@ -147,7 +154,6 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
                     getMvpView().hideLoading();
                 }, throwable ->
                 {
-                    Timber.d("Отправка сообщения произошла с ошибкой: " + throwable.getMessage());
                     if (!isViewAttached())
                     {
                         return;
@@ -165,5 +171,15 @@ public class ChatListPresenter<V extends ChatListViewHelper> extends BasePresent
                 .subscribe(response ->
                         Timber.d("sendReadMessages: успешная отправка запроса на прочтение сообщений: " + response.getMessage()), throwable ->
                         Timber.e("sendReadMessages: отправка запроса на прочтение сообщений: " + throwable.getMessage())));
+    }
+
+    @Override
+    public void unSubscribe()
+    {
+        if (!getCompositeDisposable().isDisposed())
+        {
+            getCompositeDisposable().dispose();
+            getMvpView().hideLoading();
+        }
     }
 }

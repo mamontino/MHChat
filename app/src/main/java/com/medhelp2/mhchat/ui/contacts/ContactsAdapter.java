@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.contacts;
 
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.RoomResponse;
 import com.medhelp2.mhchat.ui.base.BaseViewHolder;
+import com.medhelp2.mhchat.utils.main.AppConstants;
 import com.medhelp2.mhchat.utils.view.RoundImage;
 import com.squareup.picasso.Picasso;
 
@@ -28,17 +30,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
     private static final int VIEW_TYPE_EMPTY = 10;
     private static final int VIEW_TYPE_NORMAL = 11;
 
-    private Callback callback;
     private List<RoomResponse> response;
 
     public ContactsAdapter(List<RoomResponse> response)
     {
         this.response = response;
-    }
-
-    public void setCallback(Callback callback)
-    {
-        this.callback = callback;
     }
 
     @Override
@@ -90,11 +86,6 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         notifyDataSetChanged();
     }
 
-    interface Callback
-    {
-        void onEmptyViewAddContactClick();
-    }
-
     class ViewHolder extends BaseViewHolder
     {
 
@@ -104,11 +95,11 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         @BindView(R.id.contacts_tv_username)
         TextView tvUsername;
 
-//        @BindView(R.id.contacts_tv_date)
-//        TextView tvDate;
-//
-//        @BindView(R.id.contacts_tv_last_message)
-//        TextView tvLastMessage;
+        //        @BindView(R.id.contacts_tv_date)
+        //        TextView tvDate;
+        //
+        //        @BindView(R.id.contacts_tv_last_message)
+        //        TextView tvLastMessage;
 
         @BindView(R.id.contacts_tv_unread)
         TextView tvUnread;
@@ -124,8 +115,8 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         {
             contactImage.setImageDrawable(null);
             tvUsername.setText("");
-//            tvLastMessage.setText("");
-//            tvDate.setText("");
+            //            tvLastMessage.setText("");
+            //            tvDate.setText("");
             tvUnread.setText("");
         }
 
@@ -135,8 +126,10 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
             final RoomResponse repo = response.get(position);
             if (repo != null)
             {
+                String imageUrl = repo.getImage();
+
                 Picasso.with(itemView.getContext())
-                        .load(repo.getIdRoom())
+                        .load(Uri.parse(imageUrl + "&token=" + AppConstants.API_KEY))
                         .error(R.drawable.holder_doctor)
                         .placeholder(R.drawable.holder_doctor)
                         .transform(new RoundImage())
@@ -147,51 +140,45 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
                     tvUsername.setText(repo.getFullName());
                 }
 
-//                if (repo.getUnreadCountApiCall() > 0 && repo.getUnreadCountApiCall() < 99)
-//                {
-//                    Timber.d("repo.getUnreadCountApiCall() = " + repo.getUnreadCountApiCall());
-//                    try
-//                    {
-//                        String count = String.valueOf(repo.getUnreadCountApiCall());
-//                        tvUnread.setText(count);
-//                        tvUnread.setVisibility(View.VISIBLE);
-//                    } catch (Exception e)
-//                    {
-//                        Timber.e("Ошибка установки count: " + e.getMessage());
-//                    }
-//                } else if (repo.getUnreadCountApiCall() > 99)
-//                {
-//                    tvUnread.setText("∞");
-//                    tvUnread.setVisibility(View.VISIBLE);
-//                } else
-//                {
-//                    tvUnread.setVisibility(View.GONE);
-//                }
-//
-//                if (repo.getLastMessage() != null)
-//                {
-//                    tvLastMessage.setText(repo.getLastMessage());
-//                }
-//
-//                contactImage.setOnClickListener(v ->
-//                {
-//                    if (repo.getIdChatRoom() != 0)
-//                    {
-//                        Toast.makeText(contactImage.getContext(), "Details Fragment open", Toast.LENGTH_SHORT).show();
-//                    }
-//                });
+                //                if (repo.getUnreadCountApiCall() > 0 && repo.getUnreadCountApiCall() < 99)
+                //                {
+                //                    Timber.d("repo.getUnreadCountApiCall() = " + repo.getUnreadCountApiCall());
+                //                    try
+                //                    {
+                //                        String count = String.valueOf(repo.getUnreadCountApiCall());
+                //                        tvUnread.setText(count);
+                //                        tvUnread.setVisibility(View.VISIBLE);
+                //                    } catch (Exception e)
+                //                    {
+                //                        Timber.e("Ошибка установки count: " + e.getMessage());
+                //                    }
+                //                } else if (repo.getUnreadCountApiCall() > 99)
+                //                {
+                //                    tvUnread.setText("∞");
+                //                    tvUnread.setVisibility(View.VISIBLE);
+                //                } else
+                //                {
+                //                    tvUnread.setVisibility(View.GONE);
+                //                }
+                //
+                //                if (repo.getLastMessage() != null)
+                //                {
+                //                    tvLastMessage.setText(repo.getLastMessage());
+                //                }
+                //
+                //                contactImage.setOnClickListener(v ->
+                //                {
+                //                    if (repo.getIdChatRoom() != 0)
+                //                    {
+                //                        Toast.makeText(contactImage.getContext(), "Details Fragment open", Toast.LENGTH_SHORT).show();
+                //                    }
+                //                });
             }
         }
     }
 
     class EmptyViewHolder extends BaseViewHolder
     {
-//        @BindView(R.id.empty_image_add_contact)
-//        ImageButton btnAddContact;
-//
-//        @BindView(R.id.empty_tv_add_contact)
-//        TextView tvInfoMessage;
-
         EmptyViewHolder(View itemView)
         {
             super(itemView);
@@ -202,12 +189,5 @@ public class ContactsAdapter extends RecyclerView.Adapter<BaseViewHolder>
         protected void clear()
         {
         }
-
-//        @OnClick(R.id.err_btn_retry)
-//        void onClickAddContact()
-//        {
-//            if (callback != null)
-//                callback.onEmptyViewAddContactClick();
-//        }
     }
 }

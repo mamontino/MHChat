@@ -14,7 +14,7 @@ public class SalePresenter<V extends SaleViewHelper> extends BasePresenter<V> im
 {
 
     @Inject
-    public SalePresenter(DataHelper dataHelper,
+    SalePresenter(DataHelper dataHelper,
             SchedulerProvider schedulerProvider,
             CompositeDisposable compositeDisposable)
     {
@@ -24,7 +24,6 @@ public class SalePresenter<V extends SaleViewHelper> extends BasePresenter<V> im
     @Override
     public void getCenterInfo()
     {
-        Timber.d("Получение информации о центре из локального хранилища");
         getCompositeDisposable().add(getDataHelper().getRealmCenter()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
@@ -32,14 +31,12 @@ public class SalePresenter<V extends SaleViewHelper> extends BasePresenter<V> im
                 {
                     try
                     {
-                        Timber.d("Данные успешно загружены из локального хранилища");
-                        Timber.d(centerResponse.getTitle() + " " + (centerResponse.getPhone()));
                         getMvpView().updateHeader(centerResponse);
                     } catch (Exception e)
                     {
                         e.printStackTrace();
                     }
-                }, throwable -> Timber.d("Данные из локального хранилища загружены с ошибкой")));
+                }, throwable -> Timber.e("Данные из локального хранилища загружены с ошибкой" + throwable.getMessage())));
     }
 
     @Override
@@ -48,16 +45,15 @@ public class SalePresenter<V extends SaleViewHelper> extends BasePresenter<V> im
         getMvpView().showLoading();
         getCompositeDisposable().add(getDataHelper()
                 .getCurrentDateApiCall()
-                .map(dateList -> dateList.getResponse().getToday())
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(today ->
+                .subscribe(dateList ->
                 {
                     if (!isViewAttached())
                     {
                         return;
                     }
-                    getSalePastDate(today);
+                    getSalePastDate(dateList.getResponse().getToday());
                 }, throwable ->
                 {
                     if (!isViewAttached())
@@ -65,6 +61,7 @@ public class SalePresenter<V extends SaleViewHelper> extends BasePresenter<V> im
                         return;
                     }
                     getMvpView().hideLoading();
+                    getMvpView().showErrorScreen();
                 }));
     }
 
@@ -80,7 +77,6 @@ public class SalePresenter<V extends SaleViewHelper> extends BasePresenter<V> im
                     {
                         return;
                     }
-                    Timber.d("Данные успешно загружены в updateSaleList");
                     getMvpView().hideLoading();
                     getMvpView().updateSaleData(response);
                 }, throwable ->
@@ -90,8 +86,18 @@ public class SalePresenter<V extends SaleViewHelper> extends BasePresenter<V> im
                         return;
                     }
                     getMvpView().hideLoading();
-                    Timber.e("Загрузка данных в updateSaleList произошла с ошибкой: " + throwable.getMessage());
+                    getMvpView().showErrorScreen();
                 }));
+    }
+
+    @Override
+    public void unSubscribe()
+    {
+        if (!getCompositeDisposable().isDisposed())
+        {
+            getCompositeDisposable().dispose();
+            getMvpView().hideLoading();
+        }
     }
 
     @Override

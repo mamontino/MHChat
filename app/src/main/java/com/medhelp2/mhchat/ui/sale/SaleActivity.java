@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
 import android.support.design.widget.CollapsingToolbarLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -16,15 +17,16 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.SaleResponse;
+import com.medhelp2.mhchat.ui.analise.AnaliseActivity;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.DoctorsActivity;
@@ -32,10 +34,10 @@ import com.medhelp2.mhchat.ui.login.LoginActivity;
 import com.medhelp2.mhchat.ui.profile.ProfileActivity;
 import com.medhelp2.mhchat.ui.rate_app.RateFragment;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
-import com.medhelp2.mhchat.utils.view.ImageConverter;
+import com.medhelp2.mhchat.utils.main.AppConstants;
+import com.medhelp2.mhchat.utils.rx.RxEvents;
 import com.squareup.picasso.Picasso;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -43,17 +45,18 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class SaleActivity extends BaseActivity implements SaleViewHelper,
         NavigationView.OnNavigationItemSelectedListener
 {
     @Inject
     SaleAdapter adapter;
+
+    @Inject
+    CompositeDisposable disposables;
 
     @Inject
     LinearLayoutManager layoutManager;
@@ -67,21 +70,30 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
     @BindView(R.id.toolbar_sale)
     Toolbar toolbar;
 
+    @BindView(R.id.tv_no_con_bottom)
+    TextView tvNoCon;
+
+    @BindView(R.id.err_tv_message)
+    TextView errMessage;
+
+    @BindView(R.id.err_load_btn)
+    TextView errLoadBtn;
+
     @BindView(R.id.collapsing_toolbar_sale)
     CollapsingToolbarLayout toolbarLayout;
 
     @BindView(R.id.drawer_sale)
     DrawerLayout drawer;
 
+    @BindView(R.id.fab_sale)
+    FloatingActionButton fab;
+
     @BindView(R.id.nav_view_sale)
     NavigationView navView;
 
-    private ActionBarDrawerToggle drawerToggle;
-
-    private ArrayList<SaleResponse> saleList;
-
     private TextView headerTitle;
     private ImageView headerLogo;
+    private String phoneNumber;
 
     public static Intent getStartIntent(Context context)
     {
@@ -96,9 +108,7 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
         getActivityComponent().inject(this);
         setUnBinder(ButterKnife.bind(this));
         presenter.onAttach(this);
-        presenter.getCenterInfo();
         setUp();
-        presenter.updateSaleList();
     }
 
     @Override
@@ -108,33 +118,26 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
         headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
 
+        if (response.getPhone() != null && response.getPhone().length() > 0)
+        {
+            phoneNumber = response.getPhone();
+            fab.setVisibility(View.VISIBLE);
+        } else
+        {
+            fab.setVisibility(View.GONE);
+        }
         headerTitle.setText(response.getTitle());
 
-        Maybe<String> stringMaybe = Maybe.just(response.getLogo());
-
-        CompositeDisposable disposable = new CompositeDisposable();
-        disposable.add(stringMaybe
-                .subscribeOn(Schedulers.computation())
-                .map(ImageConverter::convertBase64StringToBitmap)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bitmap ->
-                                headerLogo.setImageBitmap(bitmap)
-
-                        , throwable ->
-                        {
-                            Picasso.with(headerLogo.getContext())
-                                    .load(R.drawable.holder_center)
-                                    .into(headerLogo);
-
-                            Timber.e("Ошибка загрузки изображения: " + throwable.getMessage());
-                        }
-                ));
+        Picasso.with(this)
+                .load(Uri.parse(response.getLogo() + "&token=" + AppConstants.API_KEY))
+                .placeholder(R.drawable.holder_center)
+                .error(R.drawable.holder_center)
+                .into(headerLogo);
     }
 
     @SuppressWarnings("unused")
     private void setupToolbar()
     {
-        Timber.d("setupToolbar");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         toolbarLayout.setTitleEnabled(false);
@@ -150,35 +153,40 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
         }
     }
 
-    @Override
-    public void lockDrawer()
+    private void setupRxBus()
     {
-        Timber.d("lockDrawer");
-        if (drawer != null)
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        disposables.add(((MainApp) getApplication())
+                .bus()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object ->
+                {
+                    if (object instanceof RxEvents.hasConnection)
+                    {
+                        tvNoCon.setVisibility(View.GONE);
+
+                    } else if (object instanceof RxEvents.noConnection)
+                    {
+                        tvNoCon.setVisibility(View.VISIBLE);
+                    }
+                }));
     }
 
     @Override
-    public void unlockDrawer()
+    public void showErrorScreen()
     {
-        Timber.d("unlockDrawer");
-        if (drawer != null)
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
-    }
-
-    @Override
-    public void closeNavigationDrawer()
-    {
-        Timber.d("closeNavigationDrawer");
-        if (drawer != null)
-        {
-            drawer.closeDrawer(Gravity.START);
-        }
+        errMessage.setVisibility(View.VISIBLE);
+        errLoadBtn.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+        errLoadBtn.setOnClickListener(v ->
+                presenter.updateSaleList());
     }
 
     @Override
     protected void onResume()
     {
+        setupRxBus();
         super.onResume();
         if (drawer != null)
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -187,7 +195,14 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
     @Override
     protected void setUp()
     {
-        Timber.d("setUp");
+        presenter.getCenterInfo();
+        presenter.updateSaleList();
+
+        if (!presenter.isNetworkMode())
+        {
+            tvNoCon.setVisibility(View.VISIBLE);
+        }
+
         setupToolbar();
         setupDrawer();
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
@@ -198,8 +213,7 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
 
     private void setupDrawer()
     {
-        Timber.d("setupDrawer");
-        drawerToggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawer,
                 toolbar,
@@ -233,6 +247,7 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
             drawer.closeDrawer(GravityCompat.START);
         } else
         {
+            presenter.unSubscribe();
             super.onBackPressed();
         }
     }
@@ -276,6 +291,14 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
     }
 
     @Override
+    public void showAnaliseActivity()
+    {
+        Intent intent = AnaliseActivity.getStartIntent(this);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
     public void showLoginActivity()
     {
         Intent intent = LoginActivity.getStartIntent(this);
@@ -305,6 +328,13 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
 
             case R.id.nav_item_price:
                 showSearchActivity();
+                return true;
+
+            case R.id.nav_item_sale:
+                return true;
+
+            case R.id.nav_item_result:
+                showAnaliseActivity();
                 return true;
 
             case R.id.nav_item_record:
@@ -340,19 +370,31 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
     }
 
     @Override
+    protected void onPause()
+    {
+        disposables.dispose();
+        super.onPause();
+    }
+
+    @Override
     public void updateSaleData(List<SaleResponse> response)
     {
-        Timber.d("updateSaleData: " + response.get(0).getSaleDescription());
-        saleList = new ArrayList<>();
-        saleList.addAll(response);
-        adapter.addItems(saleList);
+        recyclerView.setVisibility(View.VISIBLE);
+        errMessage.setVisibility(View.GONE);
+        errLoadBtn.setVisibility(View.GONE);
+        adapter.addItems(response);
     }
 
     @OnClick(R.id.fab_sale)
     public void fabClick()
     {
+        callToCenter(phoneNumber);
+    }
+
+    private void callToCenter(String phone)
+    {
         Intent intent = new Intent(Intent.ACTION_DIAL);
-        intent.setData(Uri.parse("tel:" + "5551222"));
+        intent.setData(Uri.parse("tel:" + phone));
         startActivity(intent);
     }
 }

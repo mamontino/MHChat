@@ -1,24 +1,21 @@
 package com.medhelp2.mhchat.data.model;
 
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class SaleList
 {
     @SerializedName("error")
-    @Expose
     private boolean error;
 
     @SerializedName("response")
-    @Expose
-    private List<SaleResponse> response = new ArrayList<SaleResponse>();
+    private List<SaleResponse> response = new ArrayList<>();
 
     @SerializedName("message")
-    @Expose
     private String message;
 
 

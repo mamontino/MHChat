@@ -55,6 +55,18 @@ public class DataManager implements DataHelper
     }
 
     @Override
+    public void setNetworkMode(int mode)
+    {
+        prefManager.setNetworkMode(mode);
+    }
+
+    @Override
+    public int getNetworkMode()
+    {
+        return prefManager.getNetworkMode();
+    }
+
+    @Override
     public Observable<UserList> doLoginApiCall(String username, String password)
     {
         return networkManager.doLoginApiCall(username, password);
@@ -73,9 +85,9 @@ public class DataManager implements DataHelper
     }
 
     @Override
-    public Observable<MessageList> getMessageListApiCall(int idChat)
+    public Observable<MessageList> getMessageListApiCall(int idChat, int idMessage)
     {
-        return networkManager.getMessageListApiCall(idChat);
+        return networkManager.getMessageListApiCall(idChat, idMessage);
     }
 
     @Override
@@ -106,6 +118,12 @@ public class DataManager implements DataHelper
     public Observable<ServiceList> getPriceApiCall(int idDoctor)
     {
         return networkManager.getPriceApiCall(idDoctor);
+    }
+
+    @Override
+    public void loadFile(String image)
+    {
+        networkManager.loadFile(image);
     }
 
     @Override
@@ -283,6 +301,18 @@ public class DataManager implements DataHelper
     }
 
     @Override
+    public int getStartMode()
+    {
+        return prefManager.getStartMode();
+    }
+
+    @Override
+    public void setStartMode(int mode)
+    {
+        prefManager.setStartMode(mode);
+    }
+
+    @Override
     public int getCurrentCenterId()
     {
         return prefManager.getCurrentCenterId();
@@ -370,6 +400,12 @@ public class DataManager implements DataHelper
     public Single<List<MessageResponse>> getRealmMessageList(int id)
     {
         return realmManager.getRealmMessageList(id);
+    }
+
+    @Override
+    public Single<MessageResponse> getLastMessage(int idRoom)
+    {
+        return realmManager.getLastMessage(idRoom);
     }
 
     @Override

@@ -153,6 +153,7 @@ public abstract class BaseDialog extends DialogFragment implements DialogMvpView
 
     @NonNull
     @Override
+    @SuppressWarnings("all")
     public Dialog onCreateDialog(Bundle savedInstanceState)
     {
         final RelativeLayout root = new RelativeLayout(getActivity());

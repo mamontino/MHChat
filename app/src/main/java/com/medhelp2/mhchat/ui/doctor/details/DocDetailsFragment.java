@@ -2,6 +2,7 @@ package com.medhelp2.mhchat.ui.doctor.details;
 
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -17,13 +18,14 @@ import com.medhelp2.mhchat.data.model.DoctorInfo;
 import com.medhelp2.mhchat.di.component.ActivityComponent;
 import com.medhelp2.mhchat.ui.base.BaseDialog;
 import com.medhelp2.mhchat.ui.doctor.service.ServiceActivity;
+import com.medhelp2.mhchat.utils.main.AppConstants;
+import com.squareup.picasso.Picasso;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import timber.log.Timber;
 
 public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelper
 {
@@ -79,7 +81,6 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
-        Timber.e("onCreateView");
         View view = inflater.inflate(R.layout.fragment_doctor_details, container, false);
         ActivityComponent component = getActivityComponent();
         if (component != null)
@@ -119,11 +120,9 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
         {
             Intent intent = ServiceActivity.getStartIntent(getContext());
             intent.putExtra(ServiceActivity.EXTRA_DATA_ID_DOCTOR, idDoctor);
-            Timber.e("showServiceActivity(int idDoctor): " + idDoctor);
             startActivity(intent);
             dismissDialog();
         }
-        Timber.e("showServiceActivity(int idDoctor): " + idDoctor);
     }
 
     @Override
@@ -188,6 +187,12 @@ public class DocDetailsFragment extends BaseDialog implements DocDetailsViewHelp
                 docInfoName.setVisibility(View.GONE);
                 docInfoHintName.setVisibility(View.GONE);
             }
+
+            Picasso.with(getContext())
+                    .load(Uri.parse(doctorInfo.getPhoto() + "&token=" + AppConstants.API_KEY))
+                    .placeholder(R.drawable.holder_doctor)
+                    .error(R.drawable.holder_doctor)
+                    .into(docInfoImage);
         }
     }
 }

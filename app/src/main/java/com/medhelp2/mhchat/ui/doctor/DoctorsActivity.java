@@ -2,6 +2,7 @@ package com.medhelp2.mhchat.ui.doctor;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.AppBarLayout;
@@ -23,15 +24,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
 import com.medhelp2.mhchat.data.model.CategoryResponse;
 import com.medhelp2.mhchat.data.model.CenterResponse;
 import com.medhelp2.mhchat.data.model.Doctor;
 import com.medhelp2.mhchat.data.model.DoctorInfo;
+import com.medhelp2.mhchat.ui.analise.AnaliseActivity;
 import com.medhelp2.mhchat.ui.base.BaseActivity;
 import com.medhelp2.mhchat.ui.contacts.ContactsActivity;
 import com.medhelp2.mhchat.ui.doctor.details.DocDetailsFragment;
@@ -41,7 +45,8 @@ import com.medhelp2.mhchat.ui.rate_app.RateFragment;
 import com.medhelp2.mhchat.ui.sale.SaleActivity;
 import com.medhelp2.mhchat.ui.schedule.ScheduleActivity;
 import com.medhelp2.mhchat.ui.search.SearchActivity;
-import com.medhelp2.mhchat.utils.view.ImageConverter;
+import com.medhelp2.mhchat.utils.main.AppConstants;
+import com.medhelp2.mhchat.utils.rx.RxEvents;
 import com.medhelp2.mhchat.utils.view.ItemListDecorator;
 import com.medhelp2.mhchat.utils.view.RecyclerViewClickListener;
 import com.medhelp2.mhchat.utils.view.RecyclerViewTouchListener;
@@ -54,17 +59,18 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.Maybe;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
         NavigationView.OnNavigationItemSelectedListener, Spinner.OnItemSelectedListener
 {
     @Inject
     DoctorsPresenterHelper<DoctorsViewHelper> presenter;
+
+    @Inject
+    CompositeDisposable disposables;
 
     @BindView(R.id.toolbar_doctors)
     Toolbar toolbar;
@@ -77,6 +83,15 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
 
     @BindView(R.id.spinner_doctors)
     Spinner spinner;
+
+    @BindView(R.id.tv_no_con_center)
+    TextView tvNoCon;
+
+    @BindView(R.id.err_tv_message)
+    TextView errMessage;
+
+    @BindView(R.id.err_load_btn)
+    Button errLoadBtn;
 
     @BindView(R.id.nav_view_doctors)
     NavigationView navView;
@@ -91,7 +106,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     RecyclerView recyclerView;
 
     private List<DoctorInfo> cashList;
-    private ActionBarDrawerToggle drawerToggle;
 
     private TextView headerTitle;
     private ImageView headerLogo;
@@ -115,9 +129,15 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     @Override
     protected void setUp()
     {
-        Timber.d("setUp");
+        if (!presenter.isNetworkMode())
+        {
+            tvNoCon.setVisibility(View.VISIBLE);
+            spinner.setVisibility(View.GONE);
+        }
+
         setupToolbar();
         setupDrawer();
+
         cashList = new ArrayList<>();
         presenter.getCenterInfo();
         presenter.getSpecialtyByCenter();
@@ -131,33 +151,43 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
         View headerLayout = navView.getHeaderView(0);
         headerLogo = headerLayout.findViewById(R.id.header_logo);
         headerTitle = headerLayout.findViewById(R.id.header_tv_title);
-
         headerTitle.setText(response.getTitle());
 
-        Maybe<String> stringMaybe = Maybe.just(response.getLogo());
-
-        CompositeDisposable disposable = new CompositeDisposable();
-        disposable.add(stringMaybe
-                .subscribeOn(Schedulers.computation())
-                .map(ImageConverter::convertBase64StringToBitmap)
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(bitmap ->
-                                headerLogo.setImageBitmap(bitmap)
-
-                        , throwable ->
-                        {
-                            Picasso.with(headerLogo.getContext())
-                                    .load(R.drawable.holder_center)
-                                    .into(headerLogo);
-
-                            Timber.e("Ошибка загрузки изображения: " + throwable.getMessage());
-                        }
-                ));
+        Picasso.with(this)
+                .load(Uri.parse(response.getLogo() + "&token=" + AppConstants.API_KEY))
+                .placeholder(R.drawable.holder_center)
+                .error(R.drawable.holder_center)
+                .into(headerLogo);
     }
+
+    private void setupRxBus()
+    {
+        disposables.add(((MainApp) getApplication())
+                .bus()
+                .toObservable()
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object ->
+                {
+                    if (object instanceof RxEvents.hasConnection)
+                    {
+                        tvNoCon.setVisibility(View.GONE);
+                        spinner.setVisibility(View.VISIBLE);
+                    } else if (object instanceof RxEvents.noConnection)
+                    {
+                        tvNoCon.setVisibility(View.VISIBLE);
+                        spinner.setVisibility(View.GONE);
+                    }
+                }));
+    }
+
 
     @Override
     public void updateView(List<DoctorInfo> response)
     {
+        errMessage.setVisibility(View.GONE);
+        errLoadBtn.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
         cashList.addAll(response);
         adapter = new DoctorsAdapter(response);
         recyclerView.addItemDecoration(new ItemListDecorator(this));
@@ -170,7 +200,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
             public void onClick(View view, int position)
             {
                 int idDoctor = cashList.get(position).getIdDoctor();
-                Timber.e("cashList.get(position).getIdDoctor(): " + idDoctor);
                 showDocDetailsFragment(idDoctor);
             }
 
@@ -264,7 +293,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     @SuppressWarnings("unused")
     private void setupToolbar()
     {
-        Timber.d("setupToolbar");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
         toolbarLayout.setTitleEnabled(false);
@@ -281,7 +309,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     @Override
     public void lockDrawer()
     {
-        Timber.d("lockDrawer");
         if (drawer != null)
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
@@ -289,7 +316,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     @Override
     public void unlockDrawer()
     {
-        Timber.d("unlockDrawer");
         if (drawer != null)
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
@@ -297,7 +323,6 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     @Override
     public void closeNavigationDrawer()
     {
-        Timber.d("closeNavigationDrawer");
         if (drawer != null)
         {
             drawer.closeDrawer(Gravity.START);
@@ -307,6 +332,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     @Override
     protected void onResume()
     {
+        setupRxBus();
         super.onResume();
         if (drawer != null)
             drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
@@ -314,8 +340,7 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
 
     private void setupDrawer()
     {
-        Timber.d("setupDrawer");
-        drawerToggle = new ActionBarDrawerToggle(
+        ActionBarDrawerToggle drawerToggle = new ActionBarDrawerToggle(
                 this,
                 drawer,
                 toolbar,
@@ -343,13 +368,14 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     @Override
     public void onBackPressed()
     {
-        if (drawer.isDrawerOpen(GravityCompat.START))
-        {
-            drawer.closeDrawer(GravityCompat.START);
-        } else
-        {
-            super.onBackPressed();
-        }
+            if (drawer.isDrawerOpen(GravityCompat.START))
+            {
+                drawer.closeDrawer(GravityCompat.START);
+            } else
+            {
+                presenter.unSubscribe();
+                super.onBackPressed();
+            }
     }
 
     private void setupNavMenu()
@@ -368,6 +394,17 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     }
 
     @Override
+    public void showErrorScreen()
+    {
+        recyclerView.setVisibility(View.GONE);
+        errMessage.setVisibility(View.VISIBLE);
+        errLoadBtn.setVisibility(View.VISIBLE);
+        errLoadBtn.setVisibility(View.VISIBLE);
+        errLoadBtn.setOnClickListener(v ->
+                presenter.getSpecialtyByCenter());
+    }
+
+    @Override
     public void showRateFragment()
     {
         RateFragment.newInstance().show(getSupportFragmentManager());
@@ -377,6 +414,14 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
     public void showSearchActivity()
     {
         Intent intent = SearchActivity.getStartIntent(this);
+        startActivity(intent);
+        finish();
+    }
+
+    @Override
+    public void showAnaliseActivity()
+    {
+        Intent intent = AnaliseActivity.getStartIntent(this);
         startActivity(intent);
         finish();
     }
@@ -429,6 +474,10 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
                 showSearchActivity();
                 return true;
 
+            case R.id.nav_item_result:
+                showAnaliseActivity();
+                return true;
+
             case R.id.nav_item_rate:
                 showRateFragment();
                 return true;
@@ -439,6 +488,13 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
             default:
                 return false;
         }
+    }
+
+    @Override
+    protected void onPause()
+    {
+        disposables.dispose();
+        super.onPause();
     }
 
     @Override

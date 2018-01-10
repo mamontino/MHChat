@@ -3,37 +3,31 @@ package com.medhelp2.mhchat.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
+@SuppressWarnings("unused")
 public class ServiceResponse extends RealmObject implements Parcelable
 {
     @PrimaryKey
     @SerializedName("id")
-    @Expose
     private int id;
 
     @SerializedName("id_service")
-    @Expose
     private int idService;
 
     @SerializedName("id_spec")
-    @Expose
     private int idSpec;
 
     @SerializedName("admission")
-    @Expose
     private int admission;
 
     @SerializedName("value")
-    @Expose
     private String value;
 
     @SerializedName("title")
-    @Expose
     private String title;
 
     public int getId()

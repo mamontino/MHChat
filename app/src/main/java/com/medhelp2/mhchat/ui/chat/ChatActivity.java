@@ -1,5 +1,6 @@
 package com.medhelp2.mhchat.ui.chat;
 
+
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,19 +23,12 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.schedulers.Schedulers;
-import timber.log.Timber;
 
 public class ChatActivity extends BaseActivity implements ChatViewHelper,
         SwipeRefreshLayout.OnRefreshListener
 {
     @Inject
     ChatPresenterHelper<ChatViewHelper> presenter;
-
-    @Inject
-    CompositeDisposable disposables;
 
     @BindView(R.id.toolbar_chat)
     Toolbar toolbar;
@@ -70,19 +64,14 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper,
 
         if (chatRoomId == 0)
         {
-            Timber.e("Контакт с данным идентификатором не найден");
             showError("Контакт с данным идентификатором не найден");
             finish();
         }
 
         setUp();
 
-        if (savedInstanceState != null)
+        if (savedInstanceState == null)
         {
-            Timber.d("savedInstanceState != null");
-        } else
-        {
-            Timber.d("savedInstanceState == null");
             showChatListFragment();
         }
     }
@@ -90,7 +79,6 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper,
     @Override
     public void showChatListFragment()
     {
-        Timber.d("showChatListFragment");
         getSupportFragmentManager()
                 .beginTransaction()
                 .disallowAddToBackStack()
@@ -106,7 +94,6 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper,
     @Override
     public void onFragmentDetached(String tag)
     {
-        Timber.d("onFragmentDetached");
         getSupportFragmentManager();
         Fragment fragment = getSupportFragmentManager().findFragmentByTag(tag);
         if (fragment != null)
@@ -120,25 +107,8 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper,
         }
     }
 
-    private void setupRxBus()
-    {
-        disposables.add(((MainApp) getApplication())
-                .bus()
-                .toObservable()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object ->
-                {
-                    if (object instanceof RxEvents.stopChatRefreshing)
-                    {
-                       swipeDismiss();
-                    }
-                }));
-    }
-
     private void setupToolbar()
     {
-        Timber.d("setupToolbar");
         toolbar.setTitle("");
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -171,7 +141,6 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper,
     @Override
     protected void setUp()
     {
-        setupRxBus();
         setupToolbar();
         setupRefresh();
     }
@@ -179,12 +148,10 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper,
     private void setupRefresh()
     {
         swipeChat.setOnRefreshListener(this);
-        swipeChat.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
+        swipeChat.setColorSchemeResources(R.color.color_accent);
     }
 
+    @SuppressWarnings("unused")
     private void swipeDismiss()
     {
         swipeChat.setRefreshing(false);

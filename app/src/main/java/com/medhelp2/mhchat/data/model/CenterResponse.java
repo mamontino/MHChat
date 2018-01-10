@@ -3,45 +3,37 @@ package com.medhelp2.mhchat.data.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 
+@SuppressWarnings("unused")
 public class CenterResponse extends RealmObject implements Parcelable
 {
     @PrimaryKey
     @SerializedName("id")
-    @Expose
     private int id;
 
     @SerializedName("id_center")
-    @Expose
     private int idCenter;
 
     @SerializedName("title")
-    @Expose
     private String title;
 
     @SerializedName("info")
-    @Expose
     private String info;
 
     @SerializedName("logo")
-    @Expose
     private String logo;
 
     @SerializedName("site")
-    @Expose
     private String site;
 
     @SerializedName("phone")
-    @Expose
     private String phone;
 
     @SerializedName("address")
-    @Expose
     private String address;
 
     public int getId() {

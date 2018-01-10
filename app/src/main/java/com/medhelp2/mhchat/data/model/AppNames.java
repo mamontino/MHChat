@@ -1,6 +1,6 @@
 package com.medhelp2.mhchat.data.model;
 
-
+@SuppressWarnings("unused")
 public interface AppNames
 {
     String ID_USER = "idUser";

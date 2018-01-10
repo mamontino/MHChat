@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -14,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.medhelp2.mhchat.MainApp;
 import com.medhelp2.mhchat.R;
@@ -60,6 +62,12 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
     @Inject
     DataHelper dataHelper;
 
+    @BindView(R.id.err_tv_message)
+    TextView errMessage;
+
+    @BindView(R.id.tv_no_con_center)
+    TextView noCon;
+
     @Inject
     LinearLayoutManager layoutManager;
 
@@ -75,7 +83,6 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
 
     public static ChatListFragment newInstance(int idChat)
     {
-        Timber.d("ChatListFragment newInstance for idChat " + idChat);
         Bundle args = new Bundle();
         ChatListFragment fragment = new ChatListFragment();
         if (idChat != 0)
@@ -88,10 +95,9 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
             @Nullable Bundle savedInstanceState)
     {
-        Timber.d("onCreateView");
         View view = inflater.inflate(R.layout.fragment_chat, container, false);
 
         ActivityComponent component = getActivityComponent();
@@ -116,6 +122,7 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
         return view;
     }
 
+    @SuppressWarnings("all")
     private void registerIncomingMessageReceiver()
     {
         incomingMessageReceiver = new BroadcastReceiver()
@@ -149,6 +156,7 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
         getActivity().registerReceiver(incomingMessageReceiver, filterIncomingMessage);
     }
 
+    @SuppressWarnings("all")
     private void registerOutgoingMessageReceiver()
     {
         outgoingMessageReceiver = new BroadcastReceiver()
@@ -186,9 +194,9 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
         hideKeyboard();
     }
 
+    @SuppressWarnings("all")
     private void sendMessage(int idChat, int idUser, String message)
     {
-        Timber.d("sendMessageApiCall");
         Intent startOutgoingService = MessagingService.getStartIntent(getContext());
         startOutgoingService.putExtra(MessagingService.SERVICE_MESSAGE, message);
         startOutgoingService.putExtra(MessagingService.SERVICE_CHAT_ROOM, idChat);
@@ -197,6 +205,7 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
     }
 
     @Override
+    @SuppressWarnings("all")
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -206,7 +215,6 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
     @Override
     public void onStart()
     {
-        Timber.d("onStart");
         registerOutgoingMessageReceiver();
         registerIncomingMessageReceiver();
         super.onStart();
@@ -215,23 +223,9 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
     @Override
     protected void setUp(View view)
     {
-        setupRxBus();
     }
 
-    @Override
-    public void onDestroyView()
-    {
-        presenter.onDetach();
-
-        if (incomingMessageReceiver != null)
-            getActivity().unregisterReceiver(incomingMessageReceiver);
-
-        if (outgoingMessageReceiver != null)
-            getActivity().unregisterReceiver(outgoingMessageReceiver);
-
-        super.onDestroyView();
-    }
-
+    @SuppressWarnings("all")
     private void setupRxBus()
     {
         disposables.add(((MainApp) getActivity().getApplication())
@@ -244,13 +238,55 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
                     if (object instanceof RxEvents.startChatRefreshing)
                     {
                         presenter.loadMessagesFromServer(idChat);
+                    } else if (object instanceof RxEvents.noConnection)
+                    {
+                        noCon.setVisibility(View.VISIBLE);
+                    } else if (object instanceof RxEvents.hasConnection)
+                    {
+                        noCon.setVisibility(View.GONE);
                     }
                 }));
     }
 
     @Override
+    public void onResume()
+    {
+        setupRxBus();
+        super.onResume();
+    }
+
+    @Override
+    @SuppressWarnings("all")
+    public void onPause()
+    {
+        disposables.dispose();
+
+        if (incomingMessageReceiver != null)
+        {
+            getActivity().unregisterReceiver(incomingMessageReceiver);
+        }
+
+        if (outgoingMessageReceiver != null)
+        {
+            getActivity().unregisterReceiver(outgoingMessageReceiver);
+        }
+
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy()
+    {
+        presenter.onDetach();
+        super.onDestroy();
+    }
+
+    @Override
     public void updateMessageList(List<MessageResponse> response)
     {
+        errMessage.setVisibility(View.GONE);
+        recyclerView.setVisibility(View.VISIBLE);
+
         adapter = new ChatAdapter(response, idUser);
         recyclerView.setAdapter(adapter);
         recyclerView.scrollToPosition(adapter.getItemCount() - 1);
@@ -258,10 +294,18 @@ public class ChatListFragment extends BaseFragment implements ChatListViewHelper
     }
 
     @Override
+    @SuppressWarnings("all")
     public void stopRefreshing()
     {
         ((MainApp) getActivity().getApplication())
                 .bus()
                 .send(new RxEvents.stopChatRefreshing());
+    }
+
+    @Override
+    public void showErrorScreen()
+    {
+        errMessage.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
     }
 }
