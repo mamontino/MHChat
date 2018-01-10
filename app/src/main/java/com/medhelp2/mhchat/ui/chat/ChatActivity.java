@@ -23,6 +23,7 @@ import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import timber.log.Timber;
 
 public class ChatActivity extends BaseActivity implements ChatViewHelper,
         SwipeRefreshLayout.OnRefreshListener
@@ -53,6 +54,7 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper,
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        Timber.d("OnCreate");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
         getActivityComponent().inject(this);
@@ -75,6 +77,8 @@ public class ChatActivity extends BaseActivity implements ChatViewHelper,
             showChatListFragment();
         }
     }
+
+
 
     @Override
     public void showChatListFragment()

@@ -4,7 +4,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_vertical"
-                android:padding="@dimen/base_element_margin">
+                android:paddingTop="@dimen/base_element_margin"
+                android:paddingBottom="@dimen/base_element_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
 
     <TextView
         android:id="@+id/analise_date_item"

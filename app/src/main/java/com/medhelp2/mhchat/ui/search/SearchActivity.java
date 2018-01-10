@@ -354,9 +354,9 @@ public class SearchActivity extends BaseActivity implements SearchViewHelper, Sp
         drawer.closeDrawer(GravityCompat.START);
         switch (item.getItemId())
         {
-            case R.id.nav_item_chat:
-                showContactsActivity();
-                return true;
+//            case R.id.nav_item_chat:
+//                showContactsActivity();
+//                return true;
 
             case R.id.nav_item_logout:
                 showLoginActivity();

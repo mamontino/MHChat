@@ -124,7 +124,6 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         getActivityComponent().inject(this);
         setUnBinder(ButterKnife.bind(this));
         presenter.onAttach(this);
-
         setUp();
     }
 
@@ -339,9 +338,9 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         drawer.closeDrawer(GravityCompat.START);
         switch (item.getItemId())
         {
-            case R.id.nav_item_chat:
-                showContactsActivity();
-                return true;
+//            case R.id.nav_item_chat:
+//                showContactsActivity();
+//                return true;
 
             case R.id.nav_item_logout:
                 showLoginActivity();
@@ -436,8 +435,8 @@ public class ProfileActivity extends BaseActivity implements ProfileViewHelper,
         setupRefresh();
 
         presenter.updateToken();
-        presenter.getVisits();
         presenter.updateHeaderInfo();
+        presenter.getVisits();
     }
 
     @SuppressWarnings("unused")

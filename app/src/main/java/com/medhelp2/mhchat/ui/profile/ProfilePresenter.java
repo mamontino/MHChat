@@ -31,16 +31,14 @@ public class ProfilePresenter<V extends ProfileViewHelper>
     {
         getMvpView().showLoading();
 
-        final String[] today = new String[1];
-
         getCompositeDisposable().add(getDataHelper().getCurrentDateApiCall()
                 .subscribeOn(getSchedulerProvider().io())
                 .map(DateList::getResponse)
                 .map(DateResponse::getToday)
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(date ->
-                        today[0] = date, throwable ->
+                .subscribe(this::loadVisits, throwable ->
                 {
+                    Timber.e("getCurrentDateApiCall error");
                     if (!isViewAttached())
                     {
                         return;
@@ -49,9 +47,10 @@ public class ProfilePresenter<V extends ProfileViewHelper>
                     getMvpView().swipeDismiss();
                     getMvpView().showErrorScreen();
                 }));
+    }
 
-        Timber.d(today[0]);
-
+    private void loadVisits(String today)
+    {
         getCompositeDisposable().add(getDataHelper()
                 .getAllReceptionApiCall()
                 .subscribeOn(getSchedulerProvider().io())
@@ -64,9 +63,10 @@ public class ProfilePresenter<V extends ProfileViewHelper>
                     }
                     getMvpView().hideLoading();
                     getMvpView().swipeDismiss();
-                    getMvpView().updateData(response.getResponse(), today[0]);
+                    getMvpView().updateData(response.getResponse(), today);
                 }, throwable ->
                 {
+                    Timber.e("getAllReceptionApiCall error");
                     if (!isViewAttached())
                     {
                         return;
@@ -147,10 +147,8 @@ public class ProfilePresenter<V extends ProfileViewHelper>
         getCompositeDisposable().add(getDataHelper().getRealmCenter()
                 .subscribeOn(getSchedulerProvider().io())
                 .observeOn(getSchedulerProvider().ui())
-                .subscribe(centerResponse -> center[0] = centerResponse, throwable ->
-                {
-                    getMvpView().showError("www");
-                }));
+                .subscribe(centerResponse -> center[0] = centerResponse
+                        , throwable -> getMvpView().showError("www")));
         return center[0];
     }
 

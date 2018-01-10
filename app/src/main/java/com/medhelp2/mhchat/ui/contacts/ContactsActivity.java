@@ -56,6 +56,7 @@ import butterknife.ButterKnife;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.schedulers.Schedulers;
+import timber.log.Timber;
 
 import static com.medhelp2.mhchat.ui.chat.chat_list.ChatListFragment.BROADCAST_INCOMING_MESSAGE;
 
@@ -128,6 +129,19 @@ public  class ContactsActivity extends BaseActivity implements ContactsViewHelpe
     }
 
     @Override
+    protected void onStart()
+    {
+        Timber.d("onStart");
+        super.onStart();
+    }
+    @Override
+    protected void onStop()
+    {
+        Timber.d("onStop");
+        super.onStop();
+    }
+
+    @Override
     public void updateHeader(CenterResponse response)
     {
         View headerLayout = navView.getHeaderView(0);
@@ -163,22 +177,19 @@ public  class ContactsActivity extends BaseActivity implements ContactsViewHelpe
     @Override
     public void lockDrawer()
     {
-        if (drawer != null)
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
     }
 
     @Override
     public void unlockDrawer()
     {
-        if (drawer != null)
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override
     public void closeNavigationDrawer()
     {
-        if (drawer != null)
-            drawer.closeDrawer(Gravity.START);
+        drawer.closeDrawer(Gravity.START);
     }
 
     @Override
@@ -188,8 +199,7 @@ public  class ContactsActivity extends BaseActivity implements ContactsViewHelpe
         registerIncomingMessageReceiver();
         super.onResume();
 
-        if (drawer != null)
-            drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
+        drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED);
     }
 
     @Override
@@ -360,8 +370,8 @@ public  class ContactsActivity extends BaseActivity implements ContactsViewHelpe
         drawer.closeDrawer(GravityCompat.START);
         switch (item.getItemId())
         {
-            case R.id.nav_item_chat:
-                return true;
+//            case R.id.nav_item_chat:
+//                return true;
 
             case R.id.nav_item_logout:
                 showLoginActivity();
@@ -410,6 +420,8 @@ public  class ContactsActivity extends BaseActivity implements ContactsViewHelpe
     @Override
     protected void onPause()
     {
+        Timber.d("onPause");
+
         if (incomingMessageReceiver != null)
         {
             unregisterReceiver(incomingMessageReceiver);
@@ -419,9 +431,12 @@ public  class ContactsActivity extends BaseActivity implements ContactsViewHelpe
         disposables.dispose();
     }
 
+
+
     @Override
     public void onDestroy()
     {
+        Timber.d("onDestroy");
         presenter.onDetach();
         super.onDestroy();
     }

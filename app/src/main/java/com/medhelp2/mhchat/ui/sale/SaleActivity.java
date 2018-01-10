@@ -314,9 +314,9 @@ public class SaleActivity extends BaseActivity implements SaleViewHelper,
         drawer.closeDrawer(GravityCompat.START);
         switch (item.getItemId())
         {
-            case R.id.nav_item_chat:
-                showContactsActivity();
-                return true;
+//            case R.id.nav_item_chat:
+//                showContactsActivity();
+//                return true;
 
             case R.id.nav_item_logout:
                 showLoginActivity();

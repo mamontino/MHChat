@@ -450,9 +450,9 @@ public class DoctorsActivity extends BaseActivity implements DoctorsViewHelper,
         drawer.closeDrawer(GravityCompat.START);
         switch (item.getItemId())
         {
-            case R.id.nav_item_chat:
-                showContactsActivity();
-                return true;
+//            case R.id.nav_item_chat:
+//                showContactsActivity();
+//                return true;
 
             case R.id.nav_item_sale:
                 showSaleActivity();

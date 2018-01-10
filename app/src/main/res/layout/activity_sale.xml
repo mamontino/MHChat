@@ -21,6 +21,7 @@
             android:layout_height="@dimen/fab_size"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/fab_margin"
+            android:elevation="12dp"
             app:srcCompat="@drawable/ic_call_white_24dp"/>
 
         <LinearLayout
